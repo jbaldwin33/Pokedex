@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Pokedex.PokedexApp</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>../_debug</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PkdxDatabase\PkdxDatabase.csproj" />
+    <ProjectReference Include="..\PopulateDB\PokedexLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MVVMFramework">
+      <HintPath>..\..\MVVMFramework\MVVMFramework\bin\Debug\MVVMFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
