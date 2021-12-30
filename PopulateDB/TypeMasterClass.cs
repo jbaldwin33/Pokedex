@@ -49,16 +49,12 @@ namespace Pokedex.PokedexLib
         {
             ThisType = type;
             var exclude = Resistances.Select(x => x.ThisType).Concat(Weaknesses.Select(x => x.ThisType)).Concat(Immunities.Select(x => x.ThisType));
-            var norms = Enum.GetValues(typeof(TypeEnum)).Cast<TypeEnum>().ToList().Except(exclude);
+            var norms = Enum.GetValues(typeof(TypeEnum)).Cast<TypeEnum>().Except(exclude).ToList();
 
-            foreach (var r in res)
-                Resistances.Add(new TypeMult(r, 0.5));
-            foreach (var w in weak)
-                Weaknesses.Add(new TypeMult(w, 2));
-            foreach (var i in imm)
-                Immunities.Add(new TypeMult(i, 0));
-            foreach (var n in norms)
-                NormalDamage.Add(new TypeMult(n, 1));
+            res.ForEach(r => Resistances.Add(new TypeMult(r, 0.5)));
+            weak.ForEach(w => Weaknesses.Add(new TypeMult(w, 2)));
+            imm.ForEach(i => Immunities.Add(new TypeMult(i, 0)));
+            norms.ForEach(n => NormalDamage.Add(new TypeMult(n, 1)));
         }
     }
 

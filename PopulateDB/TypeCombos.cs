@@ -29,7 +29,7 @@ namespace Pokedex.PokedexLib
                     Type2 = masterClass.TypeClasses[j];
                     if (Type1.ThisType == Type2.ThisType)
                         continue;
-                    
+
                     ResistancesChecked = new List<TypeMult>();
                     WeaknessesChecked = new List<TypeMult>();
                     dualTypeClass = new DualTypeClass(Type1, Type2);
@@ -53,7 +53,6 @@ namespace Pokedex.PokedexLib
                     ResistancesChecked.Add(res);
                 }
                 else if (Type2.Weaknesses.Any(x => x.ThisType == res.ThisType))
-                    //dualTypeClass.NormalDamage.Add(res);
                     WeaknessesChecked.Add(res);
                 else if (!Type2.Immunities.Contains(res))
                     dualTypeClass.Resistances.Add(res);
@@ -64,14 +63,7 @@ namespace Pokedex.PokedexLib
                 if (ResistancesChecked.Any(x => x.ThisType == res.ThisType) || WeaknessesChecked.Any(x => x.ThisType == res.ThisType))
                     continue;
 
-                //if (Type1.Resistances.Any(x => x.ThisType == res.ThisType))
-                //{
-                //    DoubleResNum++;
-                //    dualTypeClass.Resistances.Add(new TypeMult(res.ThisType, 0.25));
-                //    ResistancesChecked.Add(res);
-                //}
                 if (Type1.Weaknesses.Any(x => x.ThisType == res.ThisType))
-                    //dualTypeClass.NormalDamage.Add(Tuple.Create(res.ThisType, 1.0));
                     WeaknessesChecked.Add(res);
                 else if (!Type1.Immunities.Any(x => x.ThisType == res.ThisType))
                     dualTypeClass.Resistances.Add(res);
@@ -99,11 +91,6 @@ namespace Pokedex.PokedexLib
                 if (ResistancesChecked.Any(x => x.ThisType == weak.ThisType) || WeaknessesChecked.Any(x => x.ThisType == weak.ThisType))
                     continue;
 
-                //if (Type1.Weaknesses.Any(x => x.ThisType == weak.ThisType))
-                //{
-                //    DoubleWeakNum++;
-                //    dualTypeClass.Weaknesses.Add(new TypeMult(weak.ThisType, 4));
-                //}
                 if (!Type1.Immunities.Any(x => x.ThisType == weak.ThisType))
                     dualTypeClass.Weaknesses.Add(weak);
             }
