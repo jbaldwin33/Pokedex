@@ -7,13 +7,15 @@ using MVVMFramework.ViewModels;
 using Pokedex.PokedexLib;
 using System.Windows.Data;
 using Pokedex.PokedexApp.Services;
+using MVVMFramework.ViewNavigator;
 
-namespace Pokedex.PokedexApp
+namespace Pokedex.PokedexApp.ViewModels
 {
-    public class MainViewModel : ViewModel
+    public class DetailsViewModel : ViewModel
     {
         #region Fields and props
 
+        private MainViewModel mainViewModel;
         private int number;
         private string name;
         private TypeEnum? type1;
@@ -28,15 +30,11 @@ namespace Pokedex.PokedexApp
         private ObservableCollection<TypeMult> immunities;
         private ObservableCollection<TypeMult> normalDamage;
         private EvolveMethodEnum evolveMethod;
-        private PokedexClass selectedPokemon;
-        private int currentID;
-        private ObservableCollection<PokedexClass> pokemonList;
-        private ObservableCollection<PokedexForm> formCollection;
+
+
 
         private List<DualTypeClass> typeCombos;
-        private RelayCommand findCommand;
-        private RelayCommand nextCommand;
-        private RelayCommand previousCommand;
+
 
         public int Number
         {
@@ -122,73 +120,33 @@ namespace Pokedex.PokedexApp
             set => SetProperty(ref evolveMethod, value);
         }
 
-        public PokedexClass SelectedPokemon
-        {
-            get => selectedPokemon;
-            set
-            {
-                SetProperty(ref selectedPokemon, value);
-                FindCommandExecute();
-            }
-        }
 
-        public int CurrentID
-        {
-            get => currentID;
-            set => SetProperty(ref currentID, value);
-        }
-
-        public ObservableCollection<PokedexClass> PokemonList
-        {
-            get => pokemonList;
-            set => SetProperty(ref pokemonList, value);
-        }
-
-        public ObservableCollection<PokedexForm> FormCollection
-        {
-            get => formCollection;
-            set => SetProperty(ref formCollection, value);
-        }
 
         #endregion
 
-        #region Commands
 
-        public RelayCommand FindCommand => findCommand ??= new RelayCommand(FindCommandExecute);
-        public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.Num < 649);
-        public RelayCommand PreviousCommand => previousCommand ??= new RelayCommand(PreviousCommandExecute, () => SelectedPokemon?.Num > 1);
-
-        #endregion
-
-        private List<PokedexClass> pokemonListWithForms;
-        public MainViewModel()
+        public DetailsViewModel()
         {
             typeCombos = TypeMasterClass.Instance.GetDualTypeCombos();
-            GetAllPokemon();
-            PokemonList = new ObservableCollection<PokedexClass>(pokemonListWithForms.Where(x => x.Num == Math.Floor(x.Num)));
-            FormCollection = new ObservableCollection<PokedexForm>();
         }
 
-        private async void GetAllPokemon()
+        public override void OnLoaded()
         {
-            pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
+            mainViewModel = Navigator.Instance.MainViewModel as MainViewModel;
+            mainViewModel.PokemonChangedEvent2 += MainViewModel_PokemonChangedEvent2;
+            base.OnLoaded();
         }
 
-        private void FindCommandExecute() => PopulateDetails(PokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name));
+        private void MainViewModel_PokemonChangedEvent2(object sender, PokemonChangedEventArgs e) => PopulateDetails(e.Pkmn);
 
-        private void NextCommandExecute() => PopulateDetails(PokemonList.FirstOrDefault(e => e.Num == selectedPokemon.Num + 1));
-
-        private void PreviousCommandExecute() => PopulateDetails(PokemonList.FirstOrDefault(e => e.Num == selectedPokemon.Num - 1));
-
-
-        private void PopulateDetails(PokedexClass pkmn)
+        public void PopulateDetails(PokedexClass pkmn)
         {
             if (!isForm(pkmn) && hasForms(pkmn))
                 AddForms(pkmn);
             else if (!isForm(pkmn) && !hasForms(pkmn))
-                FormCollection.Clear();
+                mainViewModel.FormCollection.Clear();
             if (!isForm(pkmn))
-                CurrentID = (int)pkmn.Num - 1;
+                mainViewModel.CurrentID = (int)pkmn.Num - 1;
             Name = pkmn.Name;
             Type1 = (TypeEnum)Enum.Parse(typeof(TypeEnum), pkmn.Type1);
             Type2 = Enum.TryParse(typeof(TypeEnum), pkmn.Type2, out var t2)
@@ -215,21 +173,21 @@ namespace Pokedex.PokedexApp
             }
 
             bool isForm(PokedexClass pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
-            bool hasForms(PokedexClass pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+            bool hasForms(PokedexClass pkmn) => mainViewModel.pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
         }
 
         private void AddForms(PokedexClass pkmn)
         {
-            FormCollection.Clear();
-            FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
-            var forms = pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+            mainViewModel.FormCollection.Clear();
+            mainViewModel.FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
+            var forms = mainViewModel.pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
             foreach (var form in forms)
-                FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
+                mainViewModel.FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
         }
 
         private void FormCommandExecute(PokedexClass form)
         {
-            selectedPokemon = form;
+            mainViewModel.SelectedPokemon = form;
             PopulateDetails(form);
         }
     }
@@ -239,12 +197,5 @@ namespace Pokedex.PokedexApp
         public RelayCommand FormCommand { get; set; }
         public string Name { get; set; }
         public float Num { get; set; }
-    }
-
-    public class MultiplierConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) => $"{value}x";
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) => value;
     }
 }

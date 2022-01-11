@@ -1,30 +1,26 @@
-﻿<Window x:Class="Pokedex.PokedexApp.MainWindow"
+﻿<views:ViewBaseWindow x:Class="Pokedex.PokedexApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pokedex.PokedexApp"
         xmlns:controls="clr-namespace:MVVMFramework.Controls;assembly=MVVMFramework"
+        xmlns:views="clr-namespace:MVVMFramework.Views;assembly=MVVMFramework"
+        xmlns:nav="clr-namespace:MVVMFramework.ViewNavigator;assembly=MVVMFramework"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="900">
+        Title="MainWindow" Height="600" Width="900">
   <Window.Resources>
     <local:MultiplierConverter x:Key="MultiplierConverter"/>
   </Window.Resources>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
-    <Grid Grid.Row="0">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="auto"/>
-      </Grid.RowDefinitions>
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="*"/>
-        <!--<ColumnDefinition Width="*"/>-->
-      </Grid.ColumnDefinitions>
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0">
+    <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
         <controls:ExtraSmallButton Content="Prev" Command="{Binding PreviousCommand}"/>
         <ComboBox MinWidth="100" Height="25" IsEditable="False" IsReadOnly="True" ItemsSource="{Binding PokemonList}" DisplayMemberPath="Name" SelectedIndex="{Binding CurrentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding SelectedPokemon, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
           <ComboBox.ItemsPanel>
@@ -35,7 +31,7 @@
         </ComboBox>
         <controls:SmallButton Content="Next" Command="{Binding NextCommand}"/>
       </StackPanel>
-      <StackPanel Grid.Column="1">
+      <StackPanel>
         <ItemsControl ItemsSource="{Binding FormCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
@@ -49,190 +45,9 @@
           </ItemsControl.ItemTemplate>
         </ItemsControl>
       </StackPanel>
-    </Grid>
-    <Grid Grid.Row="1">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-        <controls:MediumTextBlock Text="Name:"/>
-        <controls:MediumTextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-        <controls:MediumTextBlock Text="Type 1:"/>
-        <controls:MediumTextBlock Text="{Binding Type1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0">
-        <controls:MediumTextBlock Text="Type 2:"/>
-        <controls:MediumTextBlock Text="{Binding Type2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0">
-        <controls:MediumTextBlock Text="Ability 1:"/>
-        <controls:MediumTextBlock Text="{Binding Ability1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0">
-        <controls:MediumTextBlock Text="Ability 2:"/>
-        <controls:MediumTextBlock Text="{Binding Ability2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-        <controls:MediumTextBlock Text="Hidden ability:"/>
-        <controls:MediumTextBlock Text="{Binding HiddenAbility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-        <controls:MediumTextBlock Text="Egg group 1:"/>
-        <controls:MediumTextBlock Text="{Binding EggGroup1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
-        <controls:MediumTextBlock Text="Egg group 2:"/>
-        <controls:MediumTextBlock Text="{Binding EggGroup2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-      </StackPanel>
-      <Grid Grid.Row="6" Grid.ColumnSpan="2">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="*"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*"/>
-              <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <controls:MediumTextBlock Text="Weaknesses:" Grid.Row="0"/>
-            <ItemsControl ItemsSource="{Binding Weaknesses, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1">
-              <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <UniformGrid Rows="1"/>
-                </ItemsPanelTemplate>
-              </ItemsControl.ItemsPanel>
-              <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                  <Grid>
-                    <Grid.RowDefinitions>
-                      <RowDefinition Height="*"/>
-                      <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Row="0">
-                      <TextBlock Text="{Binding ThisType}"/>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1">
-                      <TextBlock Text="{Binding Multiplier, Converter={StaticResource MultiplierConverter}}"/>
-                    </Border>
-                  </Grid>
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
-          </Grid>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*"/>
-              <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <controls:MediumTextBlock Text="Resistances:" Grid.Row="0"/>
-            <ItemsControl ItemsSource="{Binding Resistances, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1">
-              <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <UniformGrid Rows="1"/>
-                </ItemsPanelTemplate>
-              </ItemsControl.ItemsPanel>
-              <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                  <Grid>
-                    <Grid.RowDefinitions>
-                      <RowDefinition Height="auto"/>
-                      <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Row="0">
-                      <TextBlock Text="{Binding ThisType}"/>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1">
-                      <TextBlock Text="{Binding Multiplier, Converter={StaticResource MultiplierConverter}}"/>
-                    </Border>
-                  </Grid>
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
-          </Grid>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*"/>
-              <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <controls:MediumTextBlock Text="Immunities:" Grid.Row="0"/>
-            <ItemsControl ItemsSource="{Binding Immunities, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1">
-              <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <UniformGrid Rows="1"/>
-                </ItemsPanelTemplate>
-              </ItemsControl.ItemsPanel>
-              <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                  <Grid>
-                    <Grid.RowDefinitions>
-                      <RowDefinition Height="auto"/>
-                      <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Row="0">
-                      <TextBlock Text="{Binding ThisType}"/>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1">
-                      <TextBlock Text="{Binding Multiplier, Converter={StaticResource MultiplierConverter}}"/>
-                    </Border>
-                  </Grid>
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
-          </Grid>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*"/>
-              <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <controls:MediumTextBlock Text="Normal damage:" Grid.Row="0"/>
-            <ItemsControl ItemsSource="{Binding NormalDamage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1">
-              <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <UniformGrid Rows="1"/>
-                </ItemsPanelTemplate>
-              </ItemsControl.ItemsPanel>
-              <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                  <Grid>
-                    <Grid.RowDefinitions>
-                      <RowDefinition Height="auto"/>
-                      <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Row="0">
-                      <TextBlock Text="{Binding ThisType}"/>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1">
-                      <TextBlock Text="{Binding Multiplier, Converter={StaticResource MultiplierConverter}}"/>
-                    </Border>
-                  </Grid>
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
-          </Grid>
-        </StackPanel>
-      </Grid>
-    </Grid>
+    </StackPanel>
+    <Separator Grid.Row="1"/>
+    <nav:NavigationBar Name="navigationBar" HorizontalAlignment="Center" Grid.Row="2" DataContext="{Binding Navigator}" Height="50"/>
+    <ContentControl x:Name="contentControl" Grid.Row="3" Content="{Binding Navigator.CurrentViewModel}"/>
   </Grid>
-</Window>
+</views:ViewBaseWindow>
