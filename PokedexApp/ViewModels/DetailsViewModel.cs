@@ -5,8 +5,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using MVVMFramework.ViewModels;
 using Pokedex.PokedexLib;
-using System.Windows.Data;
-using Pokedex.PokedexApp.Services;
 using MVVMFramework.ViewNavigator;
 
 namespace Pokedex.PokedexApp.ViewModels
@@ -120,10 +118,7 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref evolveMethod, value);
         }
 
-
-
         #endregion
-
 
         public DetailsViewModel()
         {
@@ -133,7 +128,7 @@ namespace Pokedex.PokedexApp.ViewModels
         public override void OnLoaded()
         {
             mainViewModel = Navigator.Instance.MainViewModel as MainViewModel;
-            mainViewModel.PokemonChangedEvent2 += MainViewModel_PokemonChangedEvent2;
+            mainViewModel.PokemonChangedEvent += MainViewModel_PokemonChangedEvent2;
             base.OnLoaded();
         }
 
@@ -173,14 +168,14 @@ namespace Pokedex.PokedexApp.ViewModels
             }
 
             bool isForm(PokedexClass pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
-            bool hasForms(PokedexClass pkmn) => mainViewModel.pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+            bool hasForms(PokedexClass pkmn) => mainViewModel.PokemonHasForms(pkmn);
         }
 
         private void AddForms(PokedexClass pkmn)
         {
             mainViewModel.FormCollection.Clear();
             mainViewModel.FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
-            var forms = mainViewModel.pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+            var forms = mainViewModel.GetPokemonForms(pkmn);
             foreach (var form in forms)
                 mainViewModel.FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
         }

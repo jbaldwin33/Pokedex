@@ -92,46 +92,22 @@
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-          </Grid.RowDefinitions>
-          <controls:MediumTextBlock Text="Weaknesses:" Grid.Row="0"/>
-          <ItemsControl ItemsSource="{Binding Weaknesses, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1" Style="{StaticResource ItemsControlStyle}"/>
-        </Grid>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-          </Grid.RowDefinitions>
-          <controls:MediumTextBlock Text="Resistances:" Grid.Row="0"/>
-          <ItemsControl ItemsSource="{Binding Resistances, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1" Style="{StaticResource ItemsControlStyle}"/>
-        </Grid>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-          </Grid.RowDefinitions>
-          <controls:MediumTextBlock Text="Immunities:" Grid.Row="0"/>
-          <ItemsControl ItemsSource="{Binding Immunities, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1" Style="{StaticResource ItemsControlStyle}"/>
-        </Grid>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-          </Grid.RowDefinitions>
-          <controls:MediumTextBlock Text="Normal damage:" Grid.Row="0"/>
-          <ItemsControl ItemsSource="{Binding NormalDamage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1" Style="{StaticResource ItemsControlStyle}"/>
-        </Grid>
-      </StackPanel>
+      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0">
+        <controls:MediumTextBlock Text="Weaknesses:"/>
+          <ItemsControl ItemsSource="{Binding Weaknesses, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource ItemsControlStyle}"/>
+        </StackPanel>
+      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0">
+        <controls:MediumTextBlock Text="Resistances:"/>
+          <ItemsControl ItemsSource="{Binding Resistances, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource ItemsControlStyle}"/>
+        </StackPanel>
+      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1">
+        <controls:MediumTextBlock Text="Immunities:"/>
+          <ItemsControl ItemsSource="{Binding Immunities, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource ItemsControlStyle}"/>
+        </StackPanel>
+      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
+        <controls:MediumTextBlock Text="Normal damage:"/>
+          <ItemsControl ItemsSource="{Binding NormalDamage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource ItemsControlStyle}"/>
+        </StackPanel>
     </Grid>
   </Grid>
 </views:ViewBaseControl>

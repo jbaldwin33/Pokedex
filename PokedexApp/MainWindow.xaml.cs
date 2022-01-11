@@ -30,7 +30,7 @@ namespace Pokedex.PokedexApp
     /// </summary>
     public partial class MainWindow : ViewBaseWindow
     {
-        public MainWindow((Type, string, bool)[] viewModelTypes) : base(new MainViewModel(Navigator.Instance))
+        public MainWindow((Type, string, bool)[] viewModelTypes, ViewModel mainViewModel) : base(mainViewModel)
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             if (viewModelTypes == null || viewModelTypes.Length == 0)
@@ -38,6 +38,7 @@ namespace Pokedex.PokedexApp
 
             InitializeComponent();
             Navigator.Instance.NavigationBar = navigationBar;
+            Navigator.Instance.MainViewModel = mainViewModel;
             foreach (var (type, name, show) in viewModelTypes)
             {
                 var instance = (ViewModel)Activator.CreateInstance(type);

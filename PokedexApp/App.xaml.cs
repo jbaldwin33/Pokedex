@@ -1,4 +1,5 @@
-﻿using MVVMFramework.Views;
+﻿using MVVMFramework.ViewNavigator;
+using MVVMFramework.Views;
 using Pokedex.PokedexApp;
 using Pokedex.PokedexApp.ViewModels;
 using System;
@@ -19,14 +20,8 @@ namespace Pokedex
                 
             };
 
-            var window = new MainWindow(types);
+            var window = new MainWindow(types, new MainViewModel(Navigator.Instance));
             window.Show();
-            //var window = new MainWindow
-            //{
-            //    DataContext = new DetailsViewModel(),
-            //    WindowStartupLocation = WindowStartupLocation.CenterScreen
-            //};
-            //window.Show();
         }
     }
 }

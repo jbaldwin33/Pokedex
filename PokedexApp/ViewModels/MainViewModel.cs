@@ -14,13 +14,13 @@ namespace Pokedex.PokedexApp.ViewModels
     public class MainViewModel : ViewModel
     {
         public INavigator Navigator { get; set; }
-        public event PokemonChangedEventHandler PokemonChangedEvent2;
-        public delegate void PokemonChangedEventHandler(object sender, PokemonChangedEventArgs e);
+        public event PokemonChanged PokemonChangedEvent;
+        public delegate void PokemonChanged(object sender, PokemonChangedEventArgs e);
         private PokedexClass selectedPokemon;
         private int currentID;
         private ObservableCollection<PokedexClass> pokemonList;
         private ObservableCollection<PokedexForm> formCollection;
-        public List<PokedexClass> pokemonListWithForms;
+        private List<PokedexClass> pokemonListWithForms;
         private RelayCommand findCommand;
         private RelayCommand nextCommand;
         private RelayCommand previousCommand;
@@ -69,6 +69,9 @@ namespace Pokedex.PokedexApp.ViewModels
 
         #endregion
 
+        public bool PokemonHasForms(PokedexClass pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+        public IEnumerable<PokedexClass> GetPokemonForms(PokedexClass pkmn) => pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+
         private async void GetAllPokemon()
         {
             pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
@@ -81,7 +84,7 @@ namespace Pokedex.PokedexApp.ViewModels
 
         private void PreviousCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == selectedPokemon.Num - 1));
 
-        public void OnPokemonChanged(PokedexClass pkmn) => PokemonChangedEvent2?.Invoke(this, new PokemonChangedEventArgs { Pkmn = pkmn });
+        public void OnPokemonChanged(PokedexClass pkmn) => PokemonChangedEvent?.Invoke(this, new PokemonChangedEventArgs { Pkmn = pkmn });
     }
 
     public class PokemonChangedEventArgs
