@@ -80,15 +80,107 @@ namespace Pokedex.PokedexLib
     {
         private static readonly Lazy<TypeMasterClass> lazy = new Lazy<TypeMasterClass>(() => new TypeMasterClass());
         public static TypeMasterClass Instance => lazy.Value;
+        public TypeClass[] TypeClasses { get; set; }
+
+        private TypeClass type1;
+        private TypeClass type2;
+        private List<TypeMult> resistancesChecked;
+        private List<TypeMult> weaknessesChecked;
+        private DualTypeClass dualTypeClass;
+
         private TypeMasterClass()
         {
             TypeClasses = CreateTypes();
         }
 
+        public List<DualTypeClass> GetDualTypeCombos()
+        {
+            var dualTypeClasses = new List<DualTypeClass>();
 
-        public TypeClass[] TypeClasses { get; set; }
+            for (var i = 0; i < TypeClasses.Length - 1; i++)
+            {
+                for (var j = 1; j < TypeClasses.Length; j++)
+                {
+                    type1 = TypeClasses[i];
+                    type2 = TypeClasses[j];
+                    if (type1.ThisType == type2.ThisType)
+                        continue;
 
-        public TypeClass[] CreateTypes() =>
+                    resistancesChecked = new List<TypeMult>();
+                    weaknessesChecked = new List<TypeMult>();
+                    dualTypeClass = new DualTypeClass(type1, type2);
+                    CheckResistances();
+                    CheckWeaknesses();
+                    SetNormalDamage();
+
+                    dualTypeClasses.Add(dualTypeClass);
+                }
+            }
+            return dualTypeClasses;
+        }
+
+        private void CheckResistances()
+        {
+            foreach (var res in type1.Resistances)
+            {
+                if (type2.Resistances.Any(x => x.ThisType == res.ThisType))
+                {
+                    dualTypeClass.Resistances.Add(new TypeMult(res.ThisType, 0.25));
+                    resistancesChecked.Add(res);
+                }
+                else if (type2.Weaknesses.Any(x => x.ThisType == res.ThisType))
+                    weaknessesChecked.Add(res);
+                else if (!type2.Immunities.Contains(res))
+                    dualTypeClass.Resistances.Add(res);
+            }
+
+            foreach (var res in type2.Resistances)
+            {
+                if (resistancesChecked.Any(x => x.ThisType == res.ThisType) || weaknessesChecked.Any(x => x.ThisType == res.ThisType))
+                    continue;
+
+                if (type1.Weaknesses.Any(x => x.ThisType == res.ThisType))
+                    weaknessesChecked.Add(res);
+                else if (!type1.Immunities.Any(x => x.ThisType == res.ThisType))
+                    dualTypeClass.Resistances.Add(res);
+            }
+        }
+
+        private void CheckWeaknesses()
+        {
+            foreach (var weak in type1.Weaknesses)
+            {
+                if (resistancesChecked.Any(x => x.ThisType == weak.ThisType) || weaknessesChecked.Any(x => x.ThisType == weak.ThisType))
+                    continue;
+
+                if (type2.Weaknesses.Any(x => x.ThisType == weak.ThisType))
+                {
+                    dualTypeClass.Weaknesses.Add(new TypeMult(weak.ThisType, 4));
+                    weaknessesChecked.Add(weak);
+                }
+                else if (!type2.Immunities.Any(x => x.ThisType == weak.ThisType))
+                    dualTypeClass.Weaknesses.Add(weak);
+            }
+
+            foreach (var weak in type2.Weaknesses)
+            {
+                if (resistancesChecked.Any(x => x.ThisType == weak.ThisType) || weaknessesChecked.Any(x => x.ThisType == weak.ThisType))
+                    continue;
+
+                if (!type1.Immunities.Any(x => x.ThisType == weak.ThisType))
+                    dualTypeClass.Weaknesses.Add(weak);
+            }
+        }
+
+        private void SetNormalDamage()
+        {
+            var exclude = dualTypeClass.Resistances.Select(x => x.ThisType).Concat(dualTypeClass.Weaknesses.Select(x => x.ThisType)).Concat(dualTypeClass.Immunities.Select(x => x.ThisType));
+            var norms = Enum.GetValues(typeof(TypeEnum)).Cast<TypeEnum>().ToList().Except(exclude);
+            foreach (var n in norms)
+                dualTypeClass.NormalDamage.Add(new TypeMult(n, 1));
+        }
+
+        private TypeClass[] CreateTypes() =>
             new TypeClass[]
             {
                 new TypeClass(TypeEnum.Normal, new List<TypeEnum>(), new List<TypeEnum>{ TypeEnum.Fighting }, new List<TypeEnum> { TypeEnum.Ghost }),
