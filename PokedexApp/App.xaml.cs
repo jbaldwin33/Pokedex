@@ -10,10 +10,9 @@ namespace Pokedex
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var viewModel = new MainViewModel();
             var window = new MainWindow
             {
-                DataContext = viewModel,
+                DataContext = new MainViewModel(),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
             window.Show();

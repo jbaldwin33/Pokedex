@@ -1,5 +1,4 @@
-﻿using Pokedex.PkdxDatabase.Context;
-using Pokedex.PkdxDatabase.Models;
+﻿using Pokedex.PkdxDatabase.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +6,7 @@ using System.Linq;
 using MVVMFramework.ViewModels;
 using Pokedex.PokedexLib;
 using System.Windows.Data;
+using Pokedex.PokedexApp.Services;
 
 namespace Pokedex.PokedexApp
 {
@@ -34,8 +34,6 @@ namespace Pokedex.PokedexApp
         private ObservableCollection<PokedexForm> formCollection;
 
         private List<DualTypeClass> typeCombos;
-        //private List<PokedexClass> _pkmnCache;
-        //private List<PokedexClass> pkmnCache => _pkmnCache ??= new List<PokedexClass>();
         private RelayCommand findCommand;
         private RelayCommand nextCommand;
         private RelayCommand previousCommand;
@@ -157,8 +155,8 @@ namespace Pokedex.PokedexApp
         #region Commands
 
         public RelayCommand FindCommand => findCommand ??= new RelayCommand(FindCommandExecute);
-        public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.ID < 649);
-        public RelayCommand PreviousCommand => previousCommand ??= new RelayCommand(PreviousCommandExecute, () => SelectedPokemon?.ID > 1);
+        public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.Num < 649);
+        public RelayCommand PreviousCommand => previousCommand ??= new RelayCommand(PreviousCommandExecute, () => SelectedPokemon?.Num > 1);
 
         #endregion
 
@@ -166,20 +164,21 @@ namespace Pokedex.PokedexApp
         public MainViewModel()
         {
             typeCombos = TypeMasterClass.Instance.GetDualTypeCombos();
-            using var context = new PokedexDBContext();
-            pokemonListWithForms = context.PokedexEntries.ToList();
-            PokemonList = new ObservableCollection<PokedexClass>(pokemonListWithForms.Where(x => x.ID == Math.Floor(x.ID)));
-
+            GetAllPokemon();
+            PokemonList = new ObservableCollection<PokedexClass>(pokemonListWithForms.Where(x => x.Num == Math.Floor(x.Num)));
             FormCollection = new ObservableCollection<PokedexForm>();
-            //BindingOperations.EnableCollectionSynchronization(FormCollection, _lock);
+        }
 
+        private async void GetAllPokemon()
+        {
+            pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
         }
 
         private void FindCommandExecute() => PopulateDetails(PokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name));
 
-        private void NextCommandExecute() => PopulateDetails(PokemonList.FirstOrDefault(e => e.ID == selectedPokemon.ID + 1));
+        private void NextCommandExecute() => PopulateDetails(PokemonList.FirstOrDefault(e => e.Num == selectedPokemon.Num + 1));
 
-        private void PreviousCommandExecute() => PopulateDetails(PokemonList.FirstOrDefault(e => e.ID == selectedPokemon.ID - 1));
+        private void PreviousCommandExecute() => PopulateDetails(PokemonList.FirstOrDefault(e => e.Num == selectedPokemon.Num - 1));
 
 
         private void PopulateDetails(PokedexClass pkmn)
@@ -189,11 +188,11 @@ namespace Pokedex.PokedexApp
             else if (!isForm(pkmn) && !hasForms(pkmn))
                 FormCollection.Clear();
             if (!isForm(pkmn))
-                CurrentID = (int)pkmn.ID - 1;
+                CurrentID = (int)pkmn.Num - 1;
             Name = pkmn.Name;
             Type1 = (TypeEnum)Enum.Parse(typeof(TypeEnum), pkmn.Type1);
             Type2 = Enum.TryParse(typeof(TypeEnum), pkmn.Type2, out var t2)
-                ? (TypeEnum?)(TypeEnum)t2
+                ? (TypeEnum?)t2
                 : null;
             Ability1 = pkmn.Ability1;
             Ability2 = pkmn.Ability2;
@@ -215,18 +214,17 @@ namespace Pokedex.PokedexApp
                 NormalDamage = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).NormalDamage);
             }
 
-            bool isForm(PokedexClass pkmn) => pkmn.ID != Math.Floor(pkmn.ID);
-            bool hasForms(PokedexClass pkmn) => pokemonListWithForms.Any(x => x.ID != pkmn.ID && Math.Truncate(x.ID) == pkmn.ID);
+            bool isForm(PokedexClass pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
+            bool hasForms(PokedexClass pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
         }
-        private static readonly object _lock = new object();
 
         private void AddForms(PokedexClass pkmn)
         {
             FormCollection.Clear();
-            FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, ID = pkmn.ID });
-            var forms = pokemonListWithForms.Where(x => x.ID != pkmn.ID && Math.Truncate(x.ID) == pkmn.ID);
+            FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
+            var forms = pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
             foreach (var form in forms)
-                FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, ID = form.ID });
+                FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
         }
 
         private void FormCommandExecute(PokedexClass form)
@@ -240,7 +238,7 @@ namespace Pokedex.PokedexApp
     {
         public RelayCommand FormCommand { get; set; }
         public string Name { get; set; }
-        public float ID { get; set; }
+        public float Num { get; set; }
     }
 
     public class MultiplierConverter : IValueConverter

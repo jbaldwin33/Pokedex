@@ -39,11 +39,11 @@ namespace Pokedex.PokedexLib
 
     public class TypeClass
     {
-        public TypeEnum ThisType;
-        public List<TypeMult> Resistances = new List<TypeMult>();
-        public List<TypeMult> Weaknesses = new List<TypeMult>();
-        public List<TypeMult> Immunities = new List<TypeMult>();
-        public List<TypeMult> NormalDamage = new List<TypeMult>();
+        public TypeEnum ThisType { get; }
+        public List<TypeMult> Resistances { get; } = new List<TypeMult>();
+        public List<TypeMult> Weaknesses { get; } = new List<TypeMult>();
+        public List<TypeMult> Immunities { get; } = new List<TypeMult>();
+        public List<TypeMult> NormalDamage { get; } = new List<TypeMult>();
 
         public TypeClass(TypeEnum type, List<TypeEnum> res, List<TypeEnum> weak, List<TypeEnum> imm)
         {
@@ -60,12 +60,12 @@ namespace Pokedex.PokedexLib
 
     public class DualTypeClass
     {
-        public TypeClass Type1;
-        public TypeClass Type2;
-        public List<TypeMult> Resistances = new List<TypeMult>();
-        public List<TypeMult> Weaknesses = new List<TypeMult>();
-        public List<TypeMult> Immunities = new List<TypeMult>();
-        public List<TypeMult> NormalDamage = new List<TypeMult>();
+        public TypeClass Type1 { get; }
+        public TypeClass Type2 { get; }
+        public List<TypeMult> Resistances { get; } = new List<TypeMult>();
+        public List<TypeMult> Weaknesses { get; } = new List<TypeMult>();
+        public List<TypeMult> Immunities { get; } = new List<TypeMult>();
+        public List<TypeMult> NormalDamage { get; } = new List<TypeMult>();
 
         public DualTypeClass(TypeClass type1, TypeClass type2)
         {
@@ -180,7 +180,7 @@ namespace Pokedex.PokedexLib
                 dualTypeClass.NormalDamage.Add(new TypeMult(n, 1));
         }
 
-        private TypeClass[] CreateTypes() =>
+        private static TypeClass[] CreateTypes() =>
             new TypeClass[]
             {
                 new TypeClass(TypeEnum.Normal, new List<TypeEnum>(), new List<TypeEnum>{ TypeEnum.Fighting }, new List<TypeEnum> { TypeEnum.Ghost }),

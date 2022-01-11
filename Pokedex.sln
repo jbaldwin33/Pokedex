@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokedexApp", "Pokedex\PokedexApp.csproj", "{7D84BAE5-3EF3-4368-83EA-69CA691DEDD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokedexApp", "PokedexApp\PokedexApp.csproj", "{7D84BAE5-3EF3-4368-83EA-69CA691DEDD1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokedexLib", "PopulateDB\PokedexLib.csproj", "{8E99704A-2E44-4B2C-88FA-9ED7B7E7FE96}"
 EndProject

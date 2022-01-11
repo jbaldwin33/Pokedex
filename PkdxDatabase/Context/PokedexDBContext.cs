@@ -3,14 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Pokedex.PkdxDatabase.Models;
+using System.IO;
 
 namespace Pokedex.PkdxDatabase.Context
 {
-  public class PokedexDBContext : DbContext
-  {
-    public DbSet<PokedexClass> PokedexEntries { get; set; }
+    public class PokedexDBContext : DbContext
+    {
+        public PokedexDBContext(DbContextOptions options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;initial catalog=Pokedex;Trusted_Connection=true;");
+        public DbSet<PokedexClass> PokedexEntries { get; set; }
 
-  }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;initial catalog=Pokedex;Trusted_Connection=true;");
+
+    }
 }

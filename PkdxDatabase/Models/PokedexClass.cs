@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Pokedex.PkdxDatabase.Models
@@ -15,7 +16,9 @@ namespace Pokedex.PkdxDatabase.Models
     }
     public class PokedexClass
     {
-        public float ID { get; set; }//2
+        [Key]
+        public int Id { get; set; }
+        public float Num { get; set; }//2
         public string Name { get; set; }//3
         public string Type1 { get; set; }//11
         public string Type2 { get; set; }//11

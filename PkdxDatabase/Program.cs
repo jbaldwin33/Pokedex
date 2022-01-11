@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Pokedex.PkdxDatabase.Context;
 
 namespace Pokedex.PkdxDatabase
 {
@@ -8,7 +6,8 @@ namespace Pokedex.PkdxDatabase
     {
         static void Main(string[] args)
         {
-            //var records = PokedexLib
+            using var context = PokedexDbContextFactory.Instance.CreateDbContext();
+            PopulateDB.PopulateDatabase(context);
         }
     }
 }

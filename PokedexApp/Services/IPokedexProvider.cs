@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Pokedex.PokedexApp.Services
 {
-    public interface IDatabaseServiceProvider
+    public interface IPokedexProvider
     {
-        //Task<IEnumerable<PokedexClass>> GetAllPokemon();
+        Task<List<PokedexClass>> GetAllPokemon();
     }
 }
