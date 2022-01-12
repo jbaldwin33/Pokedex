@@ -27,6 +27,13 @@ namespace Pokedex.PkdxDatabase
                 {
                     Id = counter,
                     Num = csv.GetField<float>("Nat"),
+                    HP = csv.GetField<int>("HP"),
+                    Atk = csv.GetField<int>("Atk"),
+                    Def = csv.GetField<int>("Def"),
+                    SpA = csv.GetField<int>("SpA"),
+                    SpD = csv.GetField<int>("SpD"),
+                    Spe = csv.GetField<int>("Spe"),
+                    Total = csv.GetField<int>("Total"),
                     Name = csv.GetField("Pokemon"),
                     Type1 = csv.GetField("Type I"),
                     Type2 = csv.GetField("Type II"),
@@ -35,7 +42,8 @@ namespace Pokedex.PkdxDatabase
                     HiddenAbility = csv.GetField("Hidden Ability"),
                     EggGroup1 = csv.GetField("Egg Group I"),
                     EggGroup2 = csv.GetField("Egg Group II"),
-                    //CanEvolve = !string.IsNullOrEmpty(csv.GetField("Evolve")),
+                    CanEvolve = !string.IsNullOrEmpty(csv.GetField("Evolve")),
+                    Evolve = csv.GetField<string>("Evolve"),
                     EvolveMethod = GetEvolveMethod(csv.GetField("Evolve"))
                 };
                 var entry = context.PokedexEntries.Find(record.Id);

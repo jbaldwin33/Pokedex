@@ -1,0 +1,51 @@
+﻿<views:ViewBaseControl x:Class="Pokedex.PokedexApp.Views.StatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pokedex.PokedexApp.Views" 
+             xmlns:controls="clr-namespace:MVVMFramework.Controls;assembly=MVVMFramework"
+             xmlns:views="clr-namespace:MVVMFramework.Views;assembly=MVVMFramework"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <controls:SmallTextBlock Text="{Binding TotalStatsLabel}"/>
+      <controls:SmallTextBlock Text="{Binding TotalStats, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    </StackPanel>
+    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <controls:SmallTextBlock Text="{Binding HPLabel}"/>
+      <controls:SmallTextBlock Text="{Binding HPStat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    </StackPanel>
+    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <controls:SmallTextBlock Text="{Binding AtkLabel}"/>
+      <controls:SmallTextBlock Text="{Binding AtkStat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    </StackPanel>
+    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <controls:SmallTextBlock Text="{Binding DefLabel}"/>
+      <controls:SmallTextBlock Text="{Binding DefStat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    </StackPanel>
+    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <controls:SmallTextBlock Text="{Binding SpALabel}"/>
+      <controls:SmallTextBlock Text="{Binding SpAStat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    </StackPanel>
+    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <controls:SmallTextBlock Text="{Binding SpDLabel}"/>
+      <controls:SmallTextBlock Text="{Binding SpDStat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    </StackPanel>
+    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <controls:SmallTextBlock Text="{Binding SpeLabel}"/>
+      <controls:SmallTextBlock Text="{Binding SpeStat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    </StackPanel>
+  </Grid>
+</views:ViewBaseControl>

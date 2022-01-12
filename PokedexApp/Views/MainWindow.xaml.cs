@@ -23,7 +23,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MainViewModel = Pokedex.PokedexApp.ViewModels.MainViewModel;
 
-namespace Pokedex.PokedexApp
+namespace Pokedex.PokedexApp.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

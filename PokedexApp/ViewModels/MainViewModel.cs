@@ -14,8 +14,7 @@ namespace Pokedex.PokedexApp.ViewModels
     public class MainViewModel : ViewModel
     {
         public INavigator Navigator { get; set; }
-        public event PokemonChanged PokemonChangedEvent;
-        public delegate void PokemonChanged(object sender, PokemonChangedEventArgs e);
+        public Action<PokedexClass> PokemonChangedAction;
         private PokedexClass selectedPokemon;
         private int currentID;
         private ObservableCollection<PokedexClass> pokemonList;
@@ -72,11 +71,7 @@ namespace Pokedex.PokedexApp.ViewModels
         public bool PokemonHasForms(PokedexClass pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
         public IEnumerable<PokedexClass> GetPokemonForms(PokedexClass pkmn) => pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
 
-        private async void GetAllPokemon()
-        {
-            pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
-        }
-
+        private async void GetAllPokemon() => pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
 
         private void FindCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name));
 
@@ -84,11 +79,40 @@ namespace Pokedex.PokedexApp.ViewModels
 
         private void PreviousCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == selectedPokemon.Num - 1));
 
-        public void OnPokemonChanged(PokedexClass pkmn) => PokemonChangedEvent?.Invoke(this, new PokemonChangedEventArgs { Pkmn = pkmn });
-    }
+        public void OnPokemonChanged(PokedexClass pkmn)
+        {
+            if (!isForm(pkmn) && hasForms(pkmn))
+                AddForms(pkmn);
+            else if (!isForm(pkmn) && !hasForms(pkmn))
+                FormCollection.Clear();
+            if (!isForm(pkmn))
+                CurrentID = (int)pkmn.Num - 1;
+            PokemonChangedAction?.Invoke(pkmn);
 
-    public class PokemonChangedEventArgs
-    {
-        public PokedexClass Pkmn { get; set; }
+            bool isForm(PokedexClass pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
+            bool hasForms(PokedexClass pkmn) => PokemonHasForms(pkmn);
+        }
+
+        private void AddForms(PokedexClass pkmn)
+        {
+            FormCollection.Clear();
+            FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
+            var forms = GetPokemonForms(pkmn);
+            foreach (var form in forms)
+                FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
+        }
+
+        private void FormCommandExecute(PokedexClass form)
+        {
+            SelectedPokemon = form;
+            OnPokemonChanged(form);
+        }
+
+        public class PokedexForm
+        {
+            public RelayCommand FormCommand { get; set; }
+            public string Name { get; set; }
+            public float Num { get; set; }
+        }
     }
 }

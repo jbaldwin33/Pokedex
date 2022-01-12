@@ -2,6 +2,7 @@
 using MVVMFramework.Views;
 using Pokedex.PokedexApp;
 using Pokedex.PokedexApp.ViewModels;
+using Pokedex.PokedexApp.Views;
 using System;
 using System.Windows;
 
@@ -17,7 +18,7 @@ namespace Pokedex
             var types = new (Type, string, bool)[]
             {
                 (typeof(DetailsViewModel), "Details", true),
-                
+                (typeof(StatsViewModel), "Stats", true)
             };
 
             var window = new MainWindow(types, new MainViewModel(Navigator.Instance));

@@ -28,11 +28,7 @@ namespace Pokedex.PokedexApp.ViewModels
         private ObservableCollection<TypeMult> immunities;
         private ObservableCollection<TypeMult> normalDamage;
         private EvolveMethodEnum evolveMethod;
-
-
-
         private List<DualTypeClass> typeCombos;
-
 
         public int Number
         {
@@ -128,20 +124,22 @@ namespace Pokedex.PokedexApp.ViewModels
         public override void OnLoaded()
         {
             mainViewModel = Navigator.Instance.MainViewModel as MainViewModel;
-            mainViewModel.PokemonChangedEvent += MainViewModel_PokemonChangedEvent2;
+            mainViewModel.PokemonChangedAction += OnPokemonChanged;
+            if (mainViewModel.SelectedPokemon != null)
+                PopulateDetails(mainViewModel.SelectedPokemon);
             base.OnLoaded();
         }
 
-        private void MainViewModel_PokemonChangedEvent2(object sender, PokemonChangedEventArgs e) => PopulateDetails(e.Pkmn);
+        public override void OnUnloaded()
+        {
+            mainViewModel.PokemonChangedAction -= OnPokemonChanged;
+            base.OnUnloaded();
+        }
+
+        private void OnPokemonChanged(PokedexClass pkmn) => PopulateDetails(pkmn);
 
         public void PopulateDetails(PokedexClass pkmn)
         {
-            if (!isForm(pkmn) && hasForms(pkmn))
-                AddForms(pkmn);
-            else if (!isForm(pkmn) && !hasForms(pkmn))
-                mainViewModel.FormCollection.Clear();
-            if (!isForm(pkmn))
-                mainViewModel.CurrentID = (int)pkmn.Num - 1;
             Name = pkmn.Name;
             Type1 = (TypeEnum)Enum.Parse(typeof(TypeEnum), pkmn.Type1);
             Type2 = Enum.TryParse(typeof(TypeEnum), pkmn.Type2, out var t2)
@@ -166,31 +164,6 @@ namespace Pokedex.PokedexApp.ViewModels
                 Immunities = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).Immunities);
                 NormalDamage = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).NormalDamage);
             }
-
-            bool isForm(PokedexClass pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
-            bool hasForms(PokedexClass pkmn) => mainViewModel.PokemonHasForms(pkmn);
         }
-
-        private void AddForms(PokedexClass pkmn)
-        {
-            mainViewModel.FormCollection.Clear();
-            mainViewModel.FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
-            var forms = mainViewModel.GetPokemonForms(pkmn);
-            foreach (var form in forms)
-                mainViewModel.FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
-        }
-
-        private void FormCommandExecute(PokedexClass form)
-        {
-            mainViewModel.SelectedPokemon = form;
-            PopulateDetails(form);
-        }
-    }
-
-    public class PokedexForm
-    {
-        public RelayCommand FormCommand { get; set; }
-        public string Name { get; set; }
-        public float Num { get; set; }
     }
 }
