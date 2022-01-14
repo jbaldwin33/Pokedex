@@ -1,17 +1,11 @@
-﻿using MVVMFramework.ViewModels;
-using MVVMFramework.ViewNavigator;
-using Pokedex.PkdxDatabase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Pokedex.PkdxDatabase.Models;
 
 namespace Pokedex.PokedexApp.ViewModels
 {
-    public class StatsViewModel : ViewModel
+    public class StatsViewModel : TabViewModel
     {
-        private MainViewModel mainViewModel;
+        #region Fields and props
+
         private int hpStat;
         private int atkStat;
         private int defStat;
@@ -62,6 +56,10 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref totalStats, value);
         }
 
+        #endregion
+
+        #region Labels
+
         public string HPLabel => "HP";
         public string AtkLabel => "Atk";
         public string DefLabel => "Def";
@@ -70,22 +68,10 @@ namespace Pokedex.PokedexApp.ViewModels
         public string SpeLabel => "Spe";
         public string TotalStatsLabel => "Total ";
 
-        public StatsViewModel()
-        {
+        #endregion
 
-        }
-
-        public override void OnLoaded()
-        {
-            mainViewModel = Navigator.Instance.MainViewModel as MainViewModel;
-            mainViewModel.PokemonChangedAction += OnPokemonChanged;
-            if (mainViewModel.SelectedPokemon != null)
-                PopulateStats(mainViewModel.SelectedPokemon);
-            base.OnLoaded();
-        }
-
-        private void OnPokemonChanged(Pokemon pkmn) => PopulateStats(pkmn);
-        private void PopulateStats(Pokemon pkmn)
+        public StatsViewModel() { }
+        protected override void OnPokemonChanged(Pokemon pkmn)
         {
             HPStat = pkmn.HP;
             AtkStat = pkmn.Atk;

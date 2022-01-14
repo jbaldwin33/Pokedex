@@ -9,11 +9,10 @@ using MVVMFramework.ViewNavigator;
 
 namespace Pokedex.PokedexApp.ViewModels
 {
-    public class DetailsViewModel : ViewModel
+    public class DetailsViewModel : TabViewModel
     {
         #region Fields and props
 
-        private MainViewModel mainViewModel;
         private int number;
         private string name;
         private TypeEnum? type1;
@@ -114,24 +113,13 @@ namespace Pokedex.PokedexApp.ViewModels
             typeCombos = TypeMasterClass.Instance.GetDualTypeCombos();
         }
 
-        public override void OnLoaded()
-        {
-            mainViewModel = Navigator.Instance.MainViewModel as MainViewModel;
-            mainViewModel.PokemonChangedAction += OnPokemonChanged;
-            if (mainViewModel.SelectedPokemon != null)
-                PopulateDetails(mainViewModel.SelectedPokemon);
-            base.OnLoaded();
-        }
-
         public override void OnUnloaded()
         {
             mainViewModel.PokemonChangedAction -= OnPokemonChanged;
             base.OnUnloaded();
         }
 
-        private void OnPokemonChanged(Pokemon pkmn) => PopulateDetails(pkmn);
-
-        public void PopulateDetails(Pokemon pkmn)
+        protected override void OnPokemonChanged(Pokemon pkmn)
         {
             Name = pkmn.Name;
             Type1 = (TypeEnum)Enum.Parse(typeof(TypeEnum), pkmn.Type1);

@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 
 namespace Pokedex.PokedexApp.ViewModels
 {
-    public class EvolveViewModel : ViewModel
+    public class EvolveViewModel : TabViewModel
     {
-        private MainViewModel mainViewModel;
         private ObservableCollection<Pokemon> evolutionLine;
         private ObservableCollection<Pokemon> multipleEvolutions;
 
@@ -35,16 +34,7 @@ namespace Pokedex.PokedexApp.ViewModels
             MultipleEvolutions = new ObservableCollection<Pokemon>();
         }
 
-        public override void OnLoaded()
-        {
-            mainViewModel = Navigator.Instance.MainViewModel as MainViewModel;
-            mainViewModel.PokemonChangedAction += OnPokemonChanged;
-            if (mainViewModel.SelectedPokemon != null)
-                OnPokemonChanged(mainViewModel.SelectedPokemon);
-            base.OnLoaded();
-        }
-
-        private void OnPokemonChanged(Pokemon pkmn)
+        protected override void OnPokemonChanged(Pokemon pkmn)
         {
             if (!EvolutionLine.Contains(pkmn))
             {
