@@ -1,30 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Pokedex.PkdxDatabase.Models
+namespace Pokedex.PkdxDatabase.Entities
 {
-    public enum StatEnum
+    public class PokedexClassEntity
     {
-        [Description("HP")]
-        HP,
-        [Description("Attack")]
-        Atk,
-        [Description("Defense")]
-        Def,
-        [Description("Special Attack")]
-        SpA,
-        [Description("Special Defense")]
-        SpD,
-        [Description("Speed")]
-        Spe
-    }
-
-    public class PokedexClass
-    {
+        [Key]
         public int Id { get; set; }
         public float Num { get; set; }
         public float EvolutionOrderNum { get; set; }
@@ -41,15 +25,11 @@ namespace Pokedex.PkdxDatabase.Models
         public string Ability1 { get; set; }
         public string Ability2 { get; set; }
         public string HiddenAbility { get; set; }
-        public List<EVYield> EVYields { get; set; }
+        public string EVYield { get; set; }
         public string EggGroup1 { get; set; }
         public string EggGroup2 { get; set; }
-        public bool CanEvolveTo { get; set; }
         public string EvolveMethodString { get; set; }
         public byte[] Icon { get; set; }
         public int NumberOfEvolutions { get; set; }
-        public bool HasMultipleEvolutions { get; set; }
-        //[NotMapped]
-        //public List<PokedexClass> MultipleEvolutions { get; set; } = new List<PokedexClass>();
     }
 }

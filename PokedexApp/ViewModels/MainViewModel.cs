@@ -13,10 +13,15 @@ namespace Pokedex.PokedexApp.ViewModels
 {
     public class MainViewModel : ViewModel
     {
+        private string[] pokemonWithMultipleEvolutions = new string[]
+        {
+            "Gloom", "Poliwhirl", "Slowpoke", "Tyrogue", "Eevee", "Wurmple", "Kirlia", "Nincada", "Snorunt", "Clamperl", "Burmy"
+        };
         public INavigator Navigator { get; set; }
         public Action<PokedexClass> PokemonChangedAction;
         private PokedexClass selectedPokemon;
         private int currentID;
+        private byte[] iconData;
         private ObservableCollection<PokedexClass> pokemonList;
         private ObservableCollection<PokedexForm> formCollection;
         private List<PokedexClass> pokemonListWithForms;
@@ -38,6 +43,12 @@ namespace Pokedex.PokedexApp.ViewModels
         {
             get => currentID;
             set => SetProperty(ref currentID, value);
+        }
+
+        public byte[] IconData
+        {
+            get => iconData;
+            set => SetProperty(ref iconData, value);
         }
 
         public ObservableCollection<PokedexClass> PokemonList
@@ -70,16 +81,53 @@ namespace Pokedex.PokedexApp.ViewModels
 
         public bool PokemonHasForms(PokedexClass pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
         public IEnumerable<PokedexClass> GetPokemonForms(PokedexClass pkmn) => pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+        private List<PokedexClass> evList = new List<PokedexClass>();
 
-        private async void GetAllPokemon() => pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
+        public List<PokedexClass> GetEvolutionLine(PokedexClass pkmn)
+        {
+            evList.Clear();
+            evList.Add(pkmn);
+            CheckPrevious(pkmn);
+            CheckNext(pkmn);
+
+            evList.Sort((x1, x2) => x1.EvolutionOrderNum < x2.EvolutionOrderNum ? -1 : 1);
+            return evList;
+        }
+
+        private void CheckPrevious(PokedexClass currentPkmn)
+        {
+            var prevPkmn = PokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) - 1);
+            if (currentPkmn.CanEvolveTo)
+            {
+                evList.Add(prevPkmn);
+                CheckPrevious(prevPkmn);
+            }
+        }
+
+        private void CheckNext(PokedexClass currentPkmn)
+        {
+            var nextPkmn = PokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) + 1);
+            if (nextPkmn != null && nextPkmn.CanEvolveTo)
+            {
+                evList.Add(nextPkmn);
+                CheckNext(nextPkmn);
+            }
+        }
+
+        private async void GetAllPokemon()
+        {
+            pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
+            pokemonListWithForms.Sort((p1, p2) => p1.Num < p2.Num ? -1 : 1);
+            //PokedexProvider.Instance.SetEvolutions(pokemonListWithForms);
+        }
 
         private void FindCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name));
 
-        private void NextCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == selectedPokemon.Num + 1));
+        private void NextCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) + 1));
 
-        private void PreviousCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == selectedPokemon.Num - 1));
+        private void PreviousCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) - 1));
 
-        public void OnPokemonChanged(PokedexClass pkmn)
+        private void OnPokemonChanged(PokedexClass pkmn)
         {
             if (!isForm(pkmn) && hasForms(pkmn))
                 AddForms(pkmn);
@@ -87,6 +135,7 @@ namespace Pokedex.PokedexApp.ViewModels
                 FormCollection.Clear();
             if (!isForm(pkmn))
                 CurrentID = (int)pkmn.Num - 1;
+            IconData = pkmn.Icon;
             PokemonChangedAction?.Invoke(pkmn);
 
             bool isForm(PokedexClass pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
@@ -104,7 +153,7 @@ namespace Pokedex.PokedexApp.ViewModels
 
         private void FormCommandExecute(PokedexClass form)
         {
-            SelectedPokemon = form;
+            selectedPokemon = form;
             OnPokemonChanged(form);
         }
 

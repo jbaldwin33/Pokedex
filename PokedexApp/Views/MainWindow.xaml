@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:MVVMFramework.Views;assembly=MVVMFramework"
         xmlns:nav="clr-namespace:MVVMFramework.ViewNavigator;assembly=MVVMFramework"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="900">
+        Title="MainWindow" Height="700" Width="900">
   <Window.Resources>
     <local:MultiplierConverter x:Key="MultiplierConverter"/>
   </Window.Resources>
@@ -21,6 +21,7 @@
     </Grid.RowDefinitions>
     <StackPanel Grid.Row="0" HorizontalAlignment="Center">
       <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+        <Image Source="{Binding IconData, TargetNullValue={x:Null}}" Height="70"/>
         <controls:ExtraSmallButton Content="Prev" Command="{Binding PreviousCommand}"/>
         <ComboBox MinWidth="100" Height="25" IsEditable="False" IsReadOnly="True" ItemsSource="{Binding PokemonList}" DisplayMemberPath="Name" SelectedIndex="{Binding CurrentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding SelectedPokemon, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
           <ComboBox.ItemsPanel>

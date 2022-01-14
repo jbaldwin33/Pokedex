@@ -18,7 +18,9 @@ namespace Pokedex
             var types = new (Type, string, bool)[]
             {
                 (typeof(DetailsViewModel), "Details", true),
-                (typeof(StatsViewModel), "Stats", true)
+                (typeof(EvolveViewModel), "Evolution", true),
+                (typeof(StatsViewModel), "Stats", true),
+                (typeof(EVYieldViewModel), "EV Yield", true)
             };
 
             var window = new MainWindow(types, new MainViewModel(Navigator.Instance));

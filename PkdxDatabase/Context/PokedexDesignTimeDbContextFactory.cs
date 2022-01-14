@@ -9,7 +9,7 @@ namespace Pokedex.PkdxDatabase.Context
     {
         public PokedexDBContext CreateDbContext(string[] args)
         {
-            var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\"));
+            var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Binaries"));
             AppDomain.CurrentDomain.SetData("DataDirectory", path);
             var options = new DbContextOptionsBuilder().UseSqlite("Data Source=|DataDirectory|pokedex.db;").Options;
             return new PokedexDBContext(options);

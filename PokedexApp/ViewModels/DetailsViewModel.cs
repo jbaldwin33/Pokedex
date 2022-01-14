@@ -27,7 +27,6 @@ namespace Pokedex.PokedexApp.ViewModels
         private ObservableCollection<TypeMult> resistances;
         private ObservableCollection<TypeMult> immunities;
         private ObservableCollection<TypeMult> normalDamage;
-        private EvolveMethodEnum evolveMethod;
         private List<DualTypeClass> typeCombos;
 
         public int Number
@@ -106,12 +105,6 @@ namespace Pokedex.PokedexApp.ViewModels
         {
             get => normalDamage;
             set => SetProperty(ref normalDamage, value);
-        }
-
-        public EvolveMethodEnum EvolveMethod
-        {
-            get => evolveMethod;
-            set => SetProperty(ref evolveMethod, value);
         }
 
         #endregion

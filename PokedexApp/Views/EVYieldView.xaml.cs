@@ -18,11 +18,11 @@ using System.Windows.Shapes;
 namespace Pokedex.PokedexApp.Views
 {
     /// <summary>
-    /// Interaction logic for EvolveView.xaml
+    /// Interaction logic for EVYieldView.xaml
     /// </summary>
-    public partial class EvolveView : ViewBaseControl
+    public partial class EVYieldView : ViewBaseControl
     {
-        public EvolveView() : base()
+        public EVYieldView() : base()
         {
             InitializeComponent();
         }

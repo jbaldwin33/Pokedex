@@ -14,8 +14,14 @@
       <DataTemplate DataType="{x:Type viewModels:DetailsViewModel}">
         <views:DetailsView/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type viewModels:EvolveViewModel}">
+        <views:EvolveView/>
+      </DataTemplate>
       <DataTemplate DataType="{x:Type viewModels:StatsViewModel}">
         <views:StatsView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type viewModels:EVYieldViewModel}">
+        <views:EVYieldView/>
       </DataTemplate>
     </ResourceDictionary>
   </Application.Resources>

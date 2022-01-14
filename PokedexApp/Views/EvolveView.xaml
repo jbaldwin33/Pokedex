@@ -4,10 +4,83 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Pokedex.PokedexApp.Views"
+             xmlns:selector="clr-namespace:Pokedex.PokedexApp.Utilities"          
              xmlns:views="clr-namespace:MVVMFramework.Views;assembly=MVVMFramework"
+             xmlns:controls="clr-namespace:MVVMFramework.Controls;assembly=MVVMFramework"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+  <Grid>
+    <Grid.Resources>
+      <selector:MyTemplateSelector x:Key="MyDataTemplateSelector"/>
+      <DataTemplate x:Key="template1">
+        <Grid VerticalAlignment="Center">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <controls:LargeTextBlock Text="{Binding EvolveMethodString}"/>
+          </StackPanel>
+          <StackPanel Grid.Column="1" Orientation="Vertical">
+            <Image Source="{Binding Icon, TargetNullValue={x:Null}}"/>
+            <controls:MediumTextBlock Text="{Binding Name}"/>
+          </StackPanel>
+        </Grid>
+      </DataTemplate>
+      <DataTemplate x:Key="template2">
+        <Grid VerticalAlignment="Center">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Grid.Column="0" Orientation="Vertical">
+            <Image Source="{Binding Icon, TargetNullValue={x:Null}}"/>
+            <controls:MediumTextBlock Text="{Binding Name}"/>
+          </StackPanel>
+        </Grid>
+      </DataTemplate>
+      <DataTemplate x:Key="template3">
+        <ItemsControl ItemsSource="{Binding DataContext.MultipleEvolutions, RelativeSource={RelativeSource AncestorType=local:EvolveView}}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Vertical"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <controls:LargeTextBlock Text="{Binding EvolveMethodString}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Vertical">
+                  <Image Source="{Binding Icon, TargetNullValue={x:Null}}"/>
+                  <controls:MediumTextBlock Text="{Binding Name}"/>
+                </StackPanel>
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </DataTemplate>
+    </Grid.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <StackPanel HorizontalAlignment="Center">
+        <ItemsControl ItemsSource="{Binding EvolutionLine, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource MyDataTemplateSelector}"/>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
 </views:ViewBaseControl>

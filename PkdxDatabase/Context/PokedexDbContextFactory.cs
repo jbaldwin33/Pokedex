@@ -12,7 +12,7 @@ namespace Pokedex.PkdxDatabase.Context
 
         private PokedexDbContextFactory()
         {
-            var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\"));
+            var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Binaries"));
             AppDomain.CurrentDomain.SetData("DataDirectory", path);
         }
 

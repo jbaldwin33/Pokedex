@@ -22,7 +22,7 @@ namespace Pokedex.PokedexApp.Views
     /// </summary>
     public partial class DetailsView : ViewBaseControl
     {
-        public DetailsView() : base(Navigator.Instance.CurrentViewModel)
+        public DetailsView() : base()
         {
             InitializeComponent();
         }
