@@ -8,6 +8,6 @@ namespace Pokedex.PokedexApp.Services
 {
     public interface IPokedexProvider
     {
-        Task<List<PokedexClass>> GetAllPokemon();
+        Task<List<Pokemon>> GetAllPokemon();
     }
 }

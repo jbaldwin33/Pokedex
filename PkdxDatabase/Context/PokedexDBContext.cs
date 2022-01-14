@@ -15,7 +15,7 @@ namespace Pokedex.PkdxDatabase.Context
             Database.EnsureCreated();
         }
 
-        public DbSet<PokedexClassEntity> PokedexEntries { get; set; }
+        public DbSet<PokemonEntity> PokedexEntries { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;initial catalog=Pokedex;Trusted_Connection=true;");
 

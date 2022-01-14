@@ -49,7 +49,7 @@ namespace Pokedex.PokedexApp.ViewModels
             base.OnLoaded();
         }
 
-        private void OnPokemonChanged(PokedexClass pkmn)
+        private void OnPokemonChanged(Pokemon pkmn)
         {
             EVYields = pkmn.EVYields;
         }

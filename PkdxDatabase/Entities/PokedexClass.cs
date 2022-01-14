@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Pokedex.PkdxDatabase.Entities
 {
-    public class PokedexClassEntity
+    public class PokemonEntity
     {
         [Key]
         public int Id { get; set; }

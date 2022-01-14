@@ -15,10 +15,10 @@ namespace Pokedex.PokedexApp.Services
         public static PokedexProvider Instance => lazy.Value;
         private PokedexProvider() { }
 
-        public async Task<List<PokedexClass>> GetAllPokemon()
+        public async Task<List<Pokemon>> GetAllPokemon()
         {
             using var context = PokedexDbContextFactory.Instance.CreateDbContext();
-            return await context.PokedexEntries.Select(pkmn => new PokedexClass
+            return await context.PokedexEntries.Select(pkmn => new Pokemon
             {
                 Id = pkmn.Id,
                 Name = pkmn.Name,
@@ -47,7 +47,7 @@ namespace Pokedex.PokedexApp.Services
             }).ToListAsync();
         }
 
-        private static List<EVYield> GetEVYield(PokedexClassEntity pkmn)
+        private static List<EVYield> GetEVYield(PokemonEntity pkmn)
         {
             var evDict = new List<EVYield>();
 

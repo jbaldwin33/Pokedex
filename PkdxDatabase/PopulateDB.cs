@@ -21,13 +21,13 @@ namespace Pokedex.PkdxDatabase
             using var reader = new StreamReader(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries", filename));
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-            var records = new List<PokedexClass>();
+            var records = new List<Pokemon>();
             var counter = 1;
             csv.Read();
             csv.ReadHeader();
             while (csv.Read())
             {
-                var record = new PokedexClassEntity
+                var record = new PokemonEntity
                 {
                     Id = counter,
                     Num = csv.GetField<float>("Nat"),

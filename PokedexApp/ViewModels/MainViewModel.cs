@@ -13,23 +13,19 @@ namespace Pokedex.PokedexApp.ViewModels
 {
     public class MainViewModel : ViewModel
     {
-        private string[] pokemonWithMultipleEvolutions = new string[]
-        {
-            "Gloom", "Poliwhirl", "Slowpoke", "Tyrogue", "Eevee", "Wurmple", "Kirlia", "Nincada", "Snorunt", "Clamperl", "Burmy"
-        };
         public INavigator Navigator { get; set; }
-        public Action<PokedexClass> PokemonChangedAction;
-        private PokedexClass selectedPokemon;
+        public Action<Pokemon> PokemonChangedAction;
+        private Pokemon selectedPokemon;
         private int currentID;
         private byte[] iconData;
-        private ObservableCollection<PokedexClass> pokemonList;
-        private ObservableCollection<PokedexForm> formCollection;
-        private List<PokedexClass> pokemonListWithForms;
+        private ObservableCollection<Pokemon> pokemonList;
+        private ObservableCollection<PokemonForm> formCollection;
+        private List<Pokemon> pokemonListWithForms;
         private RelayCommand findCommand;
         private RelayCommand nextCommand;
         private RelayCommand previousCommand;
 
-        public PokedexClass SelectedPokemon
+        public Pokemon SelectedPokemon
         {
             get => selectedPokemon;
             set
@@ -51,13 +47,13 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref iconData, value);
         }
 
-        public ObservableCollection<PokedexClass> PokemonList
+        public ObservableCollection<Pokemon> PokemonList
         {
             get => pokemonList;
             set => SetProperty(ref pokemonList, value);
         }
 
-        public ObservableCollection<PokedexForm> FormCollection
+        public ObservableCollection<PokemonForm> FormCollection
         {
             get => formCollection;
             set => SetProperty(ref formCollection, value);
@@ -67,8 +63,8 @@ namespace Pokedex.PokedexApp.ViewModels
         {
             Navigator = navigator;
             GetAllPokemon();
-            PokemonList = new ObservableCollection<PokedexClass>(pokemonListWithForms.Where(x => x.Num == Math.Floor(x.Num)));
-            FormCollection = new ObservableCollection<PokedexForm>();
+            PokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => x.Num == Math.Floor(x.Num)));
+            FormCollection = new ObservableCollection<PokemonForm>();
         }
 
         #region Commands
@@ -79,11 +75,11 @@ namespace Pokedex.PokedexApp.ViewModels
 
         #endregion
 
-        public bool PokemonHasForms(PokedexClass pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
-        public IEnumerable<PokedexClass> GetPokemonForms(PokedexClass pkmn) => pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
-        private List<PokedexClass> evList = new List<PokedexClass>();
+        public bool PokemonHasForms(Pokemon pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+        public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+        private List<Pokemon> evList = new List<Pokemon>();
 
-        public List<PokedexClass> GetEvolutionLine(PokedexClass pkmn)
+        public List<Pokemon> GetEvolutionLine(Pokemon pkmn)
         {
             evList.Clear();
             evList.Add(pkmn);
@@ -94,7 +90,7 @@ namespace Pokedex.PokedexApp.ViewModels
             return evList;
         }
 
-        private void CheckPrevious(PokedexClass currentPkmn)
+        private void CheckPrevious(Pokemon currentPkmn)
         {
             var prevPkmn = PokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) - 1);
             if (currentPkmn.CanEvolveTo)
@@ -104,7 +100,7 @@ namespace Pokedex.PokedexApp.ViewModels
             }
         }
 
-        private void CheckNext(PokedexClass currentPkmn)
+        private void CheckNext(Pokemon currentPkmn)
         {
             var nextPkmn = PokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) + 1);
             if (nextPkmn != null && nextPkmn.CanEvolveTo)
@@ -118,7 +114,6 @@ namespace Pokedex.PokedexApp.ViewModels
         {
             pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
             pokemonListWithForms.Sort((p1, p2) => p1.Num < p2.Num ? -1 : 1);
-            //PokedexProvider.Instance.SetEvolutions(pokemonListWithForms);
         }
 
         private void FindCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name));
@@ -127,7 +122,7 @@ namespace Pokedex.PokedexApp.ViewModels
 
         private void PreviousCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) - 1));
 
-        private void OnPokemonChanged(PokedexClass pkmn)
+        private void OnPokemonChanged(Pokemon pkmn)
         {
             if (!isForm(pkmn) && hasForms(pkmn))
                 AddForms(pkmn);
@@ -138,26 +133,26 @@ namespace Pokedex.PokedexApp.ViewModels
             IconData = pkmn.Icon;
             PokemonChangedAction?.Invoke(pkmn);
 
-            bool isForm(PokedexClass pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
-            bool hasForms(PokedexClass pkmn) => PokemonHasForms(pkmn);
+            bool isForm(Pokemon pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
+            bool hasForms(Pokemon pkmn) => PokemonHasForms(pkmn);
         }
 
-        private void AddForms(PokedexClass pkmn)
+        private void AddForms(Pokemon pkmn)
         {
             FormCollection.Clear();
-            FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
+            FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
             var forms = GetPokemonForms(pkmn);
             foreach (var form in forms)
-                FormCollection.Add(new PokedexForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
+                FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
         }
 
-        private void FormCommandExecute(PokedexClass form)
+        private void FormCommandExecute(Pokemon form)
         {
             selectedPokemon = form;
             OnPokemonChanged(form);
         }
 
-        public class PokedexForm
+        public class PokemonForm
         {
             public RelayCommand FormCommand { get; set; }
             public string Name { get; set; }

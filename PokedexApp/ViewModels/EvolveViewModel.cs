@@ -13,16 +13,16 @@ namespace Pokedex.PokedexApp.ViewModels
     public class EvolveViewModel : ViewModel
     {
         private MainViewModel mainViewModel;
-        private ObservableCollection<PokedexClass> evolutionLine;
-        private ObservableCollection<PokedexClass> multipleEvolutions;
+        private ObservableCollection<Pokemon> evolutionLine;
+        private ObservableCollection<Pokemon> multipleEvolutions;
 
-        public ObservableCollection<PokedexClass> EvolutionLine
+        public ObservableCollection<Pokemon> EvolutionLine
         {
             get => evolutionLine;
             set => SetProperty(ref evolutionLine, value);
         }
 
-        public ObservableCollection<PokedexClass> MultipleEvolutions
+        public ObservableCollection<Pokemon> MultipleEvolutions
         {
             get => multipleEvolutions;
             set => SetProperty(ref multipleEvolutions, value);
@@ -31,8 +31,8 @@ namespace Pokedex.PokedexApp.ViewModels
 
         public EvolveViewModel()
         {
-            EvolutionLine = new ObservableCollection<PokedexClass>();
-            MultipleEvolutions = new ObservableCollection<PokedexClass>();
+            EvolutionLine = new ObservableCollection<Pokemon>();
+            MultipleEvolutions = new ObservableCollection<Pokemon>();
         }
 
         public override void OnLoaded()
@@ -44,7 +44,7 @@ namespace Pokedex.PokedexApp.ViewModels
             base.OnLoaded();
         }
 
-        private void OnPokemonChanged(PokedexClass pkmn)
+        private void OnPokemonChanged(Pokemon pkmn)
         {
             if (!EvolutionLine.Contains(pkmn))
             {

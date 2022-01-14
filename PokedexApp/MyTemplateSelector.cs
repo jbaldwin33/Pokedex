@@ -16,9 +16,9 @@ namespace Pokedex.PokedexApp.Utilities
         {
             FrameworkElement element = container as FrameworkElement;
 
-            if (element != null && item != null && item is PokedexClass)
+            if (element != null && item != null && item is Pokemon)
             {
-                var pkmn = item as PokedexClass;
+                var pkmn = item as Pokemon;
 
                 if (hasMultiple)
                 {

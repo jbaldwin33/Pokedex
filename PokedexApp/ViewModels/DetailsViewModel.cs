@@ -129,9 +129,9 @@ namespace Pokedex.PokedexApp.ViewModels
             base.OnUnloaded();
         }
 
-        private void OnPokemonChanged(PokedexClass pkmn) => PopulateDetails(pkmn);
+        private void OnPokemonChanged(Pokemon pkmn) => PopulateDetails(pkmn);
 
-        public void PopulateDetails(PokedexClass pkmn)
+        public void PopulateDetails(Pokemon pkmn)
         {
             Name = pkmn.Name;
             Type1 = (TypeEnum)Enum.Parse(typeof(TypeEnum), pkmn.Type1);

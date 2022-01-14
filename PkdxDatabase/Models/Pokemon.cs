@@ -23,7 +23,7 @@ namespace Pokedex.PkdxDatabase.Models
         Spe
     }
 
-    public class PokedexClass
+    public class Pokemon
     {
         public int Id { get; set; }
         public float Num { get; set; }
@@ -49,7 +49,5 @@ namespace Pokedex.PkdxDatabase.Models
         public byte[] Icon { get; set; }
         public int NumberOfEvolutions { get; set; }
         public bool HasMultipleEvolutions { get; set; }
-        //[NotMapped]
-        //public List<PokedexClass> MultipleEvolutions { get; set; } = new List<PokedexClass>();
     }
 }

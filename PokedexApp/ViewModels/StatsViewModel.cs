@@ -84,8 +84,8 @@ namespace Pokedex.PokedexApp.ViewModels
             base.OnLoaded();
         }
 
-        private void OnPokemonChanged(PokedexClass pkmn) => PopulateStats(pkmn);
-        private void PopulateStats(PokedexClass pkmn)
+        private void OnPokemonChanged(Pokemon pkmn) => PopulateStats(pkmn);
+        private void PopulateStats(Pokemon pkmn)
         {
             HPStat = pkmn.HP;
             AtkStat = pkmn.Atk;
