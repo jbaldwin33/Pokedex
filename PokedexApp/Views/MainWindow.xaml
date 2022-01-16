@@ -7,44 +7,61 @@
         xmlns:controls="clr-namespace:MVVMFramework.Controls;assembly=MVVMFramework"
         xmlns:views="clr-namespace:MVVMFramework.Views;assembly=MVVMFramework"
         xmlns:nav="clr-namespace:MVVMFramework.ViewNavigator;assembly=MVVMFramework"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="900">
-  <Window.Resources>
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+                      mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="1000">
+  <views:ViewBaseWindow.Resources>
     <local:MultiplierConverter x:Key="MultiplierConverter"/>
-  </Window.Resources>
+    <local:EnumValueToDecriptionConverter x:Key="EnumConverter"/>
+    <ResourceDictionary x:Key="dict">
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MVVMFramework;component/Controls/ControlStyles.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </views:ViewBaseWindow.Resources>
+  <views:ViewBaseWindow.Style>
+    <StaticResource ResourceKey="CustomWindowStyle"/>
+  </views:ViewBaseWindow.Style>
   <Grid>
+    <Grid.Resources>
+      <ItemsPanelTemplate x:Key="ComboBoxTemplate">
+        <VirtualizingStackPanel />
+      </ItemsPanelTemplate>
+      <ItemsPanelTemplate x:Key="HorizontalPanelTemplate">
+        <StackPanel Orientation="Horizontal"/>
+      </ItemsPanelTemplate>
+      <DataTemplate x:Key="ItemsControlItemsTemplate">
+        <controls:DefaultButton Content="{Binding Name}" Command="{Binding FormCommand}"/>
+      </DataTemplate>
+      <DataTemplate x:Key="PokedexDataTemplate">
+        <StackPanel HorizontalAlignment="Center">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical">
+              <controls:MediumTextBlock Text="{Binding PokedexType, Converter={StaticResource EnumConverter}}"/>
+              <ComboBox MinWidth="100" Height="25" IsEditable="False" IsReadOnly="True" ItemsSource="{Binding DexList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedPokemon, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsPanel="{StaticResource ComboBoxTemplate}"/>
+            </StackPanel>
+          </StackPanel>
+        </StackPanel>
+      </DataTemplate>
+    </Grid.Resources>
     <Grid.RowDefinitions>
       <RowDefinition Height="auto"/>
       <RowDefinition Height="auto"/>
       <RowDefinition Height="auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
-    <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-        <Image Source="{Binding IconData, TargetNullValue={x:Null}}" Height="70"/>
-        <controls:ExtraSmallButton Content="Prev" Command="{Binding PreviousCommand}"/>
-        <ComboBox MinWidth="100" Height="25" IsEditable="False" IsReadOnly="True" ItemsSource="{Binding PokemonList}" DisplayMemberPath="Name" SelectedIndex="{Binding CurrentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding SelectedPokemon, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-          <ComboBox.ItemsPanel>
-            <ItemsPanelTemplate>
-              <VirtualizingStackPanel />
-            </ItemsPanelTemplate>
-          </ComboBox.ItemsPanel>
-        </ComboBox>
-        <controls:SmallButton Content="Next" Command="{Binding NextCommand}"/>
+    <StackPanel Orientation="Vertical">
+      <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+        <ItemsControl ItemsSource="{Binding Pokedexes}" ItemsPanel="{StaticResource HorizontalPanelTemplate}" ItemTemplate="{StaticResource PokedexDataTemplate}"/>
       </StackPanel>
-      <StackPanel>
-        <ItemsControl ItemsSource="{Binding FormCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-          <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-              <StackPanel Orientation="Horizontal"/>
-            </ItemsPanelTemplate>
-          </ItemsControl.ItemsPanel>
-          <ItemsControl.ItemTemplate>
-            <DataTemplate>
-              <controls:DefaultButton Content="{Binding Name}" Command="{Binding FormCommand}"/>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
+      <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+        <controls:SmallButton Content="Prev" Command="{Binding PreviousCommand}"/>
+        <Image Source="{Binding IconData, TargetNullValue={x:Null}}" Height="70"/>
+        <controls:SmallButton Content="Next" Command="{Binding NextCommand}"/>
+        <controls:LargeButton Content="Sort Pokemon By..." Command="{Binding SortPokemonCommand}"/>
+      </StackPanel>
+      <StackPanel HorizontalAlignment="Center">
+        <ItemsControl ItemsSource="{Binding FormCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsPanel="{StaticResource HorizontalPanelTemplate}" ItemTemplate="{StaticResource ItemsControlItemsTemplate}"/>
       </StackPanel>
     </StackPanel>
     <Separator Grid.Row="1"/>

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Pokedex.PokedexLib.Enums;
 
 namespace Pokedex.PokedexApp.Services
 {
@@ -33,29 +34,43 @@ namespace Pokedex.PokedexApp.Services
                 HiddenAbility = pkmn.HiddenAbility,
                 NumberOfEvolutions = pkmn.NumberOfEvolutions,
                 HasMultipleEvolutions = pkmn.NumberOfEvolutions > 0,
-                HP = pkmn.HP,
-                Atk = pkmn.Atk,
-                Def = pkmn.Def,
-                SpA = pkmn.SpA,
-                SpD = pkmn.SpD,
-                Spe = pkmn.Spe,
-                Total = pkmn.Total,
                 Icon = pkmn.Icon,
                 Type1 = pkmn.Type1,
                 Type2 = pkmn.Type2,
-                EVYields = GetEVYield(pkmn)
+                EVYields = GetEVYield(pkmn),
+                BaseStats = GetBaseStats(pkmn)
             }).ToListAsync();
         }
 
+        private static List<BaseStat> GetBaseStats(PokemonEntity pkmn)
+            => new()
+            {
+                new BaseStat(StatEnum.HP, pkmn.HP),
+                new BaseStat(StatEnum.Atk, pkmn.Atk),
+                new BaseStat(StatEnum.Def, pkmn.Def),
+                new BaseStat(StatEnum.SpA, pkmn.SpA),
+                new BaseStat(StatEnum.SpD, pkmn.SpD),
+                new BaseStat(StatEnum.Spe, pkmn.Spe),
+                new BaseStat(StatEnum.Total, pkmn.Total)
+            };
+
         private static List<EVYield> GetEVYield(PokemonEntity pkmn)
         {
-            var evDict = new List<EVYield>();
+            var evDict = new List<EVYield>()
+            {
+                new EVYield{Stat = StatEnum.HP, Value = 0},
+                new EVYield{Stat = StatEnum.Atk, Value = 0},
+                new EVYield{Stat = StatEnum.Def, Value = 0},
+                new EVYield{Stat = StatEnum.SpA, Value = 0},
+                new EVYield{Stat = StatEnum.SpD, Value = 0},
+                new EVYield{Stat = StatEnum.Spe, Value = 0},
+            };
 
             var evs = pkmn.EVYield.Split('/');
             foreach (var ev in evs)
             {
                 var split = ev.Split(' ');
-                evDict.Add(new EVYield { Stat = (StatEnum)Enum.Parse(typeof(StatEnum), split[1]), Yield = int.Parse(split[0]) });
+                evDict.First(e => e.Stat == (StatEnum)Enum.Parse(typeof(StatEnum), split[1])).Value = int.Parse(split[0]);
             }
 
             return evDict;

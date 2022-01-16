@@ -22,7 +22,7 @@
       <ItemsControl.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
-            <controls:SmallTextBlock Text="{Binding Yield}"/>
+            <controls:SmallTextBlock Text="{Binding Value}"/>
             <controls:MediumTextBlock Text="{Binding Stat, Converter={StaticResource EnumValueConverter}}"/>
           </StackPanel>
         </DataTemplate>

@@ -1,4 +1,5 @@
 ﻿using Pokedex.PkdxDatabase.Models;
+using System.Linq;
 
 namespace Pokedex.PokedexApp.ViewModels
 {
@@ -73,13 +74,13 @@ namespace Pokedex.PokedexApp.ViewModels
         public StatsViewModel() { }
         protected override void OnPokemonChanged(Pokemon pkmn)
         {
-            HPStat = pkmn.HP;
-            AtkStat = pkmn.Atk;
-            DefStat = pkmn.Def;
-            SpAStat = pkmn.SpA;
-            SpDStat = pkmn.SpD;
-            SpeStat = pkmn.Spe;
-            TotalStats = pkmn.Total;
+            HPStat = pkmn.BaseStats[0].Value;
+            AtkStat = pkmn.BaseStats[1].Value;
+            DefStat = pkmn.BaseStats[2].Value;
+            SpAStat = pkmn.BaseStats[3].Value;
+            SpDStat = pkmn.BaseStats[4].Value;
+            SpeStat = pkmn.BaseStats[5].Value;
+            TotalStats = pkmn.BaseStats[6].Value;
         }
     }
 }

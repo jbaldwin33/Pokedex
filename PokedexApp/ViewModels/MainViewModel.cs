@@ -2,43 +2,37 @@
 using MVVMFramework.ViewNavigator;
 using Pokedex.PkdxDatabase.Models;
 using Pokedex.PokedexApp.Services;
+using Pokedex.PokedexApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Pokedex.PokedexLib.Enums;
 
 namespace Pokedex.PokedexApp.ViewModels
 {
+
     public class MainViewModel : ViewModel
     {
         public INavigator Navigator { get; set; }
         public Action<Pokemon> PokemonChangedAction;
+        private readonly List<Pokemon> evolutionList;
+        private readonly ObservableCollection<Pokemon> pokemonList;
         private Pokemon selectedPokemon;
-        private int currentID;
         private byte[] iconData;
-        private ObservableCollection<Pokemon> pokemonList;
         private ObservableCollection<PokemonForm> formCollection;
         private List<Pokemon> pokemonListWithForms;
         private RelayCommand findCommand;
         private RelayCommand nextCommand;
         private RelayCommand previousCommand;
+        private RelayCommand sortPokemonCommand;
 
         public Pokemon SelectedPokemon
         {
             get => selectedPokemon;
-            set
-            {
-                SetProperty(ref selectedPokemon, value);
-                FindCommandExecute();
-            }
-        }
-
-        public int CurrentID
-        {
-            get => currentID;
-            set => SetProperty(ref currentID, value);
+            set => SetProperty(ref selectedPokemon, value);
         }
 
         public byte[] IconData
@@ -47,23 +41,40 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref iconData, value);
         }
 
-        public ObservableCollection<Pokemon> PokemonList
-        {
-            get => pokemonList;
-            set => SetProperty(ref pokemonList, value);
-        }
 
         public ObservableCollection<PokemonForm> FormCollection
         {
             get => formCollection;
             set => SetProperty(ref formCollection, value);
         }
+        private DexType currentDexType;
+
+        public DexType CurrentDexType
+        {
+            get => currentDexType;
+            set => SetProperty(ref currentDexType, value);
+        }
+
+        public List<PokedexComboBoxViewModel> Pokedexes { get; set; }
+
 
         public MainViewModel(INavigator navigator)
         {
             Navigator = navigator;
             GetAllPokemon();
-            PokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => x.Num == Math.Floor(x.Num)));
+            evolutionList = new List<Pokemon>();
+            pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => x.Num == Math.Floor(x.Num)));
+
+            Pokedexes = new List<PokedexComboBoxViewModel>
+            {
+                new PokedexComboBoxViewModel(DexType.Alphabetical, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.Name)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.National, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.Num)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Kanto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num < 152).OrderBy(p => p.Num)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Johto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 152 && p.Num < 252).OrderBy(p => p.Num)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Hoenn, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 252 && p.Num < 387).OrderBy(p => p.Num)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Sinnoh, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 387 && p.Num < 494).OrderBy(p => p.Num)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Unova, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 494 && p.Num < 650).OrderBy(p => p.Num)), OnPokemonChanged),
+            };
             FormCollection = new ObservableCollection<PokemonForm>();
         }
 
@@ -72,40 +83,40 @@ namespace Pokedex.PokedexApp.ViewModels
         public RelayCommand FindCommand => findCommand ??= new RelayCommand(FindCommandExecute);
         public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.Num < 649);
         public RelayCommand PreviousCommand => previousCommand ??= new RelayCommand(PreviousCommandExecute, () => SelectedPokemon?.Num > 1);
+        public RelayCommand SortPokemonCommand => sortPokemonCommand ??= new RelayCommand(SortCommandExecute, () => true);
 
         #endregion
 
         public bool PokemonHasForms(Pokemon pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
         public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
-        private List<Pokemon> evList = new List<Pokemon>();
 
         public List<Pokemon> GetEvolutionLine(Pokemon pkmn)
         {
-            evList.Clear();
-            evList.Add(pkmn);
+            evolutionList.Clear();
+            evolutionList.Add(pkmn);
             CheckPrevious(pkmn);
             CheckNext(pkmn);
 
-            evList.Sort((x1, x2) => x1.EvolutionOrderNum < x2.EvolutionOrderNum ? -1 : 1);
-            return evList;
+            evolutionList.Sort((x1, x2) => x1.EvolutionOrderNum < x2.EvolutionOrderNum ? -1 : 1);
+            return evolutionList;
         }
 
         private void CheckPrevious(Pokemon currentPkmn)
         {
-            var prevPkmn = PokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) - 1);
+            var prevPkmn = pokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) - 1);
             if (currentPkmn.CanEvolveTo)
             {
-                evList.Add(prevPkmn);
+                evolutionList.Add(prevPkmn);
                 CheckPrevious(prevPkmn);
             }
         }
 
         private void CheckNext(Pokemon currentPkmn)
         {
-            var nextPkmn = PokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) + 1);
+            var nextPkmn = pokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) + 1);
             if (nextPkmn != null && nextPkmn.CanEvolveTo)
             {
-                evList.Add(nextPkmn);
+                evolutionList.Add(nextPkmn);
                 CheckNext(nextPkmn);
             }
         }
@@ -113,29 +124,45 @@ namespace Pokedex.PokedexApp.ViewModels
         private async void GetAllPokemon()
         {
             pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
-            pokemonListWithForms.Sort((p1, p2) => p1.Num < p2.Num ? -1 : 1);
+            pokemonListWithForms.OrderBy(p => p.Num);
         }
 
-        private void FindCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name));
+        private void FindCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name), CurrentDexType);
 
-        private void NextCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) + 1));
+        private void NextCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) + 1), CurrentDexType);
 
-        private void PreviousCommandExecute() => OnPokemonChanged(PokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) - 1));
-
-        private void OnPokemonChanged(Pokemon pkmn)
+        private void PreviousCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) - 1), CurrentDexType);
+        private void SortCommandExecute()
         {
+            var sortWindow = new PokemonListSortWindow()
+            {
+                DataContext = new PokemonListSortViewModel(new ObservableCollection<Pokemon>(pokemonListWithForms)),
+                WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
+                Width = 900,
+                Height = 500
+            };
+            sortWindow.Initialize();
+            sortWindow.Show();
+        }
+
+        private void OnPokemonChanged(Pokemon pkmn, DexType dexType)
+        {
+            ClearComboBoxes();
+            CurrentDexType = dexType;
             if (!isForm(pkmn) && hasForms(pkmn))
                 AddForms(pkmn);
             else if (!isForm(pkmn) && !hasForms(pkmn))
                 FormCollection.Clear();
             if (!isForm(pkmn))
-                CurrentID = (int)pkmn.Num - 1;
+                SelectedPokemon = pkmn;
             IconData = pkmn.Icon;
             PokemonChangedAction?.Invoke(pkmn);
 
             bool isForm(Pokemon pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
             bool hasForms(Pokemon pkmn) => PokemonHasForms(pkmn);
         }
+
+        private void ClearComboBoxes() => Pokedexes.First(pkdx => pkdx.PokedexType == CurrentDexType).SelectedPokemon = null;
 
         private void AddForms(Pokemon pkmn)
         {
@@ -148,8 +175,8 @@ namespace Pokedex.PokedexApp.ViewModels
 
         private void FormCommandExecute(Pokemon form)
         {
-            selectedPokemon = form;
-            OnPokemonChanged(form);
+            SelectedPokemon = form;
+            OnPokemonChanged(form, CurrentDexType);
         }
 
         public class PokemonForm

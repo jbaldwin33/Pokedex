@@ -1,31 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Pokedex.PokedexLib.Enums;
 
 namespace Pokedex.PokedexLib
 {
-    public enum TypeEnum
-    {
-        Normal,
-        Fire,
-        Water,
-        Grass,
-        Electric,
-        Ice,
-        Fighting,
-        Poison,
-        Ground,
-        Flying,
-        Psychic,
-        Bug,
-        Rock,
-        Ghost,
-        Dark,
-        Dragon,
-        Steel,
-        Fairy
-    }
-
     public class TypeMult
     {
         public TypeEnum ThisType { get; set; }

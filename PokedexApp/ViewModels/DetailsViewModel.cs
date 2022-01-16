@@ -6,6 +6,7 @@ using System.Linq;
 using MVVMFramework.ViewModels;
 using Pokedex.PokedexLib;
 using MVVMFramework.ViewNavigator;
+using static Pokedex.PokedexLib.Enums;
 
 namespace Pokedex.PokedexApp.ViewModels
 {

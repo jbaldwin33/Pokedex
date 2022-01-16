@@ -31,4 +31,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PopulateDB\PokedexLib.csproj" />
+  </ItemGroup>
+
 </Project>
