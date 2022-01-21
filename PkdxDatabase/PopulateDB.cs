@@ -21,7 +21,6 @@ namespace Pokedex.PkdxDatabase
             using var reader = new StreamReader(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries", filename));
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-            var records = new List<Pokemon>();
             var counter = 1;
             csv.Read();
             csv.ReadHeader();
@@ -40,16 +39,16 @@ namespace Pokedex.PkdxDatabase
                     Spe = csv.GetField<int>("Spe"),
                     Total = csv.GetField<int>("Total"),
                     Name = csv.GetField("Pokemon"),
-                    Type1 = csv.GetField("Type I"),
-                    Type2 = csv.GetField("Type II"),
-                    Ability1 = csv.GetField("Ability I"),
-                    Ability2 = csv.GetField("Ability II"),
-                    HiddenAbility = csv.GetField("Hidden Ability"),
-                    EggGroup1 = csv.GetField("Egg Group I"),
-                    EggGroup2 = csv.GetField("Egg Group II"),
+                    Type1 = csv.GetField("Type1"),
+                    Type2 = csv.GetField("Type2"),
+                    Ability1 = csv.GetField("Ability1"),
+                    Ability2 = csv.GetField("Ability2"),
+                    HiddenAbility = csv.GetField("HiddenAbility"),
+                    EggGroup1 = csv.GetField("EggGroup1"),
+                    EggGroup2 = csv.GetField("EggGroup2"),
                     EvolveMethodString = csv.GetField("Evolve"),
                     NumberOfEvolutions = !string.IsNullOrEmpty(csv.GetField("EvolveNum")) ? csv.GetField<int>("EvolveNum") : 0,
-                    EVYield = csv.GetField("EV Worth")
+                    EVYield = csv.GetField("EVYield")
                 };
                 var iconFile = GetIconFile(record.Num, record.Name);
                 if (!string.IsNullOrEmpty(iconFile))
@@ -60,9 +59,11 @@ namespace Pokedex.PkdxDatabase
                 {
                     context.Add(record);
                     context.SaveChanges();
+                    Console.WriteLine($"{counter} record(s) saved.");
                 }
                 counter++;
             }
+            Console.WriteLine("Done.");
         }
 
         private static string GetIconFile(float number, string name)

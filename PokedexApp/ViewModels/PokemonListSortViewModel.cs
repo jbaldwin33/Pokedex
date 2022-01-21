@@ -4,21 +4,27 @@ using Pokedex.PokedexApp.SortWindow;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using static Pokedex.PokedexLib.Enums;
 
 namespace Pokedex.PokedexApp.ViewModels
 {
     public class PokemonListSortViewModel : ViewModel
     {
-        private ObservableCollection<PrimarySort> primarySorts;
+        private readonly IEnumerable<Pokemon> originalList;
         private SortOptions currentSortOptions;
         private ObservableCollection<Pokemon> currentSortList;
+        private ObservableCollection<object> secondarySort;
 
-        public ObservableCollection<PrimarySort> PrimarySorts
+        public ObservableCollection<object> SecondarySort
         {
-            get => primarySorts;
-            set => SetProperty(ref primarySorts, value);
+            get => secondarySort;
+            set => SetProperty(ref secondarySort, value);
         }
+
+        private bool sortByType;
+        private RelayCommand changeTypeCommand;
+        private RelayCommand changeSortCommand;
 
         public SortOptions CurrentSortOptions
         {
@@ -27,6 +33,7 @@ namespace Pokedex.PokedexApp.ViewModels
             {
                 SetProperty(ref currentSortOptions, value);
                 SortOptionsChanged?.Invoke();
+                SortByType = value.Sort == SortType.PokemonType || value.Sort == SortType.EggGroup;
             }
         }
 
@@ -36,32 +43,44 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref currentSortList, value);
         }
 
-        public Action SortOptionsChanged;
+        public bool SortByType
+        {
+            get => sortByType;
+            set => SetProperty(ref sortByType, value);
+        }
+
+        public Action SortOptionsChanged { get; set; }
+
+        public RelayCommand ChangeTypeCommand => changeTypeCommand ??= new RelayCommand(ChangeTypeCommandExecute, ChangeTypeCommandCanExecute);
+        public RelayCommand ChangeSortCommand => changeSortCommand ??= new RelayCommand(ChangeSortCommandExecute, ChangeSortCommandCanExecute);
 
         public PokemonListSortViewModel(ObservableCollection<Pokemon> list)
         {
+            originalList = list;
             CurrentSortList = list;
-            PrimarySorts = new ObservableCollection<PrimarySort>
-            {
-                new PrimarySort( SortType.EVYield, SortByEVCommandExecute, SortByEVCommandCanExecute),
-                new PrimarySort( SortType.BaseStat, SortByStatCommandExecute, SortByStatCommandCanExecute)
-            };
         }
 
         public void OnListSorted() => CurrentSortList = new ObservableCollection<Pokemon>(CurrentSortOptions.PokemonList);
 
-        private bool SortByEVCommandCanExecute() => CurrentSortOptions.Sort != SortType.EVYield;
-        private bool SortByStatCommandCanExecute() => CurrentSortOptions.Sort != SortType.BaseStat;
+        public void ChangeSortCommandExecute(object param)
+        {
+            CurrentSortOptions = new SortOptions { Sort = (SortType)param, PokemonList = originalList, ListSorted = OnListSorted, TypeToSort = TypeEnum.Normal };
+            CurrentSortOptions.SortList();
+            CurrentSortOptions.Sort = (SortType)param;
+            if ((SortType)param == SortType.PokemonType)
+                SecondarySort = new ObservableCollection<object>(Enum.GetValues(typeof(TypeEnum)).Cast<object>());
+            else if ((SortType)param == SortType.EggGroup)
+                SecondarySort = new ObservableCollection<object>(Enum.GetValues(typeof(EggGroupEnum)).Cast<object>());
+        }
 
-        public void SortByEVCommandExecute()
+        private bool ChangeSortCommandCanExecute(object sender) => CurrentSortOptions.Sort != (SortType)sender;
+
+        private void ChangeTypeCommandExecute(object param)
         {
-            CurrentSortOptions = new SortOptions{Sort = SortType.EVYield, PokemonList = CurrentSortList, ListSorted = OnListSorted };
-            CurrentSortOptions.SortListCommandExecute("HP");
+            CurrentSortOptions.TypeToSort = (TypeEnum)param;
+            CurrentSortOptions.SortList();
         }
-        public void SortByStatCommandExecute()
-        {
-            CurrentSortOptions = new SortOptions{ Sort = SortType.BaseStat, PokemonList = CurrentSortList, ListSorted = OnListSorted};
-            CurrentSortOptions.SortListCommandExecute("HP");
-        }
+
+        private bool ChangeTypeCommandCanExecute(object param) => CurrentSortOptions.TypeToSort != (TypeEnum)param;
     }
 }

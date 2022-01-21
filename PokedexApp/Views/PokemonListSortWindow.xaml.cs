@@ -1,22 +1,12 @@
-﻿using MVVMFramework.ViewModels;
-using MVVMFramework.Views;
-using Pokedex.PokedexApp.SortWindow;
+﻿using MVVMFramework.Views;
 using Pokedex.PokedexApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static Pokedex.PokedexLib.Enums;
 
 namespace Pokedex.PokedexApp.Views
@@ -43,40 +33,49 @@ namespace Pokedex.PokedexApp.Views
                 switch (viewModel.CurrentSortOptions.Sort)
                 {
                     case SortType.EVYield:
-                        var s1 = Enum.GetValues(typeof(StatEnum)).Cast<StatEnum>().Where(x => x != StatEnum.Total);
-                        CreateColumns(s1);
+                        var values = Enum.GetValues(typeof(StatEnum)).Cast<StatEnum>().Where(x => x != StatEnum.Total);
+                        CreateColumns(values);
                         break;
                     case SortType.BaseStat:
-                        var s3 = Enum.GetValues(typeof(StatEnum)).Cast<StatEnum>();
-                        CreateColumns(s3);
+                        values = Enum.GetValues(typeof(StatEnum)).Cast<StatEnum>();
+                        CreateColumns(values);
                         break;
-                    default:
+                    case SortType.PokemonType:
+                        CreateColumns<object>(null);
                         break;
+                    case SortType.EggGroup:
+                        CreateColumns<object>(null);
+                        break;
+                    default: throw new ArgumentOutOfRangeException(nameof(viewModel.CurrentSortOptions.Sort));
                 }
             };
-            viewModel.SortByEVCommandExecute();
+            viewModel.ChangeSortCommandExecute(SortType.EVYield);
         }
 
-        private void CreateColumns<T>(IEnumerable<T> s2)
+        private void CreateColumns<T>(IEnumerable<T> values)
         {
             var gridView = new GridView();
             var column1 = new GridViewColumn
             {
                 Header = "Name",
-                DisplayMemberBinding = new Binding("Name")
+                DisplayMemberBinding = new Binding("Name"),
+                Width = 150
             };
             gridView.Columns.Add(column1);
-            var i = 0;
-            foreach (var item in s2)
+            if (values != null)
             {
-                var column = new GridViewColumn
+                var i = 0;
+                foreach (var value in values)
                 {
-                    Header = item.ToString(),
-                    DisplayMemberBinding = new Binding($"{viewModel.CurrentSortOptions.Sort}s[{i}].Value"),
-                    Width = 50
-                };
-                gridView.Columns.Add(column);
-                i++;
+                    var column = new GridViewColumn
+                    {
+                        Header = value.ToString(),
+                        DisplayMemberBinding = new Binding($"{viewModel.CurrentSortOptions.Sort}s[{i}].Value"),
+                        Width = 50
+                    };
+                    gridView.Columns.Add(column);
+                    i++;
+                }
             }
             sortedListView.View = gridView;
         }

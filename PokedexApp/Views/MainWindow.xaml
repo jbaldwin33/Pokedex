@@ -28,7 +28,7 @@
         <VirtualizingStackPanel />
       </ItemsPanelTemplate>
       <ItemsPanelTemplate x:Key="HorizontalPanelTemplate">
-        <StackPanel Orientation="Horizontal"/>
+        <UniformGrid Rows="2"/>
       </ItemsPanelTemplate>
       <DataTemplate x:Key="ItemsControlItemsTemplate">
         <controls:DefaultButton Content="{Binding Name}" Command="{Binding FormCommand}"/>
@@ -50,15 +50,15 @@
       <RowDefinition Height="auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
-    <StackPanel Orientation="Vertical">
-      <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+      <StackPanel Grid.Row="0" Orientation="Horizontal">
         <ItemsControl ItemsSource="{Binding Pokedexes}" ItemsPanel="{StaticResource HorizontalPanelTemplate}" ItemTemplate="{StaticResource PokedexDataTemplate}"/>
       </StackPanel>
       <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
         <controls:SmallButton Content="Prev" Command="{Binding PreviousCommand}"/>
         <Image Source="{Binding IconData, TargetNullValue={x:Null}}" Height="70"/>
         <controls:SmallButton Content="Next" Command="{Binding NextCommand}"/>
-        <controls:LargeButton Content="Sort Pokemon By..." Command="{Binding SortPokemonCommand}"/>
+        <controls:LargeButton Content="Sort Pokemon By..." Command="{Binding OpenSortWindowCommand}"/>
       </StackPanel>
       <StackPanel HorizontalAlignment="Center">
         <ItemsControl ItemsSource="{Binding FormCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsPanel="{StaticResource HorizontalPanelTemplate}" ItemTemplate="{StaticResource ItemsControlItemsTemplate}"/>

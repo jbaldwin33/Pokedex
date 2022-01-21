@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <RootNamespace>Pokedex.PokedexApp</RootNamespace>
+    <RootNamespace>Pokedex.PokedexCSVCreator</RootNamespace>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
@@ -13,15 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PkdxDatabase\PkdxDatabase.csproj" />
+    <PackageReference Include="CsvHelper" Version="27.2.1" />
+    <PackageReference Include="PokeApiNet" Version="3.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="MVVMFramework">
       <HintPath>..\Debug\MVVMFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="PokedexLib">
-      <HintPath>..\Debug\PokedexLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 

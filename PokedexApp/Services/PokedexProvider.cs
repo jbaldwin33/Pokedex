@@ -19,40 +19,41 @@ namespace Pokedex.PokedexApp.Services
         public async Task<List<Pokemon>> GetAllPokemon()
         {
             using var context = PokedexDbContextFactory.Instance.CreateDbContext();
-            return await context.PokedexEntries.Select(pkmn => new Pokemon
-            {
-                Id = pkmn.Id,
-                Name = pkmn.Name,
-                Num = pkmn.Num,
-                Ability1 = pkmn.Ability1,
-                Ability2 = pkmn.Ability2,
-                CanEvolveTo = !string.IsNullOrEmpty(pkmn.EvolveMethodString) && !pkmn.EvolveMethodString.Equals("N"),
-                EggGroup1 = pkmn.EggGroup1,
-                EggGroup2 = pkmn.EggGroup2,
-                EvolveMethodString = pkmn.EvolveMethodString,
-                EvolutionOrderNum = pkmn.EvolutionOrderNum,
-                HiddenAbility = pkmn.HiddenAbility,
-                NumberOfEvolutions = pkmn.NumberOfEvolutions,
-                HasMultipleEvolutions = pkmn.NumberOfEvolutions > 0,
-                Icon = pkmn.Icon,
-                Type1 = pkmn.Type1,
-                Type2 = pkmn.Type2,
-                EVYields = GetEVYield(pkmn),
-                BaseStats = GetBaseStats(pkmn)
-            }).ToListAsync();
+            return await context.PokedexEntries.Select(pkmn => CreatePokemon(pkmn)).ToListAsync();
         }
 
-        private static List<BaseStat> GetBaseStats(PokemonEntity pkmn)
-            => new()
-            {
-                new BaseStat(StatEnum.HP, pkmn.HP),
-                new BaseStat(StatEnum.Atk, pkmn.Atk),
-                new BaseStat(StatEnum.Def, pkmn.Def),
-                new BaseStat(StatEnum.SpA, pkmn.SpA),
-                new BaseStat(StatEnum.SpD, pkmn.SpD),
-                new BaseStat(StatEnum.Spe, pkmn.Spe),
-                new BaseStat(StatEnum.Total, pkmn.Total)
-            };
+        private static Pokemon CreatePokemon(PokemonEntity pkmn) => new()
+        {
+            Id = pkmn.Id,
+            Name = pkmn.Name,
+            Num = pkmn.Num,
+            Ability1 = pkmn.Ability1,
+            Ability2 = pkmn.Ability2,
+            CanEvolveTo = !string.IsNullOrEmpty(pkmn.EvolveMethodString) && !pkmn.EvolveMethodString.Equals("N"),
+            EggGroup1 = (EggGroupEnum)Enum.Parse(typeof(EggGroupEnum), pkmn.EggGroup1),
+            EggGroup2 = Enum.TryParse(typeof(EggGroupEnum), pkmn.EggGroup2, out var egg) ? (EggGroupEnum)egg : null,
+            EvolveMethodString = pkmn.EvolveMethodString,
+            EvolutionOrderNum = pkmn.EvolutionOrderNum,
+            HiddenAbility = pkmn.HiddenAbility,
+            NumberOfEvolutions = pkmn.NumberOfEvolutions,
+            HasMultipleEvolutions = pkmn.NumberOfEvolutions > 0,
+            Icon = pkmn.Icon,
+            Type1 = (TypeEnum)Enum.Parse(typeof(TypeEnum), pkmn.Type1),
+            Type2 = Enum.TryParse(typeof(TypeEnum), pkmn.Type2, out var result) ? (TypeEnum)result : null,
+            EVYields = GetEVYield(pkmn),
+            BaseStats = GetBaseStats(pkmn)
+        };
+
+        private static List<BaseStat> GetBaseStats(PokemonEntity pkmn) => new()
+        {
+            new BaseStat(StatEnum.HP, pkmn.HP),
+            new BaseStat(StatEnum.Atk, pkmn.Atk),
+            new BaseStat(StatEnum.Def, pkmn.Def),
+            new BaseStat(StatEnum.SpA, pkmn.SpA),
+            new BaseStat(StatEnum.SpD, pkmn.SpD),
+            new BaseStat(StatEnum.Spe, pkmn.Spe),
+            new BaseStat(StatEnum.Total, pkmn.Total)
+        };
 
         private static List<EVYield> GetEVYield(PokemonEntity pkmn)
         {

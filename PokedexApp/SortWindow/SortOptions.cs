@@ -9,26 +9,30 @@ namespace Pokedex.PokedexApp.SortWindow
 {
     public class SortOptions
     {
-        public Action ListSorted;
-        public IEnumerable<Pokemon> PokemonList;
+        public Action ListSorted { get; set; }
+        public IEnumerable<Pokemon> PokemonList { get; set; }
         public SortType Sort { get; set; }
+        public TypeEnum TypeToSort { get; set; }
+        public EggGroupEnum EggGroupToSort { get; set; }
 
-        public IEnumerable<Pokemon> SortPokemonList(string detailedSort) => Sort switch
+        public void SortList()
         {
-            SortType.EVYield => SortByEV(detailedSort),
-            SortType.BaseStat => SortByStat(detailedSort),
-            _ => throw new ArgumentOutOfRangeException(nameof(detailedSort)),
-        };
-
-        public void SortListCommandExecute(object detailedSort)
-        {
-            PokemonList = SortPokemonList((string)detailedSort);
+            PokemonList = GetSortedPokemonList();
             ListSorted?.Invoke();
         }
 
-        private IEnumerable<Pokemon> SortByStat(string detailedSort)
-            => PokemonList.OrderByDescending(p => p.BaseStats.First(x => x.Stat == (StatEnum)Enum.Parse(typeof(StatEnum), detailedSort)).Value).ThenBy(p => p.Num);
-        private IEnumerable<Pokemon> SortByEV(string detailedSort)
-            => PokemonList.OrderByDescending(p => p.EVYields.First(x => x.Stat == (StatEnum)Enum.Parse(typeof(StatEnum), detailedSort)).Value).ThenBy(p => p.Num);
+        private IEnumerable<Pokemon> GetSortedPokemonList() => Sort switch
+        {
+            SortType.EVYield => SortByEV(),
+            SortType.BaseStat => SortByStat(),
+            SortType.PokemonType => SortByType(),
+            SortType.EggGroup => SortByEggGroup(),
+            _ => throw new ArgumentOutOfRangeException(nameof(Sort)),
+        };
+
+        private IEnumerable<Pokemon> SortByStat() => PokemonList.OrderByDescending(p => p.BaseStats.First().Value).ThenBy(p => p.Num);
+        private IEnumerable<Pokemon> SortByEV() => PokemonList.OrderByDescending(p => p.EVYields.First().Value).ThenBy(p => p.Num);
+        private IEnumerable<Pokemon> SortByType() => PokemonList.Where(p => p.Type1 == TypeToSort || p.Type2 == TypeToSort).OrderBy(p => p.Num);
+        private IEnumerable<Pokemon> SortByEggGroup() => PokemonList.OrderByDescending(p => p.EggGroup1 == EggGroupToSort || p.EggGroup2 == EggGroupToSort).OrderBy(p => p.Num);
     }
 }

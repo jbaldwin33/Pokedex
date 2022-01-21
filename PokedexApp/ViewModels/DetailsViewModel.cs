@@ -21,8 +21,8 @@ namespace Pokedex.PokedexApp.ViewModels
         private string ability1;
         private string ability2;
         private string hiddenAbility;
-        private string eggGroup1;
-        private string eggGroup2;
+        private EggGroupEnum? eggGroup1;
+        private EggGroupEnum? eggGroup2;
         private ObservableCollection<TypeMult> weaknesses;
         private ObservableCollection<TypeMult> resistances;
         private ObservableCollection<TypeMult> immunities;
@@ -71,13 +71,13 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref hiddenAbility, value);
         }
 
-        public string EggGroup1
+        public EggGroupEnum? EggGroup1
         {
             get => eggGroup1;
             set => SetProperty(ref eggGroup1, value);
         }
 
-        public string EggGroup2
+        public EggGroupEnum? EggGroup2
         {
             get => eggGroup2;
             set => SetProperty(ref eggGroup2, value);
@@ -123,10 +123,8 @@ namespace Pokedex.PokedexApp.ViewModels
         protected override void OnPokemonChanged(Pokemon pkmn)
         {
             Name = pkmn.Name;
-            Type1 = (TypeEnum)Enum.Parse(typeof(TypeEnum), pkmn.Type1);
-            Type2 = Enum.TryParse(typeof(TypeEnum), pkmn.Type2, out var t2)
-                ? (TypeEnum?)t2
-                : null;
+            Type1 = pkmn.Type1;
+            Type2 = pkmn.Type2;
             Ability1 = pkmn.Ability1;
             Ability2 = pkmn.Ability2;
             HiddenAbility = pkmn.HiddenAbility;

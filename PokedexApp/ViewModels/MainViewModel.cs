@@ -16,6 +16,7 @@ namespace Pokedex.PokedexApp.ViewModels
 
     public class MainViewModel : ViewModel
     {
+        private const int MAX_POKEMON = 721;
         public INavigator Navigator { get; set; }
         public Action<Pokemon> PokemonChangedAction;
         private readonly List<Pokemon> evolutionList;
@@ -27,7 +28,7 @@ namespace Pokedex.PokedexApp.ViewModels
         private RelayCommand findCommand;
         private RelayCommand nextCommand;
         private RelayCommand previousCommand;
-        private RelayCommand sortPokemonCommand;
+        private RelayCommand openSortWindowCommand;
 
         public Pokemon SelectedPokemon
         {
@@ -74,6 +75,7 @@ namespace Pokedex.PokedexApp.ViewModels
                 new PokedexComboBoxViewModel(DexType.Hoenn, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 252 && p.Num < 387).OrderBy(p => p.Num)), OnPokemonChanged),
                 new PokedexComboBoxViewModel(DexType.Sinnoh, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 387 && p.Num < 494).OrderBy(p => p.Num)), OnPokemonChanged),
                 new PokedexComboBoxViewModel(DexType.Unova, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 494 && p.Num < 650).OrderBy(p => p.Num)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Kalos, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 650 && p.Num < 722).OrderBy(p => p.Num)), OnPokemonChanged)
             };
             FormCollection = new ObservableCollection<PokemonForm>();
         }
@@ -81,9 +83,9 @@ namespace Pokedex.PokedexApp.ViewModels
         #region Commands
 
         public RelayCommand FindCommand => findCommand ??= new RelayCommand(FindCommandExecute);
-        public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.Num < 649);
+        public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.Num <= MAX_POKEMON);
         public RelayCommand PreviousCommand => previousCommand ??= new RelayCommand(PreviousCommandExecute, () => SelectedPokemon?.Num > 1);
-        public RelayCommand SortPokemonCommand => sortPokemonCommand ??= new RelayCommand(SortCommandExecute, () => true);
+        public RelayCommand OpenSortWindowCommand => openSortWindowCommand ??= new RelayCommand(OpenSortWindowCommandExecute, () => true);
 
         #endregion
 
@@ -132,7 +134,7 @@ namespace Pokedex.PokedexApp.ViewModels
         private void NextCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) + 1), CurrentDexType);
 
         private void PreviousCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) - 1), CurrentDexType);
-        private void SortCommandExecute()
+        private void OpenSortWindowCommandExecute()
         {
             var sortWindow = new PokemonListSortWindow()
             {

@@ -31,16 +31,37 @@ namespace Pokedex.PokedexLib
             Fairy
         }
 
-        public enum DexType { Alphabetical, National, Kanto, Johto, Hoenn, Sinnoh, Unova }
+        public enum EggGroupEnum
+        {
+            Bug,
+            Ditto,
+            Dragon,
+            Fairy,
+            Field,
+            Flying,
+            Grass,
+            Humanlike,
+            Amorphous,
+            Mineral,
+            Monster,
+            Water1,
+            Water2,
+            Water3,
+            Unknown
+        }
+
+        public enum DexType { Alphabetical, National, Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar }
 
         public enum SortType
         {
-            //[Description("Type")]
-            //PokemonType,
             [Description("EV Yield")]
             EVYield,
             [Description("Base Stat")]
-            BaseStat
+            BaseStat,
+            [Description("Type")]
+            PokemonType,
+            [Description("Egg Group")]
+            EggGroup
         }
 
         public enum StatEnum
