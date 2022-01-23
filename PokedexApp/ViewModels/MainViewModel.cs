@@ -25,6 +25,7 @@ namespace Pokedex.PokedexApp.ViewModels
         private byte[] iconData;
         private ObservableCollection<PokemonForm> formCollection;
         private List<Pokemon> pokemonListWithForms;
+        private Pokemon placeholder;
         private RelayCommand findCommand;
         private RelayCommand nextCommand;
         private RelayCommand previousCommand;
@@ -64,6 +65,7 @@ namespace Pokedex.PokedexApp.ViewModels
             Navigator = navigator;
             GetAllPokemon();
             evolutionList = new List<Pokemon>();
+            placeholder = new Pokemon { Name = "-Select a Pokemon-", Id = -1 };
             pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => x.NationalDex == Math.Floor(x.NationalDex)));
 
             Pokedexes = new List<PokedexComboBoxViewModel>
@@ -79,6 +81,7 @@ namespace Pokedex.PokedexApp.ViewModels
                 new PokedexComboBoxViewModel(DexType.Alola, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 722 && p.NationalDex < 810).OrderBy(p => p.NationalDex)), OnPokemonChanged),
                 new PokedexComboBoxViewModel(DexType.Galar, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 810).OrderBy(p => p.NationalDex)), OnPokemonChanged)
             };
+            Pokedexes.ForEach(p => p.DexList.Insert(0, placeholder));
             FormCollection = new ObservableCollection<PokemonForm>();
         }
 
@@ -151,8 +154,14 @@ namespace Pokedex.PokedexApp.ViewModels
 
         private void OnPokemonChanged(Pokemon pkmn, DexType dexType)
         {
-            ClearComboBoxes();
+            if (pkmn.Id == -1)
+                return;
+
+            if (CurrentDexType != dexType)
+                ClearComboBoxes();
+
             CurrentDexType = dexType;
+            Pokedexes.First(p => p.PokedexType == CurrentDexType).UpdateComboboxWithoutNotify(pkmn);
             if (!isForm(pkmn) && hasForms(pkmn))
                 AddForms(pkmn);
             else if (!isForm(pkmn) && !hasForms(pkmn))
@@ -166,7 +175,7 @@ namespace Pokedex.PokedexApp.ViewModels
             bool hasForms(Pokemon pkmn) => PokemonHasForms(pkmn);
         }
 
-        private void ClearComboBoxes() => Pokedexes.First(pkdx => pkdx.PokedexType == CurrentDexType).SelectedPokemon = null;
+        private void ClearComboBoxes() => Pokedexes.First(pkdx => pkdx.PokedexType == CurrentDexType).SelectedPokemon = placeholder;
 
         private void AddForms(Pokemon pkmn)
         {

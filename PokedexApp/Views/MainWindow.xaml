@@ -9,7 +9,7 @@
         xmlns:nav="clr-namespace:MVVMFramework.ViewNavigator;assembly=MVVMFramework"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
                       mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1000">
+        Title="MainWindow" Height="600" Width="900">
   <views:ViewBaseWindow.Resources>
     <local:MultiplierConverter x:Key="MultiplierConverter"/>
     <local:EnumValueToDecriptionConverter x:Key="EnumConverter"/>
@@ -38,7 +38,7 @@
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <StackPanel Orientation="Vertical">
               <controls:MediumTextBlock Text="{Binding PokedexType, Converter={StaticResource EnumConverter}}"/>
-              <ComboBox MinWidth="100" Height="25" IsEditable="False" IsReadOnly="True" ItemsSource="{Binding DexList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedPokemon, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsPanel="{StaticResource ComboBoxTemplate}"/>
+              <ComboBox MinWidth="100" Height="25" IsEditable="False" IsReadOnly="True" ItemsSource="{Binding DexList}" DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedPokemon}" ItemsPanel="{StaticResource ComboBoxTemplate}"/>
             </StackPanel>
           </StackPanel>
         </StackPanel>
@@ -50,21 +50,28 @@
       <RowDefinition Height="auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-      <StackPanel Grid.Row="0" Orientation="Horizontal">
+    <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center">
+      <StackPanel Orientation="Horizontal">
         <ItemsControl ItemsSource="{Binding Pokedexes}" ItemsPanel="{StaticResource HorizontalPanelTemplate}" ItemTemplate="{StaticResource PokedexDataTemplate}"/>
       </StackPanel>
-      <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-        <controls:SmallButton Content="Prev" Command="{Binding PreviousCommand}"/>
-        <Image Source="{Binding IconData, TargetNullValue={x:Null}}" Height="70" Width="100"/>
-        <controls:SmallButton Content="Next" Command="{Binding NextCommand}"/>
-        <controls:LargeButton Content="Sort Pokemon By..." Command="{Binding OpenSortWindowCommand}"/>
-      </StackPanel>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
+          <controls:SmallButton Content="Prev" Command="{Binding PreviousCommand}"/>
+          <Image Grid.Column="1" Source="{Binding IconData, TargetNullValue={x:Null}}" Height="70" Width="100"/>
+          <controls:SmallButton Content="Next" Command="{Binding NextCommand}"/>
+        </StackPanel>
+        <controls:LargeButton Grid.Column="2" HorizontalAlignment="Right" Content="Sort Pokemon By..." Command="{Binding OpenSortWindowCommand}"/>
+      </Grid>
       <StackPanel HorizontalAlignment="Center">
         <ItemsControl ItemsSource="{Binding FormCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource ItemsControlItemsTemplate}">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-              <UniformGrid Rows="1" Margin="0,5,0,0"/>
+              <UniformGrid Rows="1"/>
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
         </ItemsControl>

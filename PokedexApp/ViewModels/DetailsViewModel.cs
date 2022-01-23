@@ -14,8 +14,8 @@ namespace Pokedex.PokedexApp.ViewModels
     {
         #region Fields and props
 
+        private readonly List<DualTypeClass> typeCombos;
         private int number;
-        private string name;
         private TypeEnum? type1;
         private TypeEnum? type2;
         private string ability1;
@@ -23,26 +23,11 @@ namespace Pokedex.PokedexApp.ViewModels
         private string hiddenAbility;
         private EggGroupEnum? eggGroup1;
         private EggGroupEnum? eggGroup2;
-        private ObservableCollection<TypeMult> weaknesses;
-        private ObservableCollection<TypeMult> resistances;
-        private ObservableCollection<TypeMult> immunities;
-        private ObservableCollection<TypeMult> normalDamage;
-        private List<DualTypeClass> typeCombos;
-        private int weakRows;
-        private int resRows;
-        private int immRows;
-        private int normRows;
 
         public int Number
         {
             get => number;
             set => SetProperty(ref number, value);
-        }
-
-        public string Name
-        {
-            get => name;
-            set => SetProperty(ref name, value);
         }
 
         public TypeEnum? Type1
@@ -87,55 +72,6 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref eggGroup2, value);
         }
 
-        public ObservableCollection<TypeMult> Weaknesses
-        {
-            get => weaknesses;
-            set => SetProperty(ref weaknesses, value);
-        }
-
-        public ObservableCollection<TypeMult> Resistances
-        {
-            get => resistances;
-            set => SetProperty(ref resistances, value);
-        }
-
-        public ObservableCollection<TypeMult> Immunities
-        {
-            get => immunities;
-            set => SetProperty(ref immunities, value);
-        }
-
-        public ObservableCollection<TypeMult> NormalDamage
-        {
-            get => normalDamage;
-            set => SetProperty(ref normalDamage, value);
-        }
-
-        public int WeakRows
-        {
-            get => weakRows;
-            set => SetProperty(ref weakRows, value);
-        }
-
-        public int ResRows
-        {
-            get => resRows;
-            set => SetProperty(ref resRows, value);
-        }
-
-        public int ImmRows
-        {
-            get => immRows;
-            set => SetProperty(ref immRows, value);
-        }
-
-        public int NormRows
-        {
-            get => normRows;
-            set => SetProperty(ref normRows, value);
-        }
-
-
         #endregion
 
         public DetailsViewModel()
@@ -151,7 +87,6 @@ namespace Pokedex.PokedexApp.ViewModels
 
         protected override void OnPokemonChanged(Pokemon pkmn)
         {
-            Name = pkmn.Name;
             Type1 = pkmn.Type1;
             Type2 = pkmn.Type2;
             Ability1 = pkmn.Ability1;
@@ -159,29 +94,7 @@ namespace Pokedex.PokedexApp.ViewModels
             HiddenAbility = pkmn.HiddenAbility;
             EggGroup1 = pkmn.EggGroup1;
             EggGroup2 = pkmn.EggGroup2;
-            if (Type2 == null)
-            {
-                Weaknesses = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType == Type1).Weaknesses);
-                Resistances = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType == Type1).Resistances);
-                Immunities = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType == Type1).Immunities);
-                NormalDamage = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType == Type1).NormalDamage);
-            }
-            else
-            {
-                Weaknesses = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).Weaknesses);
-                Resistances = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).Resistances);
-                Immunities = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).Immunities);
-                NormalDamage = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).NormalDamage);
-            }
-            SetRows();
-        }
-
-        private void SetRows()
-        {
-            WeakRows = Weaknesses.Count > 9 ? 2 : 1;
-            ResRows = Resistances.Count > 9 ? 2 : 1;
-            ImmRows = Immunities.Count > 9 ? 2 : 1;
-            NormRows = NormalDamage.Count > 9 ? 2 : 1;
+            
         }
     }
 }

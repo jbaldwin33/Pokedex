@@ -12,14 +12,17 @@ namespace Pokedex.PokedexApp.ViewModels
         public ObservableCollection<Pokemon> DexList { get; set; }
         private Action<Pokemon, DexType> pokemonChanged;
         private Pokemon selectedPokemon;
+        private bool withoutNotify;
+
         public Pokemon SelectedPokemon
         {
             get => selectedPokemon;
             set
             {
                 SetProperty(ref selectedPokemon, value);
-                if (value != null)
+                if (value != null && !withoutNotify)
                     pokemonChanged?.Invoke(value, PokedexType);
+                withoutNotify = false;
             }
         }
 
@@ -28,6 +31,12 @@ namespace Pokedex.PokedexApp.ViewModels
             PokedexType = type;
             DexList = list;
             pokemonChanged = changedAction;
+        }
+
+        public void UpdateComboboxWithoutNotify(Pokemon pkmn)
+        {
+            withoutNotify = true;
+            SelectedPokemon = pkmn;
         }
     }
 }

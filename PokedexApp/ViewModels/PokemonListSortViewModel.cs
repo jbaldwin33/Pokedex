@@ -77,10 +77,15 @@ namespace Pokedex.PokedexApp.ViewModels
 
         private void ChangeTypeCommandExecute(object param)
         {
-            CurrentSortOptions.TypeToSort = (TypeEnum)param;
+            if (param is TypeEnum type)
+                CurrentSortOptions.TypeToSort = type;
+            else
+                CurrentSortOptions.EggGroupToSort = (EggGroupEnum)param;
             CurrentSortOptions.SortList();
         }
 
-        private bool ChangeTypeCommandCanExecute(object param) => CurrentSortOptions.TypeToSort != (TypeEnum)param;
+        private bool ChangeTypeCommandCanExecute(object param) => param is TypeEnum type
+            ? CurrentSortOptions.TypeToSort != type
+            : CurrentSortOptions.EggGroupToSort != (EggGroupEnum)param;
     }
 }

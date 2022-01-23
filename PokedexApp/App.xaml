@@ -14,6 +14,9 @@
       <DataTemplate DataType="{x:Type viewModels:DetailsViewModel}">
         <views:DetailsView/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type viewModels:TypeMatchupViewModel}">
+        <views:TypeMatchupView/>
+      </DataTemplate>
       <DataTemplate DataType="{x:Type viewModels:EvolveViewModel}">
         <views:EvolveView/>
       </DataTemplate>

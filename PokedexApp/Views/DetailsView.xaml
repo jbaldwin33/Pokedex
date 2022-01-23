@@ -6,62 +6,33 @@
              xmlns:local="clr-namespace:Pokedex.PokedexApp"
              xmlns:views="clr-namespace:MVVMFramework.Views;assembly=MVVMFramework"
              xmlns:controls="clr-namespace:MVVMFramework.Controls;assembly=MVVMFramework"
-             xmlns:controls1="clr-namespace:Pokedex.PokedexApp.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-  <views:ViewBaseControl.Resources>
-    <local:MultiplierConverter x:Key="MultiplierConverter"/>
-    <Style x:Key="ItemsControlStyle" TargetType="ItemsControl">
-      <Setter Property="ItemsControl.ItemTemplate">
-        <Setter.Value>
-          <DataTemplate>
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
-              <Border BorderThickness="1" BorderBrush="Black" Grid.Row="0">
-                <TextBlock Text="{Binding ThisType}"/>
-              </Border>
-              <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1">
-                <TextBlock Text="{Binding Multiplier, Converter={StaticResource MultiplierConverter}}"/>
-              </Border>
-            </Grid>
-          </DataTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
-  </views:ViewBaseControl.Resources>
-  <Grid>
+  <Grid HorizontalAlignment="Center">
     <Grid.RowDefinitions>
       <RowDefinition Height="auto"/>
       <RowDefinition Height="auto"/>
       <RowDefinition Height="auto"/>
       <RowDefinition Height="auto"/>
       <RowDefinition Height="auto"/>
-      <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-      <controls:MediumTextBlock Text="Name:"/>
-      <controls:MediumTextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-    </StackPanel>
-    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
       <controls:MediumTextBlock Text="Type 1:"/>
       <controls:MediumTextBlock Text="{Binding Type1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
     </StackPanel>
-    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0">
+    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
       <controls:MediumTextBlock Text="Type 2:"/>
       <controls:MediumTextBlock Text="{Binding Type2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
     </StackPanel>
-    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0">
+    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0">
       <controls:MediumTextBlock Text="Ability 1:"/>
       <controls:MediumTextBlock Text="{Binding Ability1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
     </StackPanel>
-    <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0">
+    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0">
       <controls:MediumTextBlock Text="Ability 2:"/>
       <controls:MediumTextBlock Text="{Binding Ability2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
     </StackPanel>
@@ -77,55 +48,5 @@
       <controls:MediumTextBlock Text="Egg group 2:"/>
       <controls:MediumTextBlock Text="{Binding EggGroup2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
     </StackPanel>
-    <Grid Grid.Row="6" Grid.ColumnSpan="2">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0">
-        <controls:MediumTextBlock Text="Weaknesses:"/>
-        <ItemsControl ItemsSource="{Binding Weaknesses, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource ItemsControlStyle}">
-          <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-              <UniformGrid Rows="{Binding WeakRows}"/>
-            </ItemsPanelTemplate>
-          </ItemsControl.ItemsPanel>
-        </ItemsControl>
-      </StackPanel>
-      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0">
-        <controls:MediumTextBlock Text="Resistances:"/>
-        <ItemsControl x:Name="resistanceItems" ItemsSource="{Binding Resistances, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource ItemsControlStyle}">
-          <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-              <UniformGrid Rows="{Binding ResRows}"/>
-            </ItemsPanelTemplate>
-          </ItemsControl.ItemsPanel>
-        </ItemsControl>
-      </StackPanel>
-      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1">
-        <controls:MediumTextBlock Text="Immunities:"/>
-        <ItemsControl x:Name="immunityItems" ItemsSource="{Binding Immunities, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource ItemsControlStyle}">
-          <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-              <UniformGrid Rows="{Binding ImmRows}"/>
-            </ItemsPanelTemplate>
-          </ItemsControl.ItemsPanel>
-        </ItemsControl>
-      </StackPanel>
-      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
-        <controls:MediumTextBlock Text="Normal damage:"/>
-        <ItemsControl x:Name="normalItems" ItemsSource="{Binding NormalDamage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource ItemsControlStyle}">
-          <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-              <UniformGrid Rows="{Binding NormRows}"/>
-            </ItemsPanelTemplate>
-          </ItemsControl.ItemsPanel>
-        </ItemsControl>
-      </StackPanel>
-    </Grid>
   </Grid>
 </views:ViewBaseControl>

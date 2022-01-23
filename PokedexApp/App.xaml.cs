@@ -18,6 +18,7 @@ namespace Pokedex
             var types = new (Type, string, bool)[]
             {
                 (typeof(DetailsViewModel), "Details", true),
+                (typeof(TypeMatchupViewModel), "Type Matchups", true),
                 (typeof(EvolveViewModel), "Evolution", true),
                 (typeof(StatsViewModel), "Stats", true),
                 (typeof(EVYieldViewModel), "EV Yield", true)

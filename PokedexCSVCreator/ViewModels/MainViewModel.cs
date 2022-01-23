@@ -173,7 +173,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     AddLogEntry($"{counter} records(s) read.");
                 }
 
-                csvWriter.WriteRecords(readRecords);
+                await csvWriter.WriteRecordsAsync(readRecords);
                 AddLogEntry($"Done reading.");
                 SetIsExecuting(false);
             }
