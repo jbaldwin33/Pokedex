@@ -16,7 +16,7 @@ namespace Pokedex.PokedexApp.ViewModels
 
     public class MainViewModel : ViewModel
     {
-        private const int MAX_POKEMON = 721;
+        private const int MAX_POKEMON = 898;
         public INavigator Navigator { get; set; }
         public Action<Pokemon> PokemonChangedAction;
         private readonly List<Pokemon> evolutionList;
@@ -64,18 +64,20 @@ namespace Pokedex.PokedexApp.ViewModels
             Navigator = navigator;
             GetAllPokemon();
             evolutionList = new List<Pokemon>();
-            pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => x.Num == Math.Floor(x.Num)));
+            pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => x.NationalDex == Math.Floor(x.NationalDex)));
 
             Pokedexes = new List<PokedexComboBoxViewModel>
             {
                 new PokedexComboBoxViewModel(DexType.Alphabetical, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.Name)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.National, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.Num)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Kanto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num < 152).OrderBy(p => p.Num)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Johto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 152 && p.Num < 252).OrderBy(p => p.Num)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Hoenn, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 252 && p.Num < 387).OrderBy(p => p.Num)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Sinnoh, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 387 && p.Num < 494).OrderBy(p => p.Num)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Unova, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 494 && p.Num < 650).OrderBy(p => p.Num)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Kalos, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.Num >= 650 && p.Num < 722).OrderBy(p => p.Num)), OnPokemonChanged)
+                new PokedexComboBoxViewModel(DexType.National, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Kanto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex < 152).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Johto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 152 && p.NationalDex < 252).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Hoenn, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 252 && p.NationalDex < 387).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Sinnoh, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 387 && p.NationalDex < 494).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Unova, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 494 && p.NationalDex < 650).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Kalos, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 650 && p.NationalDex < 722).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Alola, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 722 && p.NationalDex < 810).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Galar, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 810).OrderBy(p => p.NationalDex)), OnPokemonChanged)
             };
             FormCollection = new ObservableCollection<PokemonForm>();
         }
@@ -83,14 +85,14 @@ namespace Pokedex.PokedexApp.ViewModels
         #region Commands
 
         public RelayCommand FindCommand => findCommand ??= new RelayCommand(FindCommandExecute);
-        public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.Num <= MAX_POKEMON);
-        public RelayCommand PreviousCommand => previousCommand ??= new RelayCommand(PreviousCommandExecute, () => SelectedPokemon?.Num > 1);
+        public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.NationalDex <= MAX_POKEMON);
+        public RelayCommand PreviousCommand => previousCommand ??= new RelayCommand(PreviousCommandExecute, () => SelectedPokemon?.NationalDex > 1);
         public RelayCommand OpenSortWindowCommand => openSortWindowCommand ??= new RelayCommand(OpenSortWindowCommandExecute, () => true);
 
         #endregion
 
-        public bool PokemonHasForms(Pokemon pkmn) => pokemonListWithForms.Any(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
-        public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.Num != pkmn.Num && Math.Truncate(x.Num) == pkmn.Num);
+        public bool PokemonHasForms(Pokemon pkmn) => pokemonListWithForms.Any(x => x.NationalDex != pkmn.NationalDex && Math.Truncate(x.NationalDex) == pkmn.NationalDex);
+        public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.NationalDex != pkmn.NationalDex && Math.Truncate(x.NationalDex) == pkmn.NationalDex);
 
         public List<Pokemon> GetEvolutionLine(Pokemon pkmn)
         {
@@ -126,14 +128,14 @@ namespace Pokedex.PokedexApp.ViewModels
         private async void GetAllPokemon()
         {
             pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
-            pokemonListWithForms.OrderBy(p => p.Num);
+            pokemonListWithForms.OrderBy(p => p.NationalDex);
         }
 
         private void FindCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name), CurrentDexType);
 
-        private void NextCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) + 1), CurrentDexType);
+        private void NextCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.NationalDex == Math.Floor(SelectedPokemon.NationalDex) + 1), CurrentDexType);
 
-        private void PreviousCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Num == Math.Floor(SelectedPokemon.Num) - 1), CurrentDexType);
+        private void PreviousCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.NationalDex == Math.Floor(SelectedPokemon.NationalDex) - 1), CurrentDexType);
         private void OpenSortWindowCommandExecute()
         {
             var sortWindow = new PokemonListSortWindow()
@@ -160,7 +162,7 @@ namespace Pokedex.PokedexApp.ViewModels
             IconData = pkmn.Icon;
             PokemonChangedAction?.Invoke(pkmn);
 
-            bool isForm(Pokemon pkmn) => pkmn.Num != Math.Floor(pkmn.Num);
+            bool isForm(Pokemon pkmn) => pkmn.NationalDex != Math.Floor(pkmn.NationalDex);
             bool hasForms(Pokemon pkmn) => PokemonHasForms(pkmn);
         }
 
@@ -169,10 +171,10 @@ namespace Pokedex.PokedexApp.ViewModels
         private void AddForms(Pokemon pkmn)
         {
             FormCollection.Clear();
-            FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.Num });
+            FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.NationalDex });
             var forms = GetPokemonForms(pkmn);
             foreach (var form in forms)
-                FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.Num });
+                FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.NationalDex });
         }
 
         private void FormCommandExecute(Pokemon form)

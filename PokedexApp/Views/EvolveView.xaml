@@ -22,7 +22,7 @@
             <controls:LargeTextBlock Text="{Binding EvolveMethodString}"/>
           </StackPanel>
           <StackPanel Grid.Column="1" Orientation="Vertical">
-            <Image Source="{Binding Icon, TargetNullValue={x:Null}}"/>
+            <Image Source="{Binding Icon, TargetNullValue={x:Null}}" Width="80" Height="80"/>
             <controls:MediumTextBlock Text="{Binding Name}"/>
           </StackPanel>
         </Grid>
@@ -34,7 +34,7 @@
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
           <StackPanel Grid.Column="0" Orientation="Vertical">
-            <Image Source="{Binding Icon, TargetNullValue={x:Null}}"/>
+            <Image Source="{Binding Icon, TargetNullValue={x:Null}}" Width="80" Height="80"/>
             <controls:MediumTextBlock Text="{Binding Name}"/>
           </StackPanel>
         </Grid>

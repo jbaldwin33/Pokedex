@@ -1,7 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using MVVMFramework.ViewModels;
-using Pokedex.PokedexCSVCreator;
 using Pokedex.PokedexCSVCreator.Models;
 using PokeApiNet;
 using System;
@@ -44,8 +43,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
         private readonly string filename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries", "PokedexFile.csv");
         private readonly string newFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries", "NewCSV.csv");
         private readonly PokeApiClient pokeClient;
-        private CancellationTokenSource tokenSource;
-        private CancellationToken token;
+        private bool isCancelled;
         private List<PokemonEntity> records;
         private List<PokemonEntity> readRecords;
         private bool isExecuting;
@@ -80,54 +78,50 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
         public override void OnUnloaded()
         {
             pokeClient.Dispose();
-            tokenSource.Dispose();
             base.OnUnloaded();
         }
 
-        private void CancelCommandExecute() => tokenSource.Cancel();
+        private void CancelCommandExecute() => isCancelled = true;
 
         private async Task WriteCommandExecute() => await DoExecute(FillCSV);
 
         private async Task ReadCommandExecute() => await DoExecute(ReadCSV);
 
-        private async Task DoExecute(Func<CancellationToken, Task> func)
+        private async Task DoExecute(Func<Task> func)
         {
             SetIsExecuting(true);
             LogEntries.Clear();
             try
             {
-                tokenSource = new CancellationTokenSource();
-                token = tokenSource.Token;
-                await Task.Run(() => func(token), token);
+                await Task.Run(func);
             }
             catch (Exception ex)
             {
                 ShowMessage(ex.Message);
                 SetIsExecuting(false);
             }
-            finally
-            {
-                tokenSource.Dispose();
-            }
         }
 
         private void AddLogEntry(string entry) => Application.Current.Dispatcher.Invoke(() => LogEntries.Add(entry));
 
-        private async Task ReadCSV(CancellationToken token)
+        private async Task ReadCSV()
         {
             try
             {
                 using var sr = new StreamReader(filename);
                 using var csvReader = new CsvReader(sr, CultureInfo.InvariantCulture);
-                readRecords = new List<PokemonEntity>();
+                using var sw = new StreamWriter(newFilePath, true);
+                using var csvWriter = new CsvWriter(sw, new CsvConfiguration(CultureInfo.InvariantCulture));
+
                 var counter = 0;
+                var increment = 0;
+                readRecords = new List<PokemonEntity>();
                 csvReader.Read();
                 csvReader.ReadHeader();
-                var increment = 0;
 
                 while (csvReader.Read())
                 {
-                    if (token.IsCancellationRequested)
+                    if (isCancelled)
                     {
                         DoCancel();
                         return;
@@ -179,10 +173,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     AddLogEntry($"{counter} records(s) read.");
                 }
 
-                using var sw = new StreamWriter(newFilePath, true);
-                using var csvWriter = new CsvWriter(sw, new CsvConfiguration(CultureInfo.InvariantCulture));
                 csvWriter.WriteRecords(readRecords);
-
                 AddLogEntry($"Done reading.");
                 SetIsExecuting(false);
             }
@@ -193,7 +184,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             }
         }
 
-        private async Task FillCSV(CancellationToken token)
+        private async Task FillCSV()
         {
             if (!File.Exists(newFilePath))
             {
@@ -203,7 +194,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
             while (!IsFileReady(newFilePath))
             {
-                if (token.IsCancellationRequested)
+                if (isCancelled)
                 {
                     DoCancel();
                     return;
@@ -219,7 +210,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 records = new List<PokemonEntity>();
                 for (var i = 650; i <= 898; i++)
                 {
-                    if (token.IsCancellationRequested)
+                    if (isCancelled)
                     {
                         DoCancel();
                         return;
@@ -239,7 +230,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                         added++;
                         AddLogEntry($"{added} record(s) added");
                         if (pkmnSpecies.Varieties.Count > 1)
-                            AddForms(i, pkmnSpecies, evolutionChain, growth);
+                            AddForms(csv, i, pkmnSpecies, evolutionChain, growth);
                     }
                     catch (Exception ex)
                     {
@@ -262,6 +253,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             {
                 AddLogEntry("Cancelled.");
                 SetIsExecuting(false);
+                isCancelled = false;
             });
 
         private int GetUpdatedNumber(PokemonSpecies pkmnSpecies)
@@ -427,7 +419,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
         #region Helper methods
 
-        private async void AddForms(float i, PokemonSpecies species, EvolutionChain chain, GrowthRate growth)
+        private async void AddForms(CsvWriter csv, float i, PokemonSpecies species, EvolutionChain chain, GrowthRate growth)
         {
             var toAddToForm = 0.1f;
             for (var j = 1; j < species.Varieties.Count; j++)
@@ -446,6 +438,8 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 {
                     var record = CreateEntity(i + toAddToForm, pkmn, pkmnSpecies, chain, growth, formName, i + toAddToForm);
                     records.Add(record);
+                    csv.WriteRecord(record);
+                    csv.NextRecord();
                     added++;
                     toAddToForm += 0.1f;
                     AddLogEntry($"{added} form(s) added");
@@ -466,10 +460,11 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
         private ChainLink TraverseChain(ChainLink chain, string name) => chain.Species.Name == name ? chain : chain.EvolvesTo.Count > 1 ? TraverseChain(chain.EvolvesTo.First(x => x.Species.Name == name), name) : TraverseChain(chain.EvolvesTo[0], name);
 
         private void SetIsExecuting(bool executing)
-        {
-            IsExecuting = executing;
-            CommandManager.InvalidateRequerySuggested();
-        }
+            => Application.Current.Dispatcher.Invoke(() =>
+            {
+                IsExecuting = executing;
+                CommandManager.InvalidateRequerySuggested();
+            });
 
         #endregion
     }

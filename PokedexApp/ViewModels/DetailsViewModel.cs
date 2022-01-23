@@ -28,6 +28,10 @@ namespace Pokedex.PokedexApp.ViewModels
         private ObservableCollection<TypeMult> immunities;
         private ObservableCollection<TypeMult> normalDamage;
         private List<DualTypeClass> typeCombos;
+        private int weakRows;
+        private int resRows;
+        private int immRows;
+        private int normRows;
 
         public int Number
         {
@@ -107,11 +111,36 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref normalDamage, value);
         }
 
+        public int WeakRows
+        {
+            get => weakRows;
+            set => SetProperty(ref weakRows, value);
+        }
+
+        public int ResRows
+        {
+            get => resRows;
+            set => SetProperty(ref resRows, value);
+        }
+
+        public int ImmRows
+        {
+            get => immRows;
+            set => SetProperty(ref immRows, value);
+        }
+
+        public int NormRows
+        {
+            get => normRows;
+            set => SetProperty(ref normRows, value);
+        }
+
+
         #endregion
 
         public DetailsViewModel()
         {
-            typeCombos = TypeMasterClass.Instance.GetDualTypeCombos();
+            typeCombos = TypeMasterClass.Instance.DualTypeCombos;
         }
 
         public override void OnUnloaded()
@@ -144,6 +173,15 @@ namespace Pokedex.PokedexApp.ViewModels
                 Immunities = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).Immunities);
                 NormalDamage = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == Type1 && x.Type2.ThisType == Type2).NormalDamage);
             }
+            SetRows();
+        }
+
+        private void SetRows()
+        {
+            WeakRows = Weaknesses.Count > 9 ? 2 : 1;
+            ResRows = Resistances.Count > 9 ? 2 : 1;
+            ImmRows = Immunities.Count > 9 ? 2 : 1;
+            NormRows = NormalDamage.Count > 9 ? 2 : 1;
         }
     }
 }

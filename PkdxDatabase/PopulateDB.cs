@@ -1,27 +1,32 @@
 ﻿using CsvHelper;
 using Pokedex.PkdxDatabase.Context;
 using Pokedex.PkdxDatabase.Entities;
-using Pokedex.PkdxDatabase.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Pokedex.PkdxDatabase
 {
     public static class PopulateDB
     {
-        private static readonly string filename = "PokedexFile.csv";
-        private static readonly string iconDirectory = "pokemon/main-sprites/black-white";
+        private static readonly string binaryDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries");
+        private static readonly string filename = Path.Combine(binaryDirectory, "NewCSV.csv");
+        private static readonly string iconDirectory = Path.Combine(binaryDirectory, "pokemon/regular");
+        private const int MAX_POKEMON = 898;
 
-        public static void PopulateDatabase(PokedexDBContext context)
+        public static async void PopulateDatabase(PokedexDBContext context)
         {
-            using var reader = new StreamReader(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries", filename));
+            using var reader = new StreamReader(filename);
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
             var counter = 1;
+            var failed = 0;
+            var records = new List<PokemonEntity>();
             csv.Read();
             csv.ReadHeader();
             while (csv.Read())
@@ -29,7 +34,7 @@ namespace Pokedex.PkdxDatabase
                 var record = new PokemonEntity
                 {
                     Id = counter,
-                    Num = csv.GetField<float>("Nat"),
+                    NationalDex = csv.GetField<float>("Nat"),
                     EvolutionOrderNum = csv.GetField<float>("Per"),
                     HP = csv.GetField<int>("HP"),
                     Atk = csv.GetField<int>("Atk"),
@@ -50,32 +55,45 @@ namespace Pokedex.PkdxDatabase
                     NumberOfEvolutions = !string.IsNullOrEmpty(csv.GetField("EvolveNum")) ? csv.GetField<int>("EvolveNum") : 0,
                     EVYield = csv.GetField("EVYield")
                 };
-                var iconFile = GetIconFile(record.Num, record.Name);
-                if (!string.IsNullOrEmpty(iconFile))
-                    record.Icon = ImageToByteArray(iconFile);
-                
-                var entry = context.PokedexEntries.Find(record.Id);
-                if (entry == null)
-                {
-                    context.Add(record);
-                    context.SaveChanges();
-                    Console.WriteLine($"{counter} record(s) saved.");
-                }
+
+                records.Add(record);
+                await context.AddAsync(record);
+                await context.SaveChangesAsync();
+                Console.WriteLine($"{counter} record(s) saved.");
                 counter++;
             }
+
+            //add icons
+            Parallel.ForEach(records, record =>
+            {
+                var iconFile = GetIconFile(record.NationalDex, record.Name);
+                if (!string.IsNullOrEmpty(iconFile))
+                    record.Icon = ImageToByteArray(iconFile);
+                Console.WriteLine($"{record.Name} icon saved.");
+            });
+
+            var t = Task.Run(() => context.SaveChangesAsync());
+            Console.Write("Saving changes to database...");
+            while (!t.IsCompleted)
+            {
+                Thread.Sleep(2000);
+                Console.Write("...");
+            }
+            Console.WriteLine($"{failed} record(s) failed.");
             Console.WriteLine("Done.");
         }
 
         private static string GetIconFile(float number, string name)
         {
-            if (number > 649)
+            if (number > MAX_POKEMON)
                 return string.Empty;
 
-            var files = Directory.GetFiles(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries", iconDirectory));
+            var files = Directory.GetFiles(Path.Combine(binaryDirectory, iconDirectory));
             return Math.Floor(number) != number
-                ? files.First(file => Path.GetFileName(file).Equals($"{Math.Floor(number)}-{getFormName()}.png"))
-                : files.First(file => Path.GetFileName(file).Equals($"{number}.png"));
+                ? filenameEquals($"{Math.Floor(number):000}-{getFormName()}.png")
+                : filenameEquals($"{number:000}-{name.ToLower()}.png");
 
+            string filenameEquals(string name) => files.FirstOrDefault(file => Path.GetFileName(file).Equals(name));
             string getFormName() => name.Substring(name.IndexOf('(') + 1, name.IndexOf(')') - (name.IndexOf('(') + 1)).ToLower();
         }
 

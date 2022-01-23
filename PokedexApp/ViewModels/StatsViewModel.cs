@@ -71,7 +71,6 @@ namespace Pokedex.PokedexApp.ViewModels
 
         #endregion
 
-        public StatsViewModel() { }
         protected override void OnPokemonChanged(Pokemon pkmn)
         {
             HPStat = pkmn.BaseStats[0].Value;

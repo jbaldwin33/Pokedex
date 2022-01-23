@@ -27,7 +27,7 @@ namespace Pokedex.PokedexLib
         public TypeClass(TypeEnum type, List<TypeEnum> res, List<TypeEnum> weak, List<TypeEnum> imm)
         {
             ThisType = type;
-            var exclude = Resistances.Select(x => x.ThisType).Concat(Weaknesses.Select(x => x.ThisType)).Concat(Immunities.Select(x => x.ThisType));
+            var exclude = res.Concat(weak).Concat(imm);
             var norms = Enum.GetValues(typeof(TypeEnum)).Cast<TypeEnum>().Except(exclude).ToList();
 
             res.ForEach(r => Resistances.Add(new TypeMult(r, 0.5)));
@@ -57,22 +57,25 @@ namespace Pokedex.PokedexLib
 
     public class TypeMasterClass
     {
-        private static readonly Lazy<TypeMasterClass> lazy = new Lazy<TypeMasterClass>(() => new TypeMasterClass());
+        private static readonly Lazy<TypeMasterClass> lazy = new(() => new TypeMasterClass());
         public static TypeMasterClass Instance => lazy.Value;
-        public TypeClass[] TypeClasses { get; set; }
 
         private TypeClass type1;
         private TypeClass type2;
         private List<TypeMult> resistancesChecked;
         private List<TypeMult> weaknessesChecked;
         private DualTypeClass dualTypeClass;
+        private List<DualTypeClass> dualTypeCombos;
+        private TypeClass[] typeClasses;
+        public List<DualTypeClass> DualTypeCombos => dualTypeCombos ??= GetDualTypeCombos();
+        public TypeClass[] TypeClasses => typeClasses ??= CreateTypes();
 
-        private TypeMasterClass()
+        public TypeMasterClass()
         {
-            TypeClasses = CreateTypes();
+            typeClasses = CreateTypes();
         }
 
-        public List<DualTypeClass> GetDualTypeCombos()
+        private List<DualTypeClass> GetDualTypeCombos()
         {
             var dualTypeClasses = new List<DualTypeClass>();
 

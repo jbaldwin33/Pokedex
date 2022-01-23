@@ -12,6 +12,8 @@ namespace Pokedex.PokedexApp.ViewModels
 {
     public class EvolveViewModel : TabViewModel
     {
+        #region Props and fields
+
         private ObservableCollection<Pokemon> evolutionLine;
         private ObservableCollection<Pokemon> multipleEvolutions;
 
@@ -27,6 +29,7 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref multipleEvolutions, value);
         }
 
+        #endregion
 
         public EvolveViewModel()
         {

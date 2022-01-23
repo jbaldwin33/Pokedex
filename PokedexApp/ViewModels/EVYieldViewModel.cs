@@ -13,8 +13,6 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref evYields, value);
         }
 
-        public EVYieldViewModel() { }
-
         protected override void OnPokemonChanged(Pokemon pkmn) => EVYields = pkmn.EVYields;
     }
 }

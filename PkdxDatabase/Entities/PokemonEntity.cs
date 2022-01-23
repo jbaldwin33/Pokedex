@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,11 +7,19 @@ using System.Text;
 
 namespace Pokedex.PkdxDatabase.Entities
 {
+    [Index(nameof(Id))]
     public class PokemonEntity
     {
         [Key]
         public int Id { get; set; }
-        public float Num { get; set; }
+        public float NationalDex { get; set; }
+        public float JohtoDex { get; set; }
+        public float HoennDex { get; set; }
+        public float SinnohDex { get; set; }
+        public float UnovaDex { get; set; }
+        public float KalosDex { get; set; }
+        public float AlolaDex { get; set; }
+        public float GalarDex { get; set; }
         public float EvolutionOrderNum { get; set; }
         public string Name { get; set; }
         public int HP { get; set; }
