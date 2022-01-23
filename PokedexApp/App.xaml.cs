@@ -24,7 +24,7 @@ namespace Pokedex
                 (typeof(EVYieldViewModel), "EV Yield", true)
             };
 
-            var window = new MainWindow(types, new MainViewModel(Navigator.Instance));
+            var window = new MainWindow(types, new MainViewModel(Navigator.Instance)) { Title = "Pokemon Zukan" };
             window.Show();
         }
     }

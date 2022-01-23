@@ -145,8 +145,8 @@ namespace Pokedex.PokedexApp.ViewModels
             {
                 DataContext = new PokemonListSortViewModel(new ObservableCollection<Pokemon>(pokemonListWithForms)),
                 WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
-                Width = 900,
-                Height = 500
+                Width = 700,
+                Height = 450
             };
             sortWindow.Initialize();
             sortWindow.Show();
