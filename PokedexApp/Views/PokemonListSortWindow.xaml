@@ -17,11 +17,6 @@
   <Grid>
     <Grid.Resources>
       <converters:EnumValueToDecriptionConverter x:Key="EnumValueConverter"/>
-      <ObjectDataProvider x:Key="TypeEnumDataSource" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
-        <ObjectDataProvider.MethodParameters>
-          <x:Type TypeName="enums:Enums+TypeEnum" />
-        </ObjectDataProvider.MethodParameters>
-      </ObjectDataProvider>
       <ObjectDataProvider x:Key="SortEnumDataSource" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
         <ObjectDataProvider.MethodParameters>
           <x:Type TypeName="enums:Enums+SortType" />
@@ -29,6 +24,7 @@
       </ObjectDataProvider>
     </Grid.Resources>
     <Grid.RowDefinitions>
+      <RowDefinition Height="auto"/>
       <RowDefinition Height="auto"/>
       <RowDefinition Height="auto"/>
     </Grid.RowDefinitions>
@@ -46,25 +42,13 @@
         </ItemsControl.ItemTemplate>
       </ItemsControl>
     </StackPanel>
-    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+    <StackPanel Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding SortByType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource BoolToVisConverter}}">
+      <ComboBox Width="90" ItemsSource="{Binding SecondarySortTypes}" SelectedIndex="0" SelectedItem="{Binding SelectedGroup}"/>
+    </StackPanel>
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
       <StackPanel HorizontalAlignment="Center" Margin="5">
         <ListView x:Name="sortedListView" ItemsSource="{Binding CurrentSortList}" Height="300" GridViewColumnHeader.Click="sortedListView_Click"/>
       </StackPanel>
-      <StackPanel HorizontalAlignment="Center" Visibility="{Binding SortByType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource BoolToVisConverter}}">
-        <ItemsControl ItemsSource="{Binding SecondarySort, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-          <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-              <UniformGrid Rows="6"/>
-            </ItemsPanelTemplate>
-          </ItemsControl.ItemsPanel>
-          <ItemsControl.ItemTemplate>
-            <DataTemplate>
-              <controls:SmallButton Content="{Binding}" Command="{Binding DataContext.ChangeTypeCommand, RelativeSource={RelativeSource AncestorType=local:PokemonListSortWindow}}" CommandParameter="{Binding}"/>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
-      </StackPanel>
-      
     </StackPanel>
   </Grid>
 </views:ViewBaseWindow>

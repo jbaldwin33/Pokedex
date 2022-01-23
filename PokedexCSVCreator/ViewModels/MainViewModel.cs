@@ -303,7 +303,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             Hatch = (pkmnSpecies.HatchCounter * STEPS_PER_HATCH_COUNTER).ToString(),
             Gender = GetGenderRate(pkmnSpecies.GenderRate),
             Ability1 = GetFriendlyName(pkmn.Abilities.First(x => x.Slot == 1).Ability.Name),
-            Ability2 = GetFriendlyName(pkmn.Abilities.FirstOrDefault(x => x.Slot == 2)?.Ability?.Name),
+            Ability2 = GetFriendlyName(pkmn.Abilities.FirstOrDefault(x => x.Slot == 2)?.Ability?.Name) ?? "None",
             HiddenAbility = GetFriendlyName(pkmn.Abilities.FirstOrDefault(x => x.IsHidden)?.Ability?.Name),
             EggGroup1 = pkmnSpecies.EggGroups.Count > 0 ? EggGroupName(pkmnSpecies.EggGroups[0].Name) : null,
             EggGroup2 = pkmnSpecies.EggGroups.Count > 1 ? EggGroupName(pkmnSpecies.EggGroups[1].Name) : null,

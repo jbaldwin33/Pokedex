@@ -11,9 +11,8 @@ namespace Pokedex.PokedexApp.SortWindow
     {
         public Action ListSorted { get; set; }
         public IEnumerable<Pokemon> PokemonList { get; set; }
-        public SortType Sort { get; set; }
-        public TypeEnum TypeToSort { get; set; }
-        public EggGroupEnum EggGroupToSort { get; set; }
+        public SortType CurrentSortType { get; set; }
+        public object SecondarySort { get; set; }
 
         public void SortList()
         {
@@ -21,18 +20,18 @@ namespace Pokedex.PokedexApp.SortWindow
             ListSorted?.Invoke();
         }
 
-        private IEnumerable<Pokemon> GetSortedPokemonList() => Sort switch
+        private IEnumerable<Pokemon> GetSortedPokemonList() => CurrentSortType switch
         {
             SortType.EVYield => SortByEV(),
             SortType.BaseStat => SortByStat(),
             SortType.PokemonType => SortByType(),
             SortType.EggGroup => SortByEggGroup(),
-            _ => throw new ArgumentOutOfRangeException(nameof(Sort)),
+            _ => throw new ArgumentOutOfRangeException(nameof(CurrentSortType)),
         };
 
-        private IEnumerable<Pokemon> SortByStat() => PokemonList.OrderByDescending(p => p.BaseStats.First().Value).ThenBy(p => p.NationalDex);
         private IEnumerable<Pokemon> SortByEV() => PokemonList.OrderByDescending(p => p.EVYields.First().Value).ThenBy(p => p.NationalDex);
-        private IEnumerable<Pokemon> SortByType() => PokemonList.Where(p => p.Type1 == TypeToSort || p.Type2 == TypeToSort).OrderBy(p => p.NationalDex);
-        private IEnumerable<Pokemon> SortByEggGroup() => PokemonList.Where(p => p.EggGroup1 == EggGroupToSort || p.EggGroup2 == EggGroupToSort).OrderBy(p => p.NationalDex);
+        private IEnumerable<Pokemon> SortByStat() => PokemonList.OrderByDescending(p => p.BaseStats.First().Value).ThenBy(p => p.NationalDex);
+        private IEnumerable<Pokemon> SortByType() => PokemonList.Where(p => p.Type1 == (TypeEnum)SecondarySort || p.Type2 == (TypeEnum)SecondarySort).OrderBy(p => p.NationalDex);
+        private IEnumerable<Pokemon> SortByEggGroup() => PokemonList.Where(p => p.EggGroup1 == (EggGroupEnum)SecondarySort || p.EggGroup2 == (EggGroupEnum)SecondarySort).OrderBy(p => p.NationalDex);
     }
 }

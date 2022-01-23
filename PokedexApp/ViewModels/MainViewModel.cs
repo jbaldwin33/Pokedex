@@ -149,7 +149,7 @@ namespace Pokedex.PokedexApp.ViewModels
                 Height = 450
             };
             sortWindow.Initialize();
-            sortWindow.Show();
+            sortWindow.ShowDialog();
         }
 
         private void OnPokemonChanged(Pokemon pkmn, DexType dexType)

@@ -30,7 +30,7 @@ namespace Pokedex.PokedexApp.Views
             viewModel = DataContext as PokemonListSortViewModel;
             viewModel.SortOptionsChanged = () =>
             {
-                switch (viewModel.CurrentSortOptions.Sort)
+                switch (viewModel.CurrentSortOptions.CurrentSortType)
                 {
                     case SortType.EVYield:
                         var values = Enum.GetValues(typeof(StatEnum)).Cast<StatEnum>().Where(x => x != StatEnum.Total);
@@ -46,7 +46,7 @@ namespace Pokedex.PokedexApp.Views
                     case SortType.EggGroup:
                         CreateColumns<object>(null);
                         break;
-                    default: throw new ArgumentOutOfRangeException(nameof(viewModel.CurrentSortOptions.Sort));
+                    default: throw new ArgumentOutOfRangeException(nameof(viewModel.CurrentSortOptions.CurrentSortType));
                 }
             };
             viewModel.ChangeSortCommandExecute(SortType.EVYield);
@@ -55,13 +55,13 @@ namespace Pokedex.PokedexApp.Views
         private void CreateColumns<T>(IEnumerable<T> values)
         {
             var gridView = new GridView();
-            var column1 = new GridViewColumn
+            var nameColumn = new GridViewColumn
             {
                 Header = "Name",
                 DisplayMemberBinding = new Binding("Name"),
                 Width = 150
             };
-            gridView.Columns.Add(column1);
+            gridView.Columns.Add(nameColumn);
             if (values != null)
             {
                 var i = 0;
@@ -70,7 +70,7 @@ namespace Pokedex.PokedexApp.Views
                     var column = new GridViewColumn
                     {
                         Header = value.ToString(),
-                        DisplayMemberBinding = new Binding($"{viewModel.CurrentSortOptions.Sort}s[{i}].Value"),
+                        DisplayMemberBinding = new Binding($"{viewModel.CurrentSortOptions.CurrentSortType}s[{i}].Value"),
                         Width = 50
                     };
                     gridView.Columns.Add(column);
