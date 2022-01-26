@@ -143,16 +143,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _006_charizard_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_006_charizard_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _007_squirtle {
             get {
                 object obj = ResourceManager.GetObject("_007_squirtle", resourceCulture);
@@ -226,26 +216,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _012_butterfree_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_012_butterfree_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _012_butterfree_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_012_butterfree_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _012_butterfree_gigantamax_nosparks_nopowder {
-            get {
-                object obj = ResourceManager.GetObject("_012_butterfree_gigantamax_nosparks_nopowder", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -406,16 +376,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _025_pikachu_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_025_pikachu_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _025_pikachu_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_025_pikachu_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -843,16 +803,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _052_meowth_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_052_meowth_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _053_persian {
             get {
                 object obj = ResourceManager.GetObject("_053_persian", resourceCulture);
@@ -1033,16 +983,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _068_machamp_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_068_machamp_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _069_bellsprout {
             get {
                 object obj = ResourceManager.GetObject("_069_bellsprout", resourceCulture);
@@ -1176,16 +1116,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _079_slowpoke_galar {
             get {
                 object obj = ResourceManager.GetObject("_079_slowpoke_galar", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _079_slowpoke_galar_1 {
-            get {
-                object obj = ResourceManager.GetObject("_079_slowpoke_galar_1", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -1373,16 +1303,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _094_gengar_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_094_gengar_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _095_onix {
             get {
                 object obj = ResourceManager.GetObject("_095_onix", resourceCulture);
@@ -1436,16 +1356,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _099_kingler_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_099_kingler_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _099_kingler_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_099_kingler_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -1873,16 +1783,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _131_lapras_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_131_lapras_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _132_ditto {
             get {
                 object obj = ResourceManager.GetObject("_132_ditto", resourceCulture);
@@ -1916,16 +1816,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _133_eevee_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_133_eevee_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _133_eevee_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_133_eevee_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -2036,16 +1926,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _143_snorlax_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_143_snorlax_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _143_snorlax_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_143_snorlax_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -2596,26 +2476,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _195_quagsire {
             get {
                 object obj = ResourceManager.GetObject("_195_quagsire", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _195_quagsire_1 {
-            get {
-                object obj = ResourceManager.GetObject("_195_quagsire_1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _195_quagsire_2 {
-            get {
-                object obj = ResourceManager.GetObject("_195_quagsire_2", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -6893,16 +6753,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _569_garbodor_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_569_garbodor_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _570_zorua {
             get {
                 object obj = ResourceManager.GetObject("_570_zorua", resourceCulture);
@@ -9143,16 +8993,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _809_melmetal_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_809_melmetal_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _810_grookey {
             get {
                 object obj = ResourceManager.GetObject("_810_grookey", resourceCulture);
@@ -9303,16 +9143,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _823_corviknight_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_823_corviknight_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _824_blipbug {
             get {
                 object obj = ResourceManager.GetObject("_824_blipbug", resourceCulture);
@@ -9346,16 +9176,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _826_orbeetle_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_826_orbeetle_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _826_orbeetle_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_826_orbeetle_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -9453,16 +9273,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _834_drednaw_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_834_drednaw_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _835_yamper {
             get {
                 object obj = ResourceManager.GetObject("_835_yamper", resourceCulture);
@@ -9523,16 +9333,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _839_coalossal_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_839_coalossal_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _840_applin {
             get {
                 object obj = ResourceManager.GetObject("_840_applin", resourceCulture);
@@ -9563,16 +9363,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _841_flapple_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_841_flapple_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _842_appletun {
             get {
                 object obj = ResourceManager.GetObject("_842_appletun", resourceCulture);
@@ -9586,16 +9376,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _842_appletun_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_842_appletun_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _842_appletun_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_842_appletun_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -9626,16 +9406,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _844_sandaconda_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_844_sandaconda_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _844_sandaconda_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_844_sandaconda_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -9723,16 +9493,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _849_toxtricity_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_849_toxtricity_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _849_toxtricity_lowkey {
             get {
                 object obj = ResourceManager.GetObject("_849_toxtricity_lowkey", resourceCulture);
@@ -9766,16 +9526,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _851_centiskorch_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_851_centiskorch_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _851_centiskorch_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_851_centiskorch_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -9863,16 +9613,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _858_hatterene_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_858_hatterene_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _859_impidimp {
             get {
                 object obj = ResourceManager.GetObject("_859_impidimp", resourceCulture);
@@ -9906,16 +9646,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _861_grimmsnarl_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_861_grimmsnarl_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _861_grimmsnarl_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_861_grimmsnarl_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -10076,16 +9806,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _869_alcremie_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_869_alcremie_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _869_alcremie_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_869_alcremie_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -10783,16 +10503,6 @@ namespace Pokedex.PkdxDatabase {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _879_copperajah_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_879_copperajah_gigantamax_nosparks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] _880_dracozolt {
             get {
                 object obj = ResourceManager.GetObject("_880_dracozolt", resourceCulture);
@@ -10846,16 +10556,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _884_duraludon_gigantamax {
             get {
                 object obj = ResourceManager.GetObject("_884_duraludon_gigantamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _884_duraludon_gigantamax_nosparks {
-            get {
-                object obj = ResourceManager.GetObject("_884_duraludon_gigantamax_nosparks", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -10946,16 +10646,6 @@ namespace Pokedex.PkdxDatabase {
         internal static byte[] _890_eternatus_eternamax {
             get {
                 object obj = ResourceManager.GetObject("_890_eternatus_eternamax", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _999_garbobor_gigantamax {
-            get {
-                object obj = ResourceManager.GetObject("_999_garbobor_gigantamax", resourceCulture);
                 return ((byte[])(obj));
             }
         }

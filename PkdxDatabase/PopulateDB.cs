@@ -88,18 +88,19 @@ namespace Pokedex.PkdxDatabase
                 Console.Write("...");
             }
             Console.WriteLine($"{failed} record(s) failed.");
-            Console.WriteLine("Done.");
+            Console.WriteLine("Done. Press \"Enter\" to close");
+            Console.ReadLine();
         }
 
         private static byte[] GetIconFile(float number, string name)
         {
             if (number > MAX_POKEMON)
                 return null;
-
+            
             return Math.Floor(number) != number
                 ? (byte[])Resource1.ResourceManager.GetObject($"_{Math.Floor(number):000}_{getFormName()}")
-                : (byte[])Resource1.ResourceManager.GetObject($"_{number:000}_{name.ToLower()}");
-
+                : (byte[])Resource1.ResourceManager.GetObject($"_{number:000}_{name.Replace('-', '_').ToLower()}");
+            
             string getFormName() => name.Substring(name.IndexOf('(') + 1, name.IndexOf(')') - (name.IndexOf('(') + 1)).ToLower();
         }
     }

@@ -142,9 +142,6 @@
   <data name="_006_charizard_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\006-charizard-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_006_charizard_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\006-charizard-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_007_squirtle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\007-squirtle.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -168,12 +165,6 @@
   </data>
   <data name="_012_butterfree_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\012-butterfree-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_012_butterfree_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\012-butterfree-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_012_butterfree_gigantamax_nosparks_nopowder" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\012-butterfree-gigantamax-nosparks-nopowder.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_013_weedle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\013-weedle.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -222,9 +213,6 @@
   </data>
   <data name="_025_pikachu_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\025-pikachu-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_025_pikachu_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\025-pikachu-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_025_pikachu_hoenncap" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\025-pikachu-hoenncap.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -352,9 +340,6 @@
   <data name="_052_meowth_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\052-meowth-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_052_meowth_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\052-meowth-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_053_persian" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\053-persian.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -409,9 +394,6 @@
   <data name="_068_machamp_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\068-machamp-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_068_machamp_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\068-machamp-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_069_bellsprout" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\069-bellsprout.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -453,9 +435,6 @@
   </data>
   <data name="_079_slowpoke_galar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\079-slowpoke-galar.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_079_slowpoke_galar_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\079-slowpoke-galar-1.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_080_slowbro" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\080-slowbro.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -511,9 +490,6 @@
   <data name="_094_gengar_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\094-gengar-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_094_gengar_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\094-gengar-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_095_onix" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\095-onix.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -531,9 +507,6 @@
   </data>
   <data name="_099_kingler_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\099-kingler-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_099_kingler_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\099-kingler-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_100_voltorb" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\100-voltorb.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -661,9 +634,6 @@
   <data name="_131_lapras_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\131-lapras-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_131_lapras_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\131-lapras-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_132_ditto" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\132-ditto.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -675,9 +645,6 @@
   </data>
   <data name="_133_eevee_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\133-eevee-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_133_eevee_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\133-eevee-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_134_vaporeon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\134-vaporeon.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -711,9 +678,6 @@
   </data>
   <data name="_143_snorlax_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\143-snorlax-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_143_snorlax_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\143-snorlax-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_144_articuno" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\144-articuno.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -879,12 +843,6 @@
   </data>
   <data name="_195_quagsire" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\195-quagsire.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_195_quagsire_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\195-quagsire-1.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_195_quagsire_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\195-quagsire-2.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_195_quagsire_f" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\195-quagsire-f.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -2167,9 +2125,6 @@
   <data name="_569_garbodor_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\569-garbodor-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_569_garbodor_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\569-garbodor-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_570_zorua" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\570-zorua.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -2842,9 +2797,6 @@
   <data name="_809_melmetal_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\809-melmetal-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_809_melmetal_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\809-melmetal-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_810_grookey" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\810-grookey.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -2890,9 +2842,6 @@
   <data name="_823_corviknight_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\823-corviknight-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_823_corviknight_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\823-corviknight-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_824_blipbug" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\824-blipbug.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -2904,9 +2853,6 @@
   </data>
   <data name="_826_orbeetle_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\826-orbeetle-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_826_orbeetle_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\826-orbeetle-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_827_nickit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\827-nickit.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -2935,9 +2881,6 @@
   <data name="_834_drednaw_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\834-drednaw-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_834_drednaw_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\834-drednaw-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_835_yamper" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\835-yamper.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -2956,9 +2899,6 @@
   <data name="_839_coalossal_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\839-coalossal-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_839_coalossal_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\839-coalossal-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_840_applin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\840-applin.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -2968,17 +2908,11 @@
   <data name="_841_flapple_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\841-flapple-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_841_flapple_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\841-flapple-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_842_appletun" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\842-appletun.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_842_appletun_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\842-appletun-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_842_appletun_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\842-appletun-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_843_silicobra" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\843-silicobra.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -2988,9 +2922,6 @@
   </data>
   <data name="_844_sandaconda_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\844-sandaconda-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_844_sandaconda_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\844-sandaconda-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_845_cramorant" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\845-cramorant.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3016,9 +2947,6 @@
   <data name="_849_toxtricity_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\849-toxtricity-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_849_toxtricity_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\849-toxtricity-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_849_toxtricity_lowkey" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\849-toxtricity-lowkey.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -3030,9 +2958,6 @@
   </data>
   <data name="_851_centiskorch_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\851-centiskorch-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_851_centiskorch_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\851-centiskorch-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_852_clobbopus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\852-clobbopus.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3058,9 +2983,6 @@
   <data name="_858_hatterene_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\858-hatterene-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_858_hatterene_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\858-hatterene-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_859_impidimp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\859-impidimp.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -3072,9 +2994,6 @@
   </data>
   <data name="_861_grimmsnarl_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\861-grimmsnarl-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_861_grimmsnarl_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\861-grimmsnarl-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_862_obstagoon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\862-obstagoon.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3123,9 +3042,6 @@
   </data>
   <data name="_869_alcremie_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\869-alcremie-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_869_alcremie_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\869-alcremie-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_869_alcremie_lemon_cream_berry" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\869-alcremie-lemon-cream-berry.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3334,9 +3250,6 @@
   <data name="_879_copperajah_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\879-copperajah-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_879_copperajah_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\879-copperajah-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_880_dracozolt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\880-dracozolt.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -3354,9 +3267,6 @@
   </data>
   <data name="_884_duraludon_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\884-duraludon-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_884_duraludon_gigantamax_nosparks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\884-duraludon-gigantamax-nosparks.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_885_dreepy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\885-dreepy.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3384,9 +3294,6 @@
   </data>
   <data name="_890_eternatus_eternamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\890-eternatus-eternamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="_999_garbobor_gigantamax" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>pokemonicons\999-garbobor-gigantamax.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_999_hippowdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemonicons\999-hippowdown.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
