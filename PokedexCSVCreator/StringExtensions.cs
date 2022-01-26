@@ -14,19 +14,14 @@ namespace Pokedex.PokedexCSVCreator
                 return textInfo.ToTitleCase(input).ToIrishCase();
             if (input.Contains("mime-jr"))
                 return textInfo.ToTitleCase(input.Replace('-', ' ').Insert(input.Length, "."));
-            if (input.Contains("mr-mime"))
+            if (input.Contains("mr-mime") || input.Contains("mr-rime"))
                 return textInfo.ToTitleCase(input.Replace("-", ". "));
             return textInfo.ToTitleCase(input);
         }
 
         public static string ToIrishCase(this string s)
         {
-            // This will build a Titlecased string, but 
-            // will uppercase any letter's that appear after
-            // apostrophes (as in names)
             var titlecase = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(s.ToLowerInvariant());
-            // Replaces any character after an apostrophe 
-            // with its uppercase variant
             return Regex.Replace(titlecase, "-(?:.)", m => m.Value.ToLowerInvariant());
         }
 

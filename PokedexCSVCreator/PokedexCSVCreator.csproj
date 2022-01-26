@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <Reference Include="MVVMFramework">
-      <HintPath>..\Debug\MVVMFramework.dll</HintPath>
+      <HintPath>..\assemblies\MVVMFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
 

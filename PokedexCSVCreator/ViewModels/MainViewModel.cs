@@ -13,35 +13,16 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Threading;
 using System.Windows.Input;
 #pragma warning disable IDE0058
 namespace Pokedex.PokedexCSVCreator.ViewModels
 {
     public class MainViewModel : ViewModel
     {
-        private readonly string[] updateNum =
-        {
-            "sylveon",
-            "obstagoon",
-            "perrserker",
-            "cursola",
-            "sirfetchd",
-            "mr-rime"
-        };
-
-        private readonly string[] beforeUpdate =
-        {
-            "Glaceon",
-            "Linoone",
-            "Persian",
-            "Corsola",
-            "Farfetch'd",
-            "Mr. Mime"
-        };
         private const int STEPS_PER_HATCH_COUNTER = 256;
-        private readonly string filename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries", "PokedexFile.csv");
-        private readonly string newFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries", "NewCSV.csv");
+        private static readonly string binaryDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries");
+        private static readonly string filename = Path.Combine(binaryDirectory, "PokedexFile.csv");
+        private static readonly string newFilePath = Path.Combine(binaryDirectory, "NewCSV.csv");
         private readonly PokeApiClient pokeClient;
         private bool isCancelled;
         private List<PokemonEntity> records;
@@ -85,7 +66,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
         private async Task WriteCommandExecute() => await DoExecute(FillCSV);
 
-        private async Task ReadCommandExecute() => await DoExecute(ReadCSV);
+        private Task ReadCommandExecute() => throw new NotImplementedException();//await DoExecute(ReadCSV);
 
         private async Task DoExecute(Func<Task> func)
         {
@@ -104,111 +85,100 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
         private void AddLogEntry(string entry) => Application.Current.Dispatcher.Invoke(() => LogEntries.Add(entry));
 
-        private async Task ReadCSV()
-        {
-            if (!File.Exists(filename))
-            {
-                ShowMessage("CSV file doesn't exist.");
-                return;
-            }
+        //private async Task ReadCSV()
+        //{
+        //    if (!File.Exists(filename))
+        //    {
+        //        ShowMessage("CSV file doesn't exist.");
+        //        return;
+        //    }
 
-            try
-            {
-                using var sr = new StreamReader(filename);
-                using var csvReader = new CsvReader(sr, CultureInfo.InvariantCulture);
-                using var sw = new StreamWriter(newFilePath, true);
-                using var csvWriter = new CsvWriter(sw, new CsvConfiguration(CultureInfo.InvariantCulture));
+        //    try
+        //    {
+        //        //using var sr = new StreamReader(filename);
+        //        //using var csvReader = new CsvReader(sr, CultureInfo.InvariantCulture);
+        //        //using var sw = new StreamWriter(newFilePath, true);
+        //        //using var csvWriter = new CsvWriter(sw, new CsvConfiguration(CultureInfo.InvariantCulture));
 
-                var counter = 0;
-                var increment = 0;
-                readRecords = new List<PokemonEntity>();
-                csvReader.Read();
-                csvReader.ReadHeader();
+        //        //var counter = 0;
+        //        //var increment = 0;
+        //        //readRecords = new List<PokemonEntity>();
+        //        //csvReader.Read();
+        //        //csvReader.ReadHeader();
 
-                while (csvReader.Read())
-                {
-                    if (isCancelled)
-                    {
-                        DoCancel();
-                        return;
-                    }
+        //        //while (csvReader.Read())
+        //        //{
+        //        //    if (isCancelled)
+        //        //    {
+        //        //        DoCancel();
+        //        //        return;
+        //        //    }
 
-                    var record = new PokemonEntity
-                    {
-                        ID = csvReader.GetField<float>("Per") + increment,
-                        NationalDex = csvReader.GetField<float>("Nat"),
-                        JohtoDex = string.IsNullOrEmpty(csvReader.GetField("Joh")) ? -1 : csvReader.GetField<float>("Joh"),
-                        HoennDex = string.IsNullOrEmpty(csvReader.GetField("Hoe")) ? -1 : csvReader.GetField<float>("Hoe"),
-                        SinnohDex = string.IsNullOrEmpty(csvReader.GetField("Sin")) ? -1 : csvReader.GetField<float>("Sin"),
-                        UnovaDex = string.IsNullOrEmpty(csvReader.GetField("Un")) ? -1 : csvReader.GetField<float>("Un"),
-                        KalosDex = -1,
-                        AlolaDex = -1,
-                        GalarDex = -1,
-                        HP = csvReader.GetField<int>("HP"),
-                        Atk = csvReader.GetField<int>("Atk"),
-                        Def = csvReader.GetField<int>("Def"),
-                        SpA = csvReader.GetField<int>("SpA"),
-                        SpD = csvReader.GetField<int>("SpD"),
-                        Spe = csvReader.GetField<int>("Spe"),
-                        Total = csvReader.GetField<int>("Total"),
-                        Name = csvReader.GetField("Pokemon"),
-                        Type1 = csvReader.GetField("Type1"),
-                        Type2 = csvReader.GetField("Type2"),
-                        Mass = csvReader.GetField("Mass"),
-                        LKGK = csvReader.GetField<int>("LK/GK"),
-                        EXPV = csvReader.GetField<int>("EXPV"),
-                        Color = csvReader.GetField("Color"),
-                        Hatch = csvReader.GetField("Hatch"),
-                        Gender = csvReader.GetField("EggGroup1"),
-                        Ability1 = csvReader.GetField("Ability1"),
-                        Ability2 = csvReader.GetField("Ability2"),
-                        HiddenAbility = csvReader.GetField("HiddenAbility"),
-                        EggGroup1 = csvReader.GetField("EggGroup1"),
-                        EggGroup2 = csvReader.GetField("EggGroup2"),
-                        Catch = csvReader.GetField<int>("Catch"),
-                        EXP = csvReader.GetField<int>("EXP"),
-                        Evolve = csvReader.GetField("Evolve"),
-                        EvolveNum = csvReader.GetField("EvolveNum"),
-                        EVYield = csvReader.GetField("EVYield"),
-                    };
+        //        //    var record = new PokemonEntity
+        //        //    {
+        //        //        ID = csvReader.GetField<int>("Per"),
+        //        //        NationalDex = csvReader.GetField<float>("Nat"),
+        //        //        JohtoDex = string.IsNullOrEmpty(csvReader.GetField("Joh")) ? -1 : csvReader.GetField<float>("Joh"),
+        //        //        HoennDex = string.IsNullOrEmpty(csvReader.GetField("Hoe")) ? -1 : csvReader.GetField<float>("Hoe"),
+        //        //        SinnohDex = string.IsNullOrEmpty(csvReader.GetField("Sin")) ? -1 : csvReader.GetField<float>("Sin"),
+        //        //        UnovaDex = string.IsNullOrEmpty(csvReader.GetField("Un")) ? -1 : csvReader.GetField<float>("Un"),
+        //        //        KalosDex = -1,
+        //        //        AlolaDex = -1,
+        //        //        GalarDex = -1,
+        //        //        HP = csvReader.GetField<int>("HP"),
+        //        //        Atk = csvReader.GetField<int>("Atk"),
+        //        //        Def = csvReader.GetField<int>("Def"),
+        //        //        SpA = csvReader.GetField<int>("SpA"),
+        //        //        SpD = csvReader.GetField<int>("SpD"),
+        //        //        Spe = csvReader.GetField<int>("Spe"),
+        //        //        Total = csvReader.GetField<int>("Total"),
+        //        //        Name = csvReader.GetField("Pokemon"),
+        //        //        Type1 = csvReader.GetField("Type1"),
+        //        //        Type2 = csvReader.GetField("Type2"),
+        //        //        Mass = csvReader.GetField("Mass"),
+        //        //        LKGK = csvReader.GetField<int>("LK/GK"),
+        //        //        EXPV = csvReader.GetField<int>("EXPV"),
+        //        //        Color = csvReader.GetField("Color"),
+        //        //        Hatch = csvReader.GetField("Hatch"),
+        //        //        Gender = csvReader.GetField("EggGroup1"),
+        //        //        Ability1 = csvReader.GetField("Ability1"),
+        //        //        Ability2 = csvReader.GetField("Ability2"),
+        //        //        HiddenAbility = csvReader.GetField("HiddenAbility"),
+        //        //        EggGroup1 = csvReader.GetField("EggGroup1"),
+        //        //        EggGroup2 = csvReader.GetField("EggGroup2"),
+        //        //        Catch = csvReader.GetField<int>("Catch"),
+        //        //        EXP = csvReader.GetField<int>("EXP"),
+        //        //        Evolve = csvReader.GetField("Evolve"),
+        //        //        EvolveNum = csvReader.GetField("EvolveNum"),
+        //        //        EVYield = csvReader.GetField("EVYield"),
+        //        //    };
 
-                    if (beforeUpdate.Contains(record.Name))
-                        increment++;
-                    readRecords.Add(record);
-                    counter++;
-                    AddLogEntry($"{counter} records(s) read.");
-                }
+        //        //    if (beforeUpdate.Contains(record.Name))
+        //        //        increment++;
+        //        //    readRecords.Add(record);
+        //        //    counter++;
+        //        //    AddLogEntry($"{counter} records(s) read.");
+        //        //}
 
-                await csvWriter.WriteRecordsAsync(readRecords);
-                AddLogEntry($"Done reading.");
-                SetIsExecuting(false);
-            }
-            catch (Exception ex)
-            {
-                AddLogEntry(ex.Message);
-                DoCancel();
-            }
-        }
+        //        //await csvWriter.WriteRecordsAsync(readRecords);
+        //        //AddLogEntry($"Done reading.");
+        //        //SetIsExecuting(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        AddLogEntry(ex.Message);
+        //        DoCancel();
+        //    }
+        //}
 
         private async Task FillCSV()
         {
-            //if (!File.Exists(newFilePath))
-            //{
-            //    AddLogEntry($"{Path.GetFileName(newFilePath)} doesn't exist. Run Read CSV.");
-            //    DoCancel();
-            //}
-
-            //while (!IsFileReady(newFilePath))
-            //{
-            //    if (isCancelled)
-            //    {
-            //        DoCancel();
-            //        return;
-            //    }
-            //}
-
             try
             {
+                Directory.CreateDirectory(binaryDirectory);
+                if (File.Exists(newFilePath))
+                    File.Delete(newFilePath);
+
                 var config = new CsvConfiguration(CultureInfo.InvariantCulture);
                 using var writer = new StreamWriter(newFilePath, true);
                 using var csv = new CsvWriter(writer, config);
@@ -216,6 +186,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 records = new List<PokemonEntity>();
                 csv.WriteHeader<PokemonEntity>();
                 csv.NextRecord();
+                var idCounter = 1;
                 for (var i = 1; i <= 898; i++)
                 {
                     if (isCancelled)
@@ -228,24 +199,21 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     var pkmnSpecies = await pokeClient.GetResourceAsync<PokemonSpecies>(i);
                     var evolutionChain = await pokeClient.GetResourceAsync(pkmnSpecies.EvolutionChain);
                     var growth = await pokeClient.GetResourceAsync(pkmnSpecies.GrowthRate);
-                    if (pkmn.Name.Contains("eiscue") || pkmn.Name.Contains("urshifu"))
-                    {
 
-                    }
                     try
                     {
                         string defaultFormName = null;
-                        if (!isKommooLine(pkmn) && !isMrMimeLine(pkmn) && pkmnSpecies.Varieties.Count > 1 && pkmn.Name.Contains("-") && pkmn.Name == pkmnSpecies.Varieties.First(x => x.IsDefault).Pokemon.Name)
+                        if (!IsKommooLine(pkmn.Name) && !IsMrMimeLine(pkmn.Name) && pkmnSpecies.Varieties.Count > 1 && pkmn.Name.Contains('-') && pkmn.Name == pkmnSpecies.Varieties.First(x => x.IsDefault).Pokemon.Name)
                             defaultFormName = GetFormName(pkmn.Name);
-                        var record = CreateEntity(/*updateNum.Contains(pkmnSpecies.Name) ? GetUpdatedNumber(pkmnSpecies) :*/ i /*+ 6*/, pkmn, pkmnSpecies, evolutionChain, growth, defaultFormName);
-                        SetDexNumbers(record, pkmnSpecies, 0);
+                        var record = CreateEntity(ref idCounter, pkmn, pkmnSpecies, evolutionChain, growth, false, defaultFormName);
+                        SetDexNumbers(record, pkmnSpecies);
                         records.Add(record);
                         csv.WriteRecord(record);
                         csv.NextRecord();
                         added++;
                         AddLogEntry($"{added} record(s) added");
                         if (pkmnSpecies.Varieties.Count > 1)
-                            AddForms(csv, i, pkmnSpecies, evolutionChain, growth);
+                            AddForms(csv, ref idCounter, pkmnSpecies, evolutionChain, growth);
                     }
                     catch (Exception ex)
                     {
@@ -253,7 +221,6 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     }
                 }
 
-                //csv.WriteRecords(records);
                 AddLogEntry("done");
                 SetIsExecuting(false);
             }
@@ -262,9 +229,6 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 AddLogEntry(ex.Message);
                 DoCancel();
             }
-
-            bool isKommooLine(Pokemon pkmn) => pkmn.Name.Contains("jangmo-o") || pkmn.Name.Contains("hakamo-o") || pkmn.Name.Contains("kommo-o");
-            bool isMrMimeLine(Pokemon pkmn) => pkmn.Name.Contains("mr-mime") || pkmn.Name.Contains("mime-jr") || pkmn.Name.Contains("mr-rime");
         }
 
         private void DoCancel() => Application.Current.Dispatcher.Invoke(() =>
@@ -289,21 +253,13 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 "mr-rime" => readRecords.First(x => x.Name == "Mr. Mime"),
                 _ => throw new ArgumentOutOfRangeException(nameof(pkmnSpecies.Name), pkmnSpecies.Name, "Out of range."),
             };
-            return (int)record.ID + 1;
+            return record.ID + 1;
         }
 
-        private PokemonEntity CreateEntity(float i, Pokemon pkmn, PokemonSpecies pkmnSpecies, EvolutionChain evolutionChain, GrowthRate growth, string formName = null, float addToForm = 0)
+        private PokemonEntity CreateEntity(ref int i, Pokemon pkmn, PokemonSpecies pkmnSpecies, EvolutionChain evolutionChain, GrowthRate growth, bool isForm, string formName = null)// float addToForm = 0)
         => new()
         {
-            ID = i,
-            //NationalDex = pkmnSpecies.PokedexNumbers.FirstOrDefault(x => x.Pokedex.Name.Contains("national")).EntryNumber + addToForm,
-            //JohtoDex = pkmnSpecies.PokedexNumbers.FirstOrDefault(x => x.Pokedex.Name.Contains("updated-johto"))?.EntryNumber ?? -1,
-            //HoennDex = pkmnSpecies.PokedexNumbers.FirstOrDefault(x => x.Pokedex.Name.Contains("hoenn"))?.EntryNumber ?? -1,
-            //SinnohDex = pkmnSpecies.PokedexNumbers.FirstOrDefault(x => x.Pokedex.Name.Contains("updated-sinnoh"))?.EntryNumber ?? -1,
-            //UnovaDex = pkmnSpecies.PokedexNumbers.FirstOrDefault(x => x.Pokedex.Name.Contains("unova"))?.EntryNumber ?? -1,
-            //KalosDex = pkmnSpecies.PokedexNumbers.FirstOrDefault(x => x.Pokedex.Name.Contains("kalos-central"))?.EntryNumber ?? -1,
-            //AlolaDex = pkmnSpecies.PokedexNumbers.FirstOrDefault(x => x.Pokedex.Name.Contains("alola"))?.EntryNumber ?? -1,
-            //GalarDex = pkmnSpecies.PokedexNumbers.FirstOrDefault(x => x.Pokedex.Name.Contains("galar"))?.EntryNumber ?? -1,
+            ID = i++,
             HP = pkmn.Stats.First(x => x.Stat.Name == "hp").BaseStat,
             Atk = pkmn.Stats.First(x => x.Stat.Name == "attack").BaseStat,
             Def = pkmn.Stats.First(x => x.Stat.Name == "defense").BaseStat,
@@ -329,7 +285,11 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             EXP = growth.Levels.Last().Experience,
             Evolve = pkmnSpecies.EvolvesFromSpecies == null ? string.Empty : GetEvolveString(evolutionChain, pkmnSpecies.Name),
             EvolveNum = evolutionChain.Chain.EvolvesTo.Count > 1 ? evolutionChain.Chain.EvolvesTo.Count.ToString() : "",
-            EVYield = GetEvs(pkmn)
+            EVYield = GetEvs(pkmn),
+            HasForms = pkmnSpecies.Varieties.Count > 1 ? 1 : 0,
+            IsForm = isForm ? 1 : 0,
+            PrevEvolution = string.Join(',', GetPreviousEvolutions(evolutionChain.Chain, pkmnSpecies.Name, false)),
+            NextEvolution = string.Join(',', GetNextEvolutions(evolutionChain.Chain, pkmnSpecies.Name, false))
         };
 
         #region Static helper methods
@@ -433,11 +393,10 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             }
         }
 
-        #endregion
+        private static bool IsKommooLine(string name) => name.Contains("jangmo-o") || name.Contains("hakamo-o") || name.Contains("kommo-o");
+        private static bool IsMrMimeLine(string name) => name.Contains("mr-mime") || name.Contains("mime-jr") || name.Contains("mr-rime");
 
-        #region Helper methods
-
-        private static void SetDexNumbers(PokemonEntity entity, PokemonSpecies pkmnSpecies, float addToForm)
+        private static void SetDexNumbers(PokemonEntity entity, PokemonSpecies pkmnSpecies)
         {
             entity.NationalDex = entity.JohtoDex = entity.HoennDex = entity.SinnohDex = entity.UnovaDex = entity.KalosDex = entity.AlolaDex = entity.GalarDex = -1;
 
@@ -468,61 +427,30 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     case "conquest-gallery":
                         break;
                     case "national":
-                        entity.NationalDex = dex.EntryNumber + addToForm;
+                        entity.NationalDex = dex.EntryNumber;
                         break;
                     case "updated-johto":
-                        entity.JohtoDex = dex.EntryNumber + addToForm;
+                        entity.JohtoDex = dex.EntryNumber;
                         break;
                     case "hoenn":
-                        entity.HoennDex = dex.EntryNumber + addToForm;
+                        entity.HoennDex = dex.EntryNumber;
                         break;
                     case "original-sinnoh":
-                        entity.SinnohDex = dex.EntryNumber + addToForm;
+                        entity.SinnohDex = dex.EntryNumber;
                         break;
                     case "original-unova":
-                        entity.UnovaDex = dex.EntryNumber + addToForm;
+                        entity.UnovaDex = dex.EntryNumber;
                         break;
                     case "kalos-central":
-                        entity.KalosDex = dex.EntryNumber + addToForm;
+                        entity.KalosDex = dex.EntryNumber;
                         break;
                     case "original-alola":
-                        entity.AlolaDex = dex.EntryNumber + addToForm;
+                        entity.AlolaDex = dex.EntryNumber;
                         break;
                     case "galar":
-                        entity.GalarDex = dex.EntryNumber + addToForm;
+                        entity.GalarDex = dex.EntryNumber;
                         break;
                     default: throw new ArgumentOutOfRangeException(nameof(dex.Pokedex.Name), dex.Pokedex.Name, "No dex.");
-                }
-            }
-
-        }
-
-        private async void AddForms(CsvWriter csv, float i, PokemonSpecies species, EvolutionChain chain, GrowthRate growth)
-        {
-            var toAddToForm = 0.1f;
-            for (var j = 1; j < species.Varieties.Count; j++)
-            {
-                if (species.Varieties[j].Pokemon.Name == "greninja-battle-bond")
-                    continue;
-
-                var pkmn = await pokeClient.GetResourceAsync(species.Varieties[j].Pokemon);
-                var pkmnSpecies = await pokeClient.GetResourceAsync(pkmn.Species);
-                var formName = GetFormName(pkmn.Name);
-                var added = 0;
-                try
-                {
-                    var record = CreateEntity(i, pkmn, pkmnSpecies, chain, growth, formName, toAddToForm);
-                    SetDexNumbers(record, pkmnSpecies, toAddToForm);
-                    records.Add(record);
-                    csv.WriteRecord(record);
-                    csv.NextRecord();
-                    added++;
-                    toAddToForm += 0.1f;
-                    AddLogEntry($"{added} form(s) added");
-                }
-                catch (Exception ex)
-                {
-                    AddLogEntry($"{ex.Message} {pkmn.Name}");
                 }
             }
         }
@@ -532,22 +460,143 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             if (name.Contains("noice"))
                 name = "eiscue-no-ice";
 
-            var split = isKommooLine() || isMrMimeLine() ? StringExtensions.SplitBy(name, '-', 2).ToArray() : name.Split('-', 2);
+            var split = IsKommooLine(name) || IsMrMimeLine(name) ? StringExtensions.SplitBy(name, '-', 2).ToArray() : name.Split('-', 2);
             var s1 = split[0].FirstCharToUpper();
             var s2 = split[1].FirstCharToUpper().Insert(split[1].Length, ")").Insert(0, " (");
             return string.Concat(s1, s2);
-
-            bool isKommooLine() => name.Contains("jangmo-o") || name.Contains("hakamo-o") || name.Contains("kommo-o");
-            bool isMrMimeLine() => name.Contains("mr-mime") || name.Contains("mime-jr") || name.Contains("mr-rime");
         }
 
-        private string GetEvolveString(EvolutionChain evolution, string name)
+        private static string GetEvolveString(EvolutionChain evolution, string name)
         {
             var details = TraverseChain(evolution.Chain, name);
             return details.Species.Name == "melmetal" ? "400 candy in PKMN Go" : ParseAndGetEvolveString(details.EvolutionDetails[0]);
         }
 
-        private ChainLink TraverseChain(ChainLink chain, string name) => chain.Species.Name == name ? chain : chain.EvolvesTo.Count > 1 ? TraverseChain(chain.EvolvesTo.First(x => x.Species.Name == name), name) : TraverseChain(chain.EvolvesTo[0], name);
+        private static ChainLink TraverseChain(ChainLink chain, string name)
+        {
+            if (chain.Species.Name == name)
+                return chain;
+            if (chain.EvolvesTo.Count > 1 && chain.EvolvesTo.FirstOrDefault(x => x.Species.Name == name) is ChainLink c)
+                return TraverseChain(c, name);
+            return TraverseChain(GetCorrectEvolutionPath(chain.EvolvesTo, name), name);
+        }
+
+        private static ChainLink GetCorrectEvolutionPath(List<ChainLink> chain, string name)
+        {
+            foreach (var item in chain)
+            {
+                if (item.Species.Name == name)
+                    return item;
+                foreach (var subItem in item.EvolvesTo)
+                    if (subItem.Species.Name == name)
+                        return subItem;
+            }
+            throw new Exception("Evolution chain doesn't exist");
+        }
+
+        private static List<string> GetPreviousEvolutions(ChainLink evolutionChain, string name, bool startAdding)
+        {
+            if (name == "beautifly")
+            {
+
+            }
+            var prevs = new List<string>();
+            //if (startAdding && evolutionChain.Species.Name == name)
+            //    prevs.Add(evolutionChain.Species.Name);
+            if (evolutionChain.Species.Name == name)
+                return prevs;
+            else
+                prevs.Add(evolutionChain.Species.Name);
+            if (evolutionChain.EvolvesTo.Count > 1)
+            {
+                for (var i = 0; i < evolutionChain.EvolvesTo.Count; i++)
+                {
+                    if (evolutionChain.EvolvesTo[i].EvolvesTo.Count > 0)
+                    {
+                        if (evolutionChain.EvolvesTo[i].EvolvesTo[0].Species.Name != name)
+                            continue;
+                    }
+                    else if (evolutionChain.Species.Name != name && evolutionChain.EvolvesTo[i].Species.Name != name)
+                        continue;
+
+                    prevs.AddRange(GetPreviousEvolutions(evolutionChain.EvolvesTo[i], name, startAdding));
+                    break;
+                }
+            }
+            else if (evolutionChain.EvolvesTo.Count == 1)
+                prevs.AddRange(GetPreviousEvolutions(evolutionChain.EvolvesTo[0], name, startAdding));
+
+            return prevs;
+        }
+
+        private static List<string> GetNextEvolutions(ChainLink evolutionChain, string name, bool startAdding)
+        {
+            if (name == "ralts")
+            {
+
+            }
+            if (name == "pidgeot")
+            {
+
+            }
+            var nexts = new List<string>();
+            if (startAdding)
+                nexts.Add(evolutionChain.Species.Name);
+            if (evolutionChain.Species.Name == name)
+                startAdding = true;
+            if (evolutionChain.EvolvesTo.Count > 1)
+            {
+                for (var i = 0; i < evolutionChain.EvolvesTo.Count; i++)
+                {
+                    if (evolutionChain.Species.Name != name && evolutionChain.EvolvesTo[i].Species.Name != name && evolutionChain.EvolvesTo[i].EvolvesTo.Count > 0 && evolutionChain.EvolvesTo[i].EvolvesTo[0].Species.Name != name)
+                        continue;
+                    //else if (evolutionChain.EvolvesTo[i].EvolvesTo.Count > 0)
+                    //{
+                    //    if (evolutionChain.EvolvesTo[i].EvolvesTo[0].Species.Name != name)
+                    //        continue;
+                    //}
+                    
+
+                    nexts.AddRange(GetNextEvolutions(evolutionChain.EvolvesTo[i], name, startAdding));
+                }
+            }
+            else if (evolutionChain.EvolvesTo.Count == 1)
+                nexts.AddRange(GetNextEvolutions(evolutionChain.EvolvesTo[0], name, startAdding));
+
+            return nexts;
+        }
+
+        #endregion
+
+        #region Helper methods
+
+        private void AddForms(CsvWriter csv, ref int i, PokemonSpecies species, EvolutionChain chain, GrowthRate growth)
+        {
+            for (var j = 1; j < species.Varieties.Count; j++)
+            {
+                if (species.Varieties[j].Pokemon.Name == "greninja-battle-bond")
+                    continue;
+
+                var pkmn = pokeClient.GetResourceAsync(species.Varieties[j].Pokemon).Result;
+                var pkmnSpecies = pokeClient.GetResourceAsync(pkmn.Species).Result;
+                var formName = GetFormName(pkmn.Name);
+                var added = 0;
+                try
+                {
+                    var record = CreateEntity(ref i, pkmn, pkmnSpecies, chain, growth, true, formName);
+                    SetDexNumbers(record, pkmnSpecies);
+                    records.Add(record);
+                    csv.WriteRecord(record);
+                    csv.NextRecord();
+                    added++;
+                    AddLogEntry($"{added} form(s) added");
+                }
+                catch (Exception ex)
+                {
+                    AddLogEntry($"{ex.Message} {pkmn.Name}");
+                }
+            }
+        }
 
         private void SetIsExecuting(bool executing)
             => Application.Current.Dispatcher.Invoke(() =>

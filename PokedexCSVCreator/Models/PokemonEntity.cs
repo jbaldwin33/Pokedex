@@ -4,18 +4,8 @@ namespace Pokedex.PokedexCSVCreator.Models
 {
     public class PokemonEntity
     {
-        [Name("Per")]
-        public float ID { get; set; }
-        [Name("Nat")]
-        public float NationalDex { get; set; }
-        public float JohtoDex { get; set; }
-        public float HoennDex { get; set; }
-        public float SinnohDex { get; set; }
-        public float UnovaDex { get; set; }
-        public float KalosDex { get; set; }
-        public float AlolaDex { get; set; }
-        public float GalarDex { get; set; }
-        [Name("Pokemon")]
+        public int ID { get; set; }
+        public int NationalDex { get; set; }
         public string Name { get; set; }
         public int HP { get; set; }
         public int Atk { get; set; }
@@ -43,7 +33,17 @@ namespace Pokedex.PokedexCSVCreator.Models
         public int Catch { get; set; }
         public int EXP { get; set; }
         public string Evolve { get; set; }
-        //public byte[] Icon { get; set; }
         public string EvolveNum { get; set; }
+        public int HasForms { get; set; }
+        public int IsForm { get; set; }
+        public int JohtoDex { get; set; }
+        public int HoennDex { get; set; }
+        public int SinnohDex { get; set; }
+        public int UnovaDex { get; set; }
+        public int KalosDex { get; set; }
+        public int AlolaDex { get; set; }
+        public int GalarDex { get; set; }
+        public string PrevEvolution { get; set; }
+        public string NextEvolution { get; set; }
     }
 }

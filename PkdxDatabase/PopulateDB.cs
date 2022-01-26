@@ -14,9 +14,8 @@ namespace Pokedex.PkdxDatabase
 {
     public static class PopulateDB
     {
-        private static readonly string binaryDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Binaries");
+        private static readonly string binaryDirectory = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory), "Binaries");
         private static readonly string filename = Path.Combine(binaryDirectory, "NewCSV.csv");
-        private static readonly string iconDirectory = Path.Combine(binaryDirectory, "pokemon/regular");
         private const int MAX_POKEMON = 898;
 
         public static async void PopulateDatabase(PokedexDBContext context)
@@ -34,8 +33,16 @@ namespace Pokedex.PkdxDatabase
                 var record = new PokemonEntity
                 {
                     Id = counter,
-                    NationalDex = csv.GetField<float>("Nat"),
-                    EvolutionOrderNum = csv.GetField<float>("Per"),
+                    NationalDex = csv.GetField<int>("NationalDex"),
+                    JohtoDex = csv.GetField<int>("JohtoDex"),
+                    HoennDex = csv.GetField<int>("HoennDex"),
+                    SinnohDex = csv.GetField<int>("SinnohDex"),
+                    UnovaDex = csv.GetField<int>("UnovaDex"),
+                    KalosDex = csv.GetField<int>("KalosDex"),
+                    AlolaDex = csv.GetField<int>("AlolaDex"),
+                    GalarDex = csv.GetField<int>("GalarDex"),
+                    PrevEvolution = csv.GetField("PrevEvolution"),
+                    NextEvolution = csv.GetField("NextEvolution"),
                     HP = csv.GetField<int>("HP"),
                     Atk = csv.GetField<int>("Atk"),
                     Def = csv.GetField<int>("Def"),
@@ -43,7 +50,7 @@ namespace Pokedex.PkdxDatabase
                     SpD = csv.GetField<int>("SpD"),
                     Spe = csv.GetField<int>("Spe"),
                     Total = csv.GetField<int>("Total"),
-                    Name = csv.GetField("Pokemon"),
+                    Name = csv.GetField("Name"),
                     Type1 = csv.GetField("Type1"),
                     Type2 = csv.GetField("Type2"),
                     Ability1 = csv.GetField("Ability1"),
@@ -53,7 +60,10 @@ namespace Pokedex.PkdxDatabase
                     EggGroup2 = csv.GetField("EggGroup2"),
                     EvolveMethodString = csv.GetField("Evolve"),
                     NumberOfEvolutions = !string.IsNullOrEmpty(csv.GetField("EvolveNum")) ? csv.GetField<int>("EvolveNum") : 0,
-                    EVYield = csv.GetField("EVYield")
+                    EVYield = csv.GetField("EVYield"),
+                    HasForms = csv.GetField<int>("HasForms") == 1,
+                    IsForm = csv.GetField<int>("IsForm") == 1,
+                    
                 };
 
                 records.Add(record);
@@ -66,9 +76,7 @@ namespace Pokedex.PkdxDatabase
             //add icons
             Parallel.ForEach(records, record =>
             {
-                var iconFile = GetIconFile(record.NationalDex, record.Name);
-                if (!string.IsNullOrEmpty(iconFile))
-                    record.Icon = ImageToByteArray(iconFile);
+                record.Icon = GetIconFile(record.NationalDex, record.Name);
                 Console.WriteLine($"{record.Name} icon saved.");
             });
 
@@ -83,20 +91,16 @@ namespace Pokedex.PkdxDatabase
             Console.WriteLine("Done.");
         }
 
-        private static string GetIconFile(float number, string name)
+        private static byte[] GetIconFile(float number, string name)
         {
             if (number > MAX_POKEMON)
-                return string.Empty;
+                return null;
 
-            var files = Directory.GetFiles(Path.Combine(binaryDirectory, iconDirectory));
             return Math.Floor(number) != number
-                ? filenameEquals($"{Math.Floor(number):000}-{getFormName()}.png")
-                : filenameEquals($"{number:000}-{name.ToLower()}.png");
+                ? (byte[])Resource1.ResourceManager.GetObject($"_{Math.Floor(number):000}_{getFormName()}")
+                : (byte[])Resource1.ResourceManager.GetObject($"_{number:000}_{name.ToLower()}");
 
-            string filenameEquals(string name) => files.FirstOrDefault(file => Path.GetFileName(file).Equals(name));
             string getFormName() => name.Substring(name.IndexOf('(') + 1, name.IndexOf(')') - (name.IndexOf('(') + 1)).ToLower();
         }
-
-        public static byte[] ImageToByteArray(string imageIn) => File.ReadAllBytes(imageIn);
     }
 }

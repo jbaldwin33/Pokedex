@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Pokedex.PokedexLib.Enums;
 
 namespace Pokedex.PokedexApp.ViewModels
@@ -21,11 +19,11 @@ namespace Pokedex.PokedexApp.ViewModels
         public Action<Pokemon> PokemonChangedAction;
         private readonly List<Pokemon> evolutionList;
         private readonly ObservableCollection<Pokemon> pokemonList;
+        private readonly Pokemon placeholder;
         private Pokemon selectedPokemon;
         private byte[] iconData;
         private ObservableCollection<PokemonForm> formCollection;
         private List<Pokemon> pokemonListWithForms;
-        private Pokemon placeholder;
         private RelayCommand findCommand;
         private RelayCommand nextCommand;
         private RelayCommand previousCommand;
@@ -43,7 +41,6 @@ namespace Pokedex.PokedexApp.ViewModels
             set => SetProperty(ref iconData, value);
         }
 
-
         public ObservableCollection<PokemonForm> FormCollection
         {
             get => formCollection;
@@ -59,15 +56,13 @@ namespace Pokedex.PokedexApp.ViewModels
 
         public List<PokedexComboBoxViewModel> Pokedexes { get; set; }
 
-
         public MainViewModel(INavigator navigator)
         {
             Navigator = navigator;
             GetAllPokemon();
             evolutionList = new List<Pokemon>();
             placeholder = new Pokemon { Name = "-Select a Pokemon-", Id = -1 };
-            pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => x.NationalDex == Math.Floor(x.NationalDex)));
-
+            pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => !x.IsForm));
             Pokedexes = new List<PokedexComboBoxViewModel>
             {
                 new PokedexComboBoxViewModel(DexType.Alphabetical, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.Name)), OnPokemonChanged),
@@ -94,51 +89,24 @@ namespace Pokedex.PokedexApp.ViewModels
 
         #endregion
 
-        public bool PokemonHasForms(Pokemon pkmn) => pokemonListWithForms.Any(x => x.NationalDex != pkmn.NationalDex && Math.Truncate(x.NationalDex) == pkmn.NationalDex);
-        public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.NationalDex != pkmn.NationalDex && Math.Truncate(x.NationalDex) == pkmn.NationalDex);
+        public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.NationalDex == pkmn.NationalDex && x.IsForm);
 
         public List<Pokemon> GetEvolutionLine(Pokemon pkmn)
         {
             evolutionList.Clear();
+            foreach (var p in pkmn.PrevEvolution)
+                evolutionList.Add(pokemonList.First(x => x.Name.ToLower().Contains(p) && !x.IsForm));
             evolutionList.Add(pkmn);
-            CheckPrevious(pkmn);
-            CheckNext(pkmn);
-
-            evolutionList.Sort((x1, x2) => x1.EvolutionOrderNum < x2.EvolutionOrderNum ? -1 : 1);
+            foreach (var p in pkmn.NextEvolution)
+                evolutionList.Add(pokemonList.First(x => x.Name.ToLower().Contains(p) && !x.IsForm));
             return evolutionList;
         }
 
-        private void CheckPrevious(Pokemon currentPkmn)
-        {
-            var prevPkmn = pokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) - 1);
-            if (currentPkmn.CanEvolveTo)
-            {
-                evolutionList.Add(prevPkmn);
-                CheckPrevious(prevPkmn);
-            }
-        }
-
-        private void CheckNext(Pokemon currentPkmn)
-        {
-            var nextPkmn = pokemonList.FirstOrDefault(p => p.EvolutionOrderNum == Math.Floor(currentPkmn.EvolutionOrderNum) + 1);
-            if (nextPkmn != null && nextPkmn.CanEvolveTo)
-            {
-                evolutionList.Add(nextPkmn);
-                CheckNext(nextPkmn);
-            }
-        }
-
-        private async void GetAllPokemon()
-        {
-            pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
-            pokemonListWithForms.OrderBy(p => p.NationalDex);
-        }
+        private async void GetAllPokemon() => pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
 
         private void FindCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name), CurrentDexType);
-
-        private void NextCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.NationalDex == Math.Floor(SelectedPokemon.NationalDex) + 1), CurrentDexType);
-
-        private void PreviousCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.NationalDex == Math.Floor(SelectedPokemon.NationalDex) - 1), CurrentDexType);
+        private void NextCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.NationalDex == SelectedPokemon.NationalDex + 1), CurrentDexType);
+        private void PreviousCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.NationalDex == SelectedPokemon.NationalDex - 1), CurrentDexType);
         private void OpenSortWindowCommandExecute()
         {
             var sortWindow = new PokemonListSortWindow()
@@ -162,17 +130,14 @@ namespace Pokedex.PokedexApp.ViewModels
 
             CurrentDexType = dexType;
             Pokedexes.First(p => p.PokedexType == CurrentDexType).UpdateComboboxWithoutNotify(pkmn);
-            if (!isForm(pkmn) && hasForms(pkmn))
+            if (!pkmn.IsForm && pkmn.HasForms)
                 AddForms(pkmn);
-            else if (!isForm(pkmn) && !hasForms(pkmn))
+            else if (!pkmn.IsForm && !pkmn.HasForms)
                 FormCollection.Clear();
-            if (!isForm(pkmn))
+            if (!pkmn.IsForm)
                 SelectedPokemon = pkmn;
             IconData = pkmn.Icon;
             PokemonChangedAction?.Invoke(pkmn);
-
-            bool isForm(Pokemon pkmn) => pkmn.NationalDex != Math.Floor(pkmn.NationalDex);
-            bool hasForms(Pokemon pkmn) => PokemonHasForms(pkmn);
         }
 
         private void ClearComboBoxes() => Pokedexes.First(pkdx => pkdx.PokedexType == CurrentDexType).SelectedPokemon = placeholder;

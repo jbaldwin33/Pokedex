@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <Reference Include="MVVMFramework">
-      <HintPath>..\Debug\MVVMFramework.dll</HintPath>
+      <HintPath>..\assemblies\MVVMFramework.dll</HintPath>
     </Reference>
     <Reference Include="PokedexLib">
       <HintPath>..\Debug\PokedexLib.dll</HintPath>

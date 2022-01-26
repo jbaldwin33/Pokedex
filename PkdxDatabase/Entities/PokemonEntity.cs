@@ -12,15 +12,16 @@ namespace Pokedex.PkdxDatabase.Entities
     {
         [Key]
         public int Id { get; set; }
-        public float NationalDex { get; set; }
-        public float JohtoDex { get; set; }
-        public float HoennDex { get; set; }
-        public float SinnohDex { get; set; }
-        public float UnovaDex { get; set; }
-        public float KalosDex { get; set; }
-        public float AlolaDex { get; set; }
-        public float GalarDex { get; set; }
-        public float EvolutionOrderNum { get; set; }
+        public int NationalDex { get; set; }
+        public int JohtoDex { get; set; }
+        public int HoennDex { get; set; }
+        public int SinnohDex { get; set; }
+        public int UnovaDex { get; set; }
+        public int KalosDex { get; set; }
+        public int AlolaDex { get; set; }
+        public int GalarDex { get; set; }
+        public string PrevEvolution { get; set; }
+        public string NextEvolution { get; set; }
         public string Name { get; set; }
         public int HP { get; set; }
         public int Atk { get; set; }
@@ -40,5 +41,7 @@ namespace Pokedex.PkdxDatabase.Entities
         public string EvolveMethodString { get; set; }
         public byte[] Icon { get; set; }
         public int NumberOfEvolutions { get; set; }
+        public bool HasForms { get; set; }
+        public bool IsForm { get; set; }
     }
 }

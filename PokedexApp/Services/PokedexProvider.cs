@@ -27,13 +27,21 @@ namespace Pokedex.PokedexApp.Services
             Id = pkmn.Id,
             Name = pkmn.Name,
             NationalDex = pkmn.NationalDex,
+            JohtoDex = pkmn.JohtoDex,
+            HoennDex = pkmn.HoennDex,
+            SinnohDex = pkmn.SinnohDex,
+            UnovaDex = pkmn.UnovaDex,
+            KalosDex = pkmn.KalosDex,
+            AlolaDex = pkmn.AlolaDex,
+            GalarDex = pkmn.GalarDex,
             Ability1 = pkmn.Ability1,
             Ability2 = pkmn.Ability2,
             CanEvolveTo = !string.IsNullOrEmpty(pkmn.EvolveMethodString) && !pkmn.EvolveMethodString.Equals("N"),
             EggGroup1 = Enum.TryParse(typeof(EggGroupEnum), pkmn.EggGroup1, out var egg1) ? (EggGroupEnum)egg1 : null,
             EggGroup2 = Enum.TryParse(typeof(EggGroupEnum), pkmn.EggGroup2, out var egg2) ? (EggGroupEnum)egg2 : null,
             EvolveMethodString = pkmn.EvolveMethodString,
-            EvolutionOrderNum = pkmn.EvolutionOrderNum,
+            PrevEvolution = string.IsNullOrEmpty(pkmn.PrevEvolution) ? Array.Empty<string>() : pkmn.PrevEvolution.Split(','),
+            NextEvolution = string.IsNullOrEmpty(pkmn.NextEvolution) ? Array.Empty<string>() : pkmn.NextEvolution.Split(','),
             HiddenAbility = pkmn.HiddenAbility,
             NumberOfEvolutions = pkmn.NumberOfEvolutions,
             HasMultipleEvolutions = pkmn.NumberOfEvolutions > 0,
@@ -41,7 +49,9 @@ namespace Pokedex.PokedexApp.Services
             Type1 = (TypeEnum)Enum.Parse(typeof(TypeEnum), pkmn.Type1),
             Type2 = Enum.TryParse(typeof(TypeEnum), pkmn.Type2, out var result) ? (TypeEnum)result : null,
             EVYields = GetEVYield(pkmn),
-            BaseStats = GetBaseStats(pkmn)
+            BaseStats = GetBaseStats(pkmn),
+            HasForms = pkmn.HasForms,
+            IsForm = pkmn.IsForm
         };
 
         private static List<BaseStat> GetBaseStats(PokemonEntity pkmn) => new()

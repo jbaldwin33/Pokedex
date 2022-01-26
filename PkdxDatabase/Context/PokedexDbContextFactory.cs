@@ -13,7 +13,15 @@ namespace Pokedex.PkdxDatabase.Context
         private PokedexDbContextFactory()
         {
             var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Binaries"));
-            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+
+            if (Directory.Exists(path))
+                AppDomain.CurrentDomain.SetData("DataDirectory", path);
+            else
+            {
+                Console.WriteLine("Binary directory doesn't exist. Run CSV Creator first to create the CSV file. Press \"Enter\" to close");
+                Console.ReadLine();
+                Environment.Exit(0);
+            }
         }
 
         public PokedexDBContext CreateDbContext()
