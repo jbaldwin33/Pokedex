@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -62,8 +60,7 @@ namespace Pokedex.PkdxDatabase
                     NumberOfEvolutions = !string.IsNullOrEmpty(csv.GetField("EvolveNum")) ? csv.GetField<int>("EvolveNum") : 0,
                     EVYield = csv.GetField("EVYield"),
                     HasForms = csv.GetField<int>("HasForms") == 1,
-                    IsForm = csv.GetField<int>("IsForm") == 1,
-                    
+                    IsForm = csv.GetField<int>("IsForm") == 1
                 };
 
                 records.Add(record);
@@ -74,10 +71,14 @@ namespace Pokedex.PkdxDatabase
             }
 
             //add icons
+            var failedicons = 0;
             Parallel.ForEach(records, record =>
             {
                 record.Icon = GetIconFile(record.NationalDex, record.Name);
-                Console.WriteLine($"{record.Name} icon saved.");
+                if (record.Icon == null)
+                    failedicons++;
+                else
+                    Console.WriteLine($"{record.Name} icon saved.");
             });
 
             var t = Task.Run(() => context.SaveChangesAsync());
@@ -88,20 +89,13 @@ namespace Pokedex.PkdxDatabase
                 Console.Write("...");
             }
             Console.WriteLine($"{failed} record(s) failed.");
+            Console.WriteLine($"{failedicons} icon(s) failed.");
             Console.WriteLine("Done. Press \"Enter\" to close");
             Console.ReadLine();
         }
 
-        private static byte[] GetIconFile(float number, string name)
-        {
-            if (number > MAX_POKEMON)
-                return null;
-            
-            return Math.Floor(number) != number
-                ? (byte[])Resource1.ResourceManager.GetObject($"_{Math.Floor(number):000}_{getFormName()}")
-                : (byte[])Resource1.ResourceManager.GetObject($"_{number:000}_{name.Replace('-', '_').ToLower()}");
-            
-            string getFormName() => name.Substring(name.IndexOf('(') + 1, name.IndexOf(')') - (name.IndexOf('(') + 1)).ToLower();
-        }
+        private static byte[] GetIconFile(float number, string name) => number > MAX_POKEMON ? null : (byte[])Resource1.ResourceManager.GetObject(RemoveSpecialCharacters(name).ToLower());
+
+        private static string RemoveSpecialCharacters(string name) => name.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", "").Replace(".", "");
     }
 }

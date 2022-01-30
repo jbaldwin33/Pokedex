@@ -14,12 +14,8 @@ namespace Pokedex.PokedexApp.Utilities
         private bool hasMultiple;
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            FrameworkElement element = container as FrameworkElement;
-
-            if (element != null && item != null && item is Pokemon)
+            if (container is FrameworkElement element && item is Pokemon pkmn)
             {
-                var pkmn = item as Pokemon;
-
                 if (hasMultiple)
                 {
                     hasMultiple = false;
@@ -27,7 +23,7 @@ namespace Pokedex.PokedexApp.Utilities
                 }
 
                 hasMultiple = pkmn.HasMultipleEvolutions;
-                
+
                 if (string.IsNullOrEmpty(pkmn.EvolveMethodString) || pkmn.EvolveMethodString == "N")
                     return element.FindResource("template2") as DataTemplate;
                 else if (!string.IsNullOrEmpty(pkmn.EvolveMethodString))

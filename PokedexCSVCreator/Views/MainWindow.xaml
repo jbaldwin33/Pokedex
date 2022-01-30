@@ -49,7 +49,6 @@
       </ListView>
     </Border>
     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-      <Button Content="Read CSV file" Command="{Binding ReadCommand}" Padding="5" Margin="5"/>
       <Button Content="Write CSV file" Command="{Binding WriteCommand}" Padding="5" Margin="5"/>
       <Button Content="Cancel" Command="{Binding CancelCommand}" Padding="5" Margin="5"/>
     </StackPanel>
