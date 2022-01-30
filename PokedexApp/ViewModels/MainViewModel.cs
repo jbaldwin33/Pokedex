@@ -17,7 +17,6 @@ namespace Pokedex.PokedexApp.ViewModels
         private const int MAX_POKEMON = 898;
         public INavigator Navigator { get; set; }
         public Action<Pokemon> PokemonChangedAction;
-        private readonly List<Pokemon> evolutionList;
         private readonly ObservableCollection<Pokemon> pokemonList;
         private readonly Pokemon placeholder;
         private Pokemon selectedPokemon;
@@ -55,12 +54,12 @@ namespace Pokedex.PokedexApp.ViewModels
         }
 
         public List<PokedexComboBoxViewModel> Pokedexes { get; set; }
+        public ObservableCollection<Pokemon> PokemonList => pokemonList;
 
         public MainViewModel(INavigator navigator)
         {
             Navigator = navigator;
             GetAllPokemon();
-            evolutionList = new List<Pokemon>();
             placeholder = new Pokemon { Name = "-Select a Pokemon-", Id = -1 };
             pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => !x.IsForm));
             Pokedexes = new List<PokedexComboBoxViewModel>
@@ -90,17 +89,6 @@ namespace Pokedex.PokedexApp.ViewModels
         #endregion
 
         public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.NationalDex == pkmn.NationalDex && x.IsForm);
-
-        public List<Pokemon> GetEvolutionLine(Pokemon pkmn)
-        {
-            evolutionList.Clear();
-            foreach (var p in pkmn.PrevEvolution)
-                evolutionList.Add(pokemonList.First(x => x.Name.ToLower().Contains(p) && !x.IsForm));
-            evolutionList.Add(pkmn);
-            foreach (var p in pkmn.NextEvolution)
-                evolutionList.Add(pokemonList.First(x => x.Name.ToLower().Contains(p) && !x.IsForm));
-            return evolutionList;
-        }
 
         private async void GetAllPokemon() => pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
 

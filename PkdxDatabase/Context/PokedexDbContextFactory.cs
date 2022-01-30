@@ -6,22 +6,22 @@ namespace Pokedex.PkdxDatabase.Context
 {
     public class PokedexDbContextFactory
     {
-        private const string CONNECTION_STRING = "Data Source=|DataDirectory|pokedex.db;";
+        private const string CONNECTION_STRING = "Data Source=pokedex.db;";
         private static readonly Lazy<PokedexDbContextFactory> lazy = new(() => new PokedexDbContextFactory());
         public static PokedexDbContextFactory Instance => lazy.Value;
 
         private PokedexDbContextFactory()
         {
-            var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Binaries"));
+            //var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\", "Binaries"));
 
-            if (Directory.Exists(path))
-                AppDomain.CurrentDomain.SetData("DataDirectory", path);
-            else
-            {
-                Console.WriteLine("Binary directory doesn't exist. Run CSV Creator first to create the CSV file. Press \"Enter\" to close");
-                Console.ReadLine();
-                Environment.Exit(0);
-            }
+            //if (Directory.Exists(path))
+            //    AppDomain.CurrentDomain.SetData("DataDirectory", path);
+            //else
+            //{
+            //    Console.WriteLine("Binary directory doesn't exist. Run CSV Creator first to create the CSV file. Press \"Enter\" to close");
+            //    Console.ReadLine();
+            //    Environment.Exit(0);
+            //}
         }
 
         public PokedexDBContext CreateDbContext()

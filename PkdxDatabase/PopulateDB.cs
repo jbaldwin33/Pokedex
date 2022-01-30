@@ -12,8 +12,7 @@ namespace Pokedex.PkdxDatabase
 {
     public static class PopulateDB
     {
-        private static readonly string binaryDirectory = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory), "Binaries");
-        private static readonly string filename = Path.Combine(binaryDirectory, "NewCSV.csv");
+        private static readonly string filename = Path.Combine(AppContext.BaseDirectory, "NewCSV.csv");
         private const int MAX_POKEMON = 898;
 
         public static async void PopulateDatabase(PokedexDBContext context)

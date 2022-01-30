@@ -1,12 +1,7 @@
-﻿using MVVMFramework.ViewModels;
-using MVVMFramework.ViewNavigator;
-using Pokedex.PkdxDatabase.Models;
-using System;
+﻿using Pokedex.PkdxDatabase.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pokedex.PokedexApp.ViewModels
 {
@@ -43,7 +38,7 @@ namespace Pokedex.PokedexApp.ViewModels
             {
                 EvolutionLine.Clear();
                 MultipleEvolutions.Clear();
-                mainViewModel.GetEvolutionLine(pkmn).ForEach(EvolutionLine.Add);
+                GetEvolutionLine(pkmn).ForEach(EvolutionLine.Add);
                 for (var i = 0; i < EvolutionLine.Count; i++)
                 {
                     if (EvolutionLine[i].HasMultipleEvolutions)
@@ -56,6 +51,17 @@ namespace Pokedex.PokedexApp.ViewModels
                     }
                 }
             }
+        }
+
+        private List<Pokemon> GetEvolutionLine(Pokemon pkmn)
+        {
+            var evolutionList = new List<Pokemon>();
+            foreach (var p in pkmn.PrevEvolution)
+                evolutionList.Add(mainViewModel.PokemonList.First(x => x.Name.ToLower().Contains(p) && !x.IsForm));
+            evolutionList.Add(pkmn);
+            foreach (var p in pkmn.NextEvolution)
+                evolutionList.Add(mainViewModel.PokemonList.First(x => x.Name.ToLower().Contains(p) && !x.IsForm));
+            return evolutionList;
         }
     }
 }

@@ -4,10 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Pokedex.PokedexLib</RootNamespace>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <BaseOutputPath>bin\</BaseOutputPath>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>../Debug</OutputPath>
-  </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y/E &quot;$(OutDir)PokedexLib.dll&quot; &quot;$(SolutionDir)assemblies\&quot;" />
+  </Target>
 
 </Project>
