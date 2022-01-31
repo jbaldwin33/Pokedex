@@ -361,4 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/assemblies
+/assemblies/pokedex.db-wal
+/assemblies/pokedex.db-shm
+/assemblies/pokedex.db
