@@ -1,18 +1,18 @@
-﻿using Pokedex.PkdxDatabase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MVVMFramework.ViewNavigator;
+using Pokedex.PokedexApp.ViewModels;
+using PokedexTests.Mocks;
 
 namespace PokedexTests
 {
     public class TestSetup
     {
-        public List<Pokemon> PokemonList { get; set; }
+        public MainViewModel MainViewModel;
         public TestSetup()
         {
-            PokemonList = Pokedex.PokedexApp.Services.PokedexProvider.Instance.GetAllPokemon().Result;
+            MainViewModel = new MainViewModel(Navigator.Instance, new FakePokedexProvider());
+            Navigator.Instance.MainViewModel = MainViewModel;
         }
+
+        
     }
 }

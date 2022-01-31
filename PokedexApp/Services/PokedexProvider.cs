@@ -51,7 +51,10 @@ namespace Pokedex.PokedexApp.Services
             EVYields = GetEVYield(pkmn),
             BaseStats = GetBaseStats(pkmn),
             HasForms = pkmn.HasForms,
-            IsForm = pkmn.IsForm
+            IsForm = pkmn.IsForm,
+            IsAlolanForm = pkmn.IsAlolanForm,
+            IsGalarianForm = pkmn.IsGalarianForm,
+            EvolvesFromRegionalForm = pkmn.EvolvesFromRegionalForm
         };
 
         private static List<BaseStat> GetBaseStats(PokemonEntity pkmn) => new()

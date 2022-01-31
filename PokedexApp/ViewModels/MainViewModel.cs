@@ -16,6 +16,7 @@ namespace Pokedex.PokedexApp.ViewModels
     {
         private const int MAX_POKEMON = 898;
         public INavigator Navigator { get; set; }
+        public IPokedexProvider PokedexProvider { get; set; }
         public Action<Pokemon> PokemonChangedAction;
         private readonly ObservableCollection<Pokemon> pokemonList;
         private readonly Pokemon placeholder;
@@ -23,7 +24,6 @@ namespace Pokedex.PokedexApp.ViewModels
         private byte[] iconData;
         private ObservableCollection<PokemonForm> formCollection;
         private List<Pokemon> pokemonListWithForms;
-        private RelayCommand findCommand;
         private RelayCommand nextCommand;
         private RelayCommand previousCommand;
         private RelayCommand openSortWindowCommand;
@@ -55,10 +55,12 @@ namespace Pokedex.PokedexApp.ViewModels
 
         public List<PokedexComboBoxViewModel> Pokedexes { get; set; }
         public ObservableCollection<Pokemon> PokemonList => pokemonList;
+        public List<Pokemon> PokemonListWithForms => pokemonListWithForms;
 
-        public MainViewModel(INavigator navigator)
+        public MainViewModel(INavigator navigator, IPokedexProvider pokedexProvider)
         {
             Navigator = navigator;
+            PokedexProvider = pokedexProvider;
             GetAllPokemon();
             placeholder = new Pokemon { Name = "-Select a Pokemon-", Id = -1 };
             pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => !x.IsForm));
@@ -81,7 +83,6 @@ namespace Pokedex.PokedexApp.ViewModels
 
         #region Commands
 
-        public RelayCommand FindCommand => findCommand ??= new RelayCommand(FindCommandExecute);
         public RelayCommand NextCommand => nextCommand ??= new RelayCommand(NextCommandExecute, () => SelectedPokemon?.NationalDex <= MAX_POKEMON);
         public RelayCommand PreviousCommand => previousCommand ??= new RelayCommand(PreviousCommandExecute, () => SelectedPokemon?.NationalDex > 1);
         public RelayCommand OpenSortWindowCommand => openSortWindowCommand ??= new RelayCommand(OpenSortWindowCommandExecute, () => true);
@@ -90,9 +91,8 @@ namespace Pokedex.PokedexApp.ViewModels
 
         public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.NationalDex == pkmn.NationalDex && x.IsForm);
 
-        private async void GetAllPokemon() => pokemonListWithForms = await PokedexProvider.Instance.GetAllPokemon();
+        private async void GetAllPokemon() => pokemonListWithForms = await PokedexProvider.GetAllPokemon();
 
-        private void FindCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.Name == SelectedPokemon.Name), CurrentDexType);
         private void NextCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.NationalDex == SelectedPokemon.NationalDex + 1), CurrentDexType);
         private void PreviousCommandExecute() => OnPokemonChanged(pokemonList.FirstOrDefault(e => e.NationalDex == SelectedPokemon.NationalDex - 1), CurrentDexType);
         private void OpenSortWindowCommandExecute()
@@ -133,10 +133,10 @@ namespace Pokedex.PokedexApp.ViewModels
         private void AddForms(Pokemon pkmn)
         {
             FormCollection.Clear();
-            FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), Name = pkmn.Name, Num = pkmn.NationalDex });
+            FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(pkmn), () => true), PkmnForm = pkmn, FormName = pkmn.Name });
             var forms = GetPokemonForms(pkmn);
             foreach (var form in forms)
-                FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), Name = form.Name, Num = form.NationalDex });
+                FormCollection.Add(new PokemonForm { FormCommand = new RelayCommand(() => FormCommandExecute(form), () => true), PkmnForm = form, FormName = form.Name });
         }
 
         private void FormCommandExecute(Pokemon form)
@@ -148,8 +148,8 @@ namespace Pokedex.PokedexApp.ViewModels
         public class PokemonForm
         {
             public RelayCommand FormCommand { get; set; }
-            public string Name { get; set; }
-            public float Num { get; set; }
+            public Pokemon PkmnForm { get; set; }
+            public string FormName { get; set; }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MVVMFramework.ViewNavigator;
 using MVVMFramework.Views;
 using Pokedex.PokedexApp;
+using Pokedex.PokedexApp.Services;
 using Pokedex.PokedexApp.ViewModels;
 using Pokedex.PokedexApp.Views;
 using System;
@@ -24,7 +25,7 @@ namespace Pokedex
                 (typeof(EVYieldViewModel), "EV Yield", true)
             };
 
-            var window = new MainWindow(types, new MainViewModel(Navigator.Instance)) { Title = "Pokemon Zukan" };
+            var window = new MainWindow(types, new MainViewModel(Navigator.Instance, PokedexProvider.Instance)) { Title = "Pokemon Zukan" };
             window.Show();
         }
     }

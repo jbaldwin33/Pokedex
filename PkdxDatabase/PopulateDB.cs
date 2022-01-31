@@ -12,7 +12,7 @@ namespace Pokedex.PkdxDatabase
 {
     public static class PopulateDB
     {
-        private static readonly string filename = Path.Combine(AppContext.BaseDirectory, "NewCSV.csv");
+        private static readonly string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\", "..\\", "..\\", "assemblies", "NewCSV.csv");
         private const int MAX_POKEMON = 898;
 
         public static async void PopulateDatabase(PokedexDBContext context)
@@ -58,8 +58,11 @@ namespace Pokedex.PkdxDatabase
                     EvolveMethodString = csv.GetField("Evolve"),
                     NumberOfEvolutions = !string.IsNullOrEmpty(csv.GetField("EvolveNum")) ? csv.GetField<int>("EvolveNum") : 0,
                     EVYield = csv.GetField("EVYield"),
-                    HasForms = csv.GetField<int>("HasForms") == 1,
-                    IsForm = csv.GetField<int>("IsForm") == 1
+                    HasForms = csv.GetField<bool>("HasForms"),
+                    IsForm = csv.GetField<bool>("IsForm"),
+                    IsAlolanForm = csv.GetField<bool>("IsAlolanForm"),
+                    IsGalarianForm = csv.GetField<bool>("IsGalarianForm"),
+                    EvolvesFromRegionalForm = csv.GetField<bool>("EvolvesFromRegionalForm")
                 };
 
                 records.Add(record);

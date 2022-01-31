@@ -34,8 +34,11 @@ namespace Pokedex.PokedexCSVCreator.Models
         public int EXP { get; set; }
         public string Evolve { get; set; }
         public string EvolveNum { get; set; }
-        public int HasForms { get; set; }
-        public int IsForm { get; set; }
+        public bool HasForms { get; set; }
+        public bool IsForm { get; set; }
+        public bool IsAlolanForm { get; set; }
+        public bool IsGalarianForm { get; set; }
+        public bool EvolvesFromRegionalForm { get; set; }
         public int JohtoDex { get; set; }
         public int HoennDex { get; set; }
         public int SinnohDex { get; set; }

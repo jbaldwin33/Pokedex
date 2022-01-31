@@ -31,7 +31,7 @@
         <UniformGrid Rows="2"/>
       </ItemsPanelTemplate>
       <DataTemplate x:Key="ItemsControlItemsTemplate">
-        <controls:DefaultButton Content="{Binding Name}" Command="{Binding FormCommand}"/>
+        <controls:DefaultButton Content="{Binding FormName}" Command="{Binding FormCommand}"/>
       </DataTemplate>
       <DataTemplate x:Key="PokedexDataTemplate">
         <StackPanel HorizontalAlignment="Center">

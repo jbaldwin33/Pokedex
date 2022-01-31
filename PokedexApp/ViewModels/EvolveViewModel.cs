@@ -57,10 +57,10 @@ namespace Pokedex.PokedexApp.ViewModels
         {
             var evolutionList = new List<Pokemon>();
             foreach (var p in pkmn.PrevEvolution)
-                evolutionList.Add(mainViewModel.PokemonList.First(x => x.Name.ToLower().Contains(p) && !x.IsForm));
+                evolutionList.Add(mainViewModel.PokemonListWithForms.First(x => x.Name.Contains(p)));
             evolutionList.Add(pkmn);
             foreach (var p in pkmn.NextEvolution)
-                evolutionList.Add(mainViewModel.PokemonList.First(x => x.Name.ToLower().Contains(p) && !x.IsForm));
+                evolutionList.Add(mainViewModel.PokemonListWithForms.First(x => x.Name.Contains(p)));
             return evolutionList;
         }
     }
