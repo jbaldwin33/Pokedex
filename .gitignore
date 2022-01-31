@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /assemblies/pokedex.db-wal
 /assemblies/pokedex.db-shm
 /assemblies/pokedex.db
+!*.dll
+/assemblies/ref
