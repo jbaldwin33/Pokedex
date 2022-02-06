@@ -47,7 +47,7 @@ namespace Pokedex.PokedexCSVCreator
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static string FixName(this string name) => name.Contains("-standard") || name.Contains("-disguised") || name.Contains("-original") ? name.Remove(name.IndexOf("-"), name.Length - name.IndexOf("-")) : name;
+        public static string FixName(this string name) => name.Contains("-standard") || name.Contains("-disguised") || name.Contains("-original") && !name.Contains("-original-cap") ? name.Remove(name.IndexOf("-"), name.Length - name.IndexOf("-")) : name;
 
         /// <summary>
         /// Remove dashes from name and capitalize

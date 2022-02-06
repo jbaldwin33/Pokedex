@@ -83,16 +83,16 @@ namespace Pokedex.PokedexApp.ViewModels
         {
             if (pkmn.Type2 == null)
             {
-                Weaknesses = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType   == pkmn.Type1).Weaknesses);
-                Resistances = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType  == pkmn.Type1).Resistances);
-                Immunities = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType   == pkmn.Type1).Immunities);
+                Weaknesses = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType == pkmn.Type1).Weaknesses);
+                Resistances = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType == pkmn.Type1).Resistances);
+                Immunities = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType == pkmn.Type1).Immunities);
                 NormalDamage = new ObservableCollection<TypeMult>(TypeMasterClass.Instance.TypeClasses.First(x => x.ThisType == pkmn.Type1).NormalDamage);
             }
             else
             {
-                Weaknesses = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType   == pkmn.Type1 && x.Type2.ThisType   == pkmn.Type2).Weaknesses);
-                Resistances = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType  == pkmn.Type1 && x.Type2.ThisType  == pkmn.Type2).Resistances);
-                Immunities = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType   == pkmn.Type1 && x.Type2.ThisType   == pkmn.Type2).Immunities);
+                Weaknesses = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == pkmn.Type1 && x.Type2.ThisType == pkmn.Type2).Weaknesses);
+                Resistances = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == pkmn.Type1 && x.Type2.ThisType == pkmn.Type2).Resistances);
+                Immunities = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == pkmn.Type1 && x.Type2.ThisType == pkmn.Type2).Immunities);
                 NormalDamage = new ObservableCollection<TypeMult>(typeCombos.First(x => x.Type1.ThisType == pkmn.Type1 && x.Type2.ThisType == pkmn.Type2).NormalDamage);
             }
             WeakRows = SetRows(Weaknesses);

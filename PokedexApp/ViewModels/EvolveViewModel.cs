@@ -56,12 +56,31 @@ namespace Pokedex.PokedexApp.ViewModels
         private List<Pokemon> GetEvolutionLine(Pokemon pkmn)
         {
             var evolutionList = new List<Pokemon>();
-            foreach (var p in pkmn.PrevEvolution)
-                evolutionList.Add(mainViewModel.PokemonListWithForms.First(x => x.Name.Contains(p)));
+            AddPrev(evolutionList, pkmn.PrevEvolution);
             evolutionList.Add(pkmn);
-            foreach (var p in pkmn.NextEvolution)
-                evolutionList.Add(mainViewModel.PokemonListWithForms.First(x => x.Name.Contains(p)));
+            AddNext(evolutionList, pkmn.NextEvolution);
             return evolutionList;
+        }
+
+        private void AddPrev(List<Pokemon> evolutionList, string prevEvolution)
+        {
+            var pkmn = mainViewModel.PokemonListWithForms.FirstOrDefault(x => x.Name == prevEvolution);
+            if (pkmn == null)
+                return;
+            AddPrev(evolutionList, pkmn.PrevEvolution);
+            evolutionList.Add(pkmn);
+        }
+
+        private void AddNext(List<Pokemon> evolutionList, string[] nextEvolution)
+        {
+            foreach (var p in nextEvolution)
+            {
+                var pkmn = mainViewModel.PokemonListWithForms.FirstOrDefault(x => x.Name == p);
+                if (pkmn == null)
+                    return;
+                evolutionList.Add(pkmn);
+                AddNext(evolutionList, pkmn.NextEvolution);
+            }
         }
     }
 }

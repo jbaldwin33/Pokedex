@@ -17,8 +17,8 @@ namespace Pokedex.PokedexCSVCreator
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var viewModel = new MainViewModel();
-            var window = new MainWindow
+            var viewModel = new CSVViewModel();
+            var window = new CSVWindow
             {
                 DataContext = viewModel,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen

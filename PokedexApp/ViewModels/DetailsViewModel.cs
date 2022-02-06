@@ -1,11 +1,4 @@
 ﻿using Pokedex.PkdxDatabase.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using MVVMFramework.ViewModels;
-using Pokedex.PokedexLib;
-using MVVMFramework.ViewNavigator;
 using static Pokedex.PokedexLib.Enums;
 
 namespace Pokedex.PokedexApp.ViewModels
@@ -14,7 +7,6 @@ namespace Pokedex.PokedexApp.ViewModels
     {
         #region Fields and props
 
-        private readonly List<DualTypeClass> typeCombos;
         private int number;
         private TypeEnum? type1;
         private TypeEnum? type2;
@@ -74,17 +66,6 @@ namespace Pokedex.PokedexApp.ViewModels
 
         #endregion
 
-        public DetailsViewModel()
-        {
-            typeCombos = TypeMasterClass.Instance.DualTypeCombos;
-        }
-
-        public override void OnUnloaded()
-        {
-            mainViewModel.PokemonChangedAction -= OnPokemonChanged;
-            base.OnUnloaded();
-        }
-
         protected override void OnPokemonChanged(Pokemon pkmn)
         {
             Type1 = pkmn.Type1;
@@ -94,7 +75,6 @@ namespace Pokedex.PokedexApp.ViewModels
             HiddenAbility = pkmn.HiddenAbility;
             EggGroup1 = pkmn.EggGroup1;
             EggGroup2 = pkmn.EggGroup2;
-            
         }
     }
 }

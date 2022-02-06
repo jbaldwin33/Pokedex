@@ -56,7 +56,7 @@ namespace Pokedex.PkdxDatabase
                     EggGroup1 = csv.GetField("EggGroup1"),
                     EggGroup2 = csv.GetField("EggGroup2"),
                     EvolveMethodString = csv.GetField("Evolve"),
-                    NumberOfEvolutions = !string.IsNullOrEmpty(csv.GetField("EvolveNum")) ? csv.GetField<int>("EvolveNum") : 0,
+                    NumberOfEvolutions = string.IsNullOrEmpty(csv.GetField("EvolveNum")) ? 0 : csv.GetField<int>("EvolveNum"),
                     EVYield = csv.GetField("EVYield"),
                     HasForms = csv.GetField<bool>("HasForms"),
                     IsForm = csv.GetField<bool>("IsForm"),

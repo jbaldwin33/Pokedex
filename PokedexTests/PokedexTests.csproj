@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<BaseOutputPath>bin\</BaseOutputPath>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

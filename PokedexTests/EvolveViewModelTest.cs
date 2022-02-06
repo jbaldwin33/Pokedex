@@ -11,15 +11,16 @@ namespace PokedexTests
     public class EvolveViewModelTest
     {
         [Theory]
-        [InlineData("Bulbasaur", 3)]
-        [InlineData("Mew", 1)]
-        public void Verify_Evolution_Line_Updates(string name, int count)
+        [InlineData("Mew", "Bulbasaur", 3)]
+        [InlineData("Bulbasaur", "Mew", 1)]
+        public void Verify_Evolution_Line_Updates(string firstName, string secondName, int count)
         {
             var setup = new TestSetup();
             var mainViewModel = setup.MainViewModel;
             var sut = new EvolveViewModel();
             sut.OnLoaded();
-            mainViewModel.Pokedexes[0].SelectedPokemon = mainViewModel.PokemonList.First(x => x.Name == name);
+            mainViewModel.Pokedexes[0].SelectedPokemon = mainViewModel.PokemonList.First(x => x.Name == firstName);
+            mainViewModel.Pokedexes[0].SelectedPokemon = mainViewModel.PokemonList.First(x => x.Name == secondName);
 
             Assert.Equal(count, sut.EvolutionLine.Count);
         }
@@ -34,14 +35,29 @@ namespace PokedexTests
             mainViewModel.Pokedexes[0].SelectedPokemon = mainViewModel.PokemonList.First(x => x.Name == name);
             mainViewModel.FormCollection[1].FormCommand.Execute(mainViewModel.FormCollection[1].PkmnForm);
 
-            Assert.Equal(sut.EvolutionLine[1].IsForm, prevIsForm);
+            Assert.Equal(prevIsForm, sut.EvolutionLine[1].IsForm);
+        }
+
+        [Theory]
+        [InlineData("Rattata", 2)]
+        [InlineData("Zigzagoon", 2)]
+        public void Verify_Form_Change_Updates_Evolution_Line_Count(string name, int count)
+        {
+            var setup = new TestSetup();
+            var mainViewModel = setup.MainViewModel;
+            var sut = new EvolveViewModel();
+            sut.OnLoaded();
+            mainViewModel.Pokedexes[0].SelectedPokemon = mainViewModel.PokemonList.First(x => x.Name == name);
+            mainViewModel.FormCollection[1].FormCommand.Execute(mainViewModel.FormCollection[1].PkmnForm);
+
+            Assert.Equal(count, sut.EvolutionLine.Count);
         }
 
         [Theory]
         [InlineData("Raticate", null, 0, false)]
         [InlineData("Raticate", "Raticate (Alola)", 0, true)]
         [InlineData("Raichu", null, 1, false)]
-        [InlineData("Raichu", "Raichu (Alola)", 1, true)]
+        [InlineData("Raichu", "Raichu (Alola)", 1, false)]
         [InlineData("Persian", null, 0, false)]
         [InlineData("Persian", "Persian (Alola)", 0, true)]
         public void Verify_Evolution_Line_Correct_Regional_Form(string name, string nameWithForm, int index, bool prevIsForm)
@@ -54,7 +70,7 @@ namespace PokedexTests
             if (!string.IsNullOrEmpty(nameWithForm))
                 mainViewModel.FormCollection[1].FormCommand.Execute(mainViewModel.FormCollection[1].PkmnForm);
 
-            Assert.Equal(sut.EvolutionLine[index].IsForm, prevIsForm);
+            Assert.Equal(prevIsForm, sut.EvolutionLine[index].IsForm);
         }
 
         [Theory]
@@ -66,7 +82,8 @@ namespace PokedexTests
             var mainViewModel = setup.MainViewModel;
             var sut = new EvolveViewModel();
             sut.OnLoaded();
-            mainViewModel.Pokedexes[0].SelectedPokemon = mainViewModel.PokemonList.First(x => x.Name == name);
+            var n = mainViewModel.PokemonList.First(x => x.Name == name);
+            mainViewModel.Pokedexes[0].SelectedPokemon = n;
 
             Assert.Equal(prevIsForm, sut.EvolutionLine[0].IsForm);
             Assert.Equal(evolutionLineCount, sut.EvolutionLine.Count);
@@ -91,7 +108,7 @@ namespace PokedexTests
                 form.FormCommand.Execute(form.PkmnForm);
             }
 
-            Assert.Equal(nextIsForm, sut.EvolutionLine[sut.EvolutionLine.Count - 1].IsForm);
+            Assert.Equal(nextIsForm, sut.EvolutionLine[^1].IsForm);
             Assert.Equal(evolutionLineCount, sut.EvolutionLine.Count);
         }
     }

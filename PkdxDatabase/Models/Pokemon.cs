@@ -14,7 +14,7 @@ namespace Pokedex.PkdxDatabase.Models
         public int KalosDex { get; set; }
         public int AlolaDex { get; set; }
         public int GalarDex { get; set; }
-        public string[] PrevEvolution { get; set; }
+        public string PrevEvolution { get; set; }
         public string[] NextEvolution { get; set; }
         public string Name { get; set; }
         public TypeEnum? Type1 { get; set; }

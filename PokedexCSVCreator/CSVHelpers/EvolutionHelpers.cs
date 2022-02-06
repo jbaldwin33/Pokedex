@@ -38,46 +38,33 @@ namespace Pokedex.PokedexCSVCreator.CSVHelpers
             return details.Species.Name == "melmetal" ? "400 candy in PKMN Go" : ParseAndGetEvolveString(details.EvolutionDetails[0], isAlolanForm, isGalarianForm, evolvesFromForm);
         }
 
-        public static List<string> GetPreviousEvolutions(ChainLink evolutionChain, string name, PokemonEntity pkmn, bool startAdding)
+        public static string GetPreviousEvolutions(PokeApiClient pokeClient, PokemonSpecies species, PokemonEntity pkmn)
         {
-            var prevs = new List<string>();
             var sb = new StringBuilder();
-            if (evolutionChain.Species.Name == name)
-                return prevs;
-            else
-            {
-                sb.Append(evolutionChain.Species.Name.FirstCharToUpper());
-                sb.Append(pkmn.EvolvesFromRegionalForm ? pkmn.IsAlolanForm ? " (Alola)" : pkmn.IsGalarianForm ? " (Galar)" : string.Empty : string.Empty);
-                prevs.Add(sb.ToString());
-            }
-
-            if (evolutionChain.EvolvesTo.Count > 1)
-            {
-                var useChain = GetCorrectEvolutionPathWithPreEvolution(evolutionChain.EvolvesTo, name);
-                if (useChain == null || useChain.EvolvesTo.Count > 0 && useChain.EvolvesTo[0].Species.Name != name)
-                    return prevs;
-
-                prevs.AddRange(GetPreviousEvolutions(useChain, name, pkmn, startAdding));
-            }
-            else if (evolutionChain.EvolvesTo.Count == 1)
-                prevs.AddRange(GetPreviousEvolutions(evolutionChain.EvolvesTo[0], name, pkmn, startAdding));
-
-            return prevs;
+            if (species.EvolvesFromSpecies == null)
+                return string.Empty;
+            var prev = pokeClient.GetResourceAsync<PokemonSpecies>(species.EvolvesFromSpecies.Name).Result;
+            sb.Append(prev.Name.FirstCharToUpper());
+            sb.Append(pkmn.EvolvesFromRegionalForm ? isAlolanForm(prev) ? " (Alola)" : isGalarianForm(prev) ? " (Galar)" : string.Empty : string.Empty);
+            return sb.ToString();
+            
+            bool isAlolanForm(PokemonSpecies pkmnSpecies) => pkmnSpecies.Varieties.Any(x => x.Pokemon.Name.Contains("-alola")) && pkmn.AlolaDex != -1;
+            bool isGalarianForm(PokemonSpecies pkmnSpecies) => pkmnSpecies.Varieties.Any(x => x.Pokemon.Name.Contains("-galar")) && pkmn.GalarDex != -1;
         }
 
         public static List<string> GetNextEvolutions(ChainLink evolutionChain, string name, PokemonEntity pkmn, bool startAdding)
         {
-            if (name.Contains("meowth"))
-            {
-
-            }
             var nexts = new List<string>();
             var sb = new StringBuilder();
             if (startAdding)
             {
-                sb.Append(evolutionChain.Species.Name.FirstCharToUpper());
-                sb.Append(pkmn.IsAlolanForm ? " (Alola)" : pkmn.IsGalarianForm && !name.Contains("meowth") && !name.Contains("yamask") ? " (Galar)" : string.Empty);
-                nexts.Add(sb.ToString());
+                if (notPerrserker() && notPersian() && notSirfetchd() && notMrRime() && notCofagricus() && notRunerigus())
+                {
+                    sb.Append(evolutionChain.Species.Name.FirstCharToUpper());
+                    sb.Append(pkmn.IsAlolanForm ? " (Alola)" : pkmn.IsGalarianForm && !name.Contains("meowth") && !name.Contains("yamask") && !name.Contains("farfetchd") && !name.Contains("mr-mime") && !name.Contains("corsola") ? " (Galar)" : string.Empty);
+                    nexts.Add(sb.ToString());
+                    return nexts;
+                }
             }
             if (evolutionChain.Species.Name == name)
                 startAdding = true;
@@ -98,22 +85,29 @@ namespace Pokedex.PokedexCSVCreator.CSVHelpers
                 nexts.AddRange(GetNextEvolutions(evolutionChain.EvolvesTo[0], name, pkmn, startAdding));
 
             return nexts;
+
+            bool notPerrserker() => evolutionChain.Species.Name != "perrserker" || pkmn.IsGalarianForm;
+            bool notPersian() => evolutionChain.Species.Name != "persian" || !pkmn.IsGalarianForm;
+            bool notSirfetchd() => evolutionChain.Species.Name != "sirfetchd" || pkmn.IsGalarianForm;
+            bool notMrRime() => evolutionChain.Species.Name != "mr-rime" || pkmn.IsGalarianForm;
+            bool notRunerigus() => evolutionChain.Species.Name != "runerigus" || pkmn.IsGalarianForm;
+            bool notCofagricus() => evolutionChain.Species.Name != "cofagrigus" || !pkmn.IsGalarianForm;
         }
 
         public static ChainLink GetCorrectEvolutionPathWithPreEvolution(List<ChainLink> chain, string name)
         {
             foreach (var item in chain)
-                if (TraverseForName(item, name))
+                if (EvolutionChainContainsName(item, name))
                     return item;
             return null;
         }
 
-        public static bool TraverseForName(ChainLink item, string name)
+        public static bool EvolutionChainContainsName(ChainLink item, string name)
         {
             if (item.Species.Name == name)
                 return true;
             foreach (var sub in item.EvolvesTo)
-                return TraverseForName(sub, name);
+                return EvolutionChainContainsName(sub, name);
             return false;
         }
 
@@ -154,6 +148,8 @@ namespace Pokedex.PokedexCSVCreator.CSVHelpers
                 method = $"Trade w/ {details.TradeSpecies.Name.GetFriendlyName()}";
             if (details.TurnUpsideDown)
                 method = $"Lv. {details.MinLevel} upside down";
+            if (details.Trigger.Name == "trade")
+                method = "Trade";
             return $"{method}{(evolvesFromForm ? string.Empty : isAlolanForm ? " (Alolan form)" : isGalarianForm ? " (Galarian form)" : string.Empty)}";
         }
     }

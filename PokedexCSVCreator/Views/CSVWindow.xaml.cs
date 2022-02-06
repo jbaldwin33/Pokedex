@@ -21,9 +21,9 @@ namespace Pokedex.PokedexCSVCreator.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CSVWindow : Window
     {
-        public MainWindow()
+        public CSVWindow()
         {
             InitializeComponent();
             ((INotifyCollectionChanged)itemsControl.Items).CollectionChanged += ListView_CollectionChanged;

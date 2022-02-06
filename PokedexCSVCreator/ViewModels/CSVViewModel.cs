@@ -17,7 +17,7 @@ using static Pokedex.PokedexCSVCreator.CSVHelpers.EvolutionHelpers;
 #pragma warning disable IDE0058
 namespace Pokedex.PokedexCSVCreator.ViewModels
 {
-    public class MainViewModel : ViewModel
+    public class CSVViewModel : ViewModel
     {
         private const int STEPS_PER_HATCH_COUNTER = 256;
         private static readonly string binaryDirectory = Path.Combine(AppContext.BaseDirectory, "..\\", "..\\", "..\\", "assemblies");
@@ -46,7 +46,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
         public RelayCommand WriteCommand => writeCommand ??= new RelayCommand(async () => await WriteCommandExecute(), () => !IsExecuting);
         public RelayCommand CancelCommand => cancelCommand ??= new RelayCommand(() => isCancelled = true, () => IsExecuting);
 
-        public MainViewModel()
+        public CSVViewModel()
         {
             LogEntries = new ObservableCollection<string>();
             pokeClient = new PokeApiClient();
@@ -109,16 +109,10 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                         if (!IsKommooLine(fixedName) && !IsMrMimeLine(fixedName) && pkmnSpecies.Varieties.Count > 1 && fixedName.Contains('-') && fixedName == pkmnSpecies.Varieties.First(x => x.IsDefault).Pokemon.Name)
                             defaultFormName = GetFormName(fixedName);
                         var record = CreateEntity(ref idCounter, pkmn, pkmnSpecies, evolutionChain, growth, false, defaultFormName);
-                        if (record.Name == "Minior (Red-Meteor)")
-                            record.Name = "Minior";
-                        SetDexNumbers(record, pkmnSpecies);
-                        records.Add(record);
                         added++;
                         AddLogEntry($"{added} record(s) added");
-                        if (pkmnSpecies.Name == "zarude")
-                            AddZarude(ref idCounter, pkmn, pkmnSpecies, evolutionChain, growth);
-                        if (pkmnSpecies.Varieties.Count > 1)
-                            AddForms(ref idCounter, pkmnSpecies, evolutionChain, growth);
+                        PostAddEntity(ref idCounter, record, pkmn, pkmnSpecies, evolutionChain, growth);
+                        records.Add(record);
                     }
                     catch (Exception ex)
                     {
@@ -136,21 +130,8 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             }
         }
 
-        private void AddZarude(ref int i, Pokemon pkmn, PokemonSpecies pkmnSpecies, EvolutionChain chain, GrowthRate growth)
-        {
-            try
-            {
-                var record = CreateEntity(ref i, pkmn, pkmnSpecies, chain, growth, true, null);
-                SetDexNumbers(record, pkmnSpecies);
-                record.Name = "Zarude (Dada)";
-                records.Add(record);
-                AddLogEntry($"zarude form(s) added");
-            }
-            catch (Exception ex)
-            {
-                AddLogEntry($"{ex.Message} {pkmn.Name}");
-            }
-        }
+
+        #region Helper methods
 
         private PokemonEntity CreateEntity(ref int i, Pokemon pkmn, PokemonSpecies pkmnSpecies, EvolutionChain evolutionChain, GrowthRate growth, bool isForm, string formName = null)
         {
@@ -180,7 +161,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 EggGroup2 = pkmnSpecies.EggGroups.Count > 1 ? EggGroupName(pkmnSpecies.EggGroups[1].Name) : null,
                 Catch = pkmnSpecies.CaptureRate,
                 EXP = growth.Levels[^1].Experience,
-                EvolveNum = GetNumberOfEvolutions(evolutionChain.Chain, pkmnSpecies.Name),
+                //EvolveNum = GetNumberOfEvolutions(evolutionChain.Chain, pkmnSpecies.Name),
                 EVYield = GetEvs(pkmn),
                 HasForms = pkmnSpecies.Varieties.Count > 1,
                 IsForm = isForm,
@@ -188,13 +169,132 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 IsGalarianForm = pkmn.Name.EndsWith("-galar"),
 
             };
-            var prevPokemon = records.FirstOrDefault(x => x.NationalDex == GetDexEntryNumber(pkmnSpecies, "national") - 1 && entity.IsAlolanForm ? x.IsAlolanForm : entity.IsGalarianForm ? x.IsGalarianForm : false);
-            entity.EvolvesFromRegionalForm = prevPokemon != null && ((entity.IsAlolanForm && prevPokemon.IsAlolanForm) || (entity.IsGalarianForm && prevPokemon.IsGalarianForm));
-            entity.Evolve = pkmnSpecies.EvolvesFromSpecies == null ? string.Empty : GetEvolveString(evolutionChain, pkmnSpecies.Name, entity.IsAlolanForm, entity.IsGalarianForm, entity.EvolvesFromRegionalForm);
-            entity.PrevEvolution = string.Join(',', GetPreviousEvolutions(evolutionChain.Chain, pkmnSpecies.Name, entity, false));
-            entity.NextEvolution = string.Join(',', GetNextEvolutions(evolutionChain.Chain, pkmnSpecies.Name, entity, false));
+            SetDexNumbers(entity, pkmnSpecies);
+            DoEvolutionWork(entity, pkmnSpecies, evolutionChain);
             return entity;
         }
+
+        private void DoEvolutionWork(PokemonEntity entity, PokemonSpecies pkmnSpecies, EvolutionChain evolutionChain)
+        {
+            if (entity.Name == "Perrserker")
+            {
+
+            }
+            if (entity.Name.Contains("Pikachu") && entity.IsForm)
+                return;
+
+            var query = records.Where(x => x.NationalDex == GetDexEntryNumber(pkmnSpecies, "national") - 1);
+            if (entity.IsAlolanForm)
+                query = addAlolanClause();
+            if (entity.IsGalarianForm)
+                query = addGalarianClause();
+            var prevPokemon = query.FirstOrDefault();
+
+            PokemonSpecies prev = null;
+            bool isPreEvolution = false;
+            if (prevPokemon != null)
+                isPreEvolution = EvolutionChainContainsName(evolutionChain.Chain, getName());
+
+            if (prevPokemon == null || !isPreEvolution)
+                if (pkmnSpecies.EvolvesFromSpecies != null)
+                    prev = pokeClient.GetResourceAsync(pkmnSpecies.EvolvesFromSpecies).Result;
+
+            entity.EvolvesFromRegionalForm = prev != null 
+                ? prev.Varieties.Any(x => x.Pokemon.Name.EndsWith("-alola")) || prev.Varieties.Any(x => x.Pokemon.Name.EndsWith("-galar"))
+                : prevPokemon != null && isPreEvolution && ((entity.IsAlolanForm && prevPokemon.IsAlolanForm) || (entity.IsGalarianForm && prevPokemon.IsGalarianForm));
+            entity.Evolve = pkmnSpecies.EvolvesFromSpecies == null ? string.Empty : GetEvolveString(evolutionChain, pkmnSpecies.Name, entity.IsAlolanForm, entity.IsGalarianForm, entity.EvolvesFromRegionalForm);
+            entity.PrevEvolution = GetPreviousEvolutions(pokeClient, pkmnSpecies, entity);
+            entity.NextEvolution = string.Join(',', GetNextEvolutions(evolutionChain.Chain, pkmnSpecies.Name, entity, false));
+            entity.EvolveNum = entity.NextEvolution.Split(',').Count().ToString();
+
+            string getName() => !prevPokemon.Name.Contains(" (", StringComparison.CurrentCulture) ? prevPokemon.Name.ToLower() : prevPokemon.Name[..prevPokemon.Name.IndexOf(" (")].ToLower();
+            IEnumerable<PokemonEntity> addAlolanClause() => records.Where(x => x.IsAlolanForm);
+            IEnumerable<PokemonEntity> addGalarianClause() => records.Where(x => x.IsGalarianForm);
+        }
+
+        private void AddForms(ref int i, PokemonSpecies species, EvolutionChain chain, GrowthRate growth)
+        {
+            var added = 0;
+            for (var j = 1; j < species.Varieties.Count; j++)
+            {
+                if (species.Varieties[j].Pokemon.Name == "greninja-battle-bond" ||
+                    species.Varieties[j].Pokemon.Name.Contains("totem") ||
+                    species.Varieties[j].Pokemon.Name.Contains("-low-key-gmax") ||
+                    species.Varieties[j].Pokemon.Name.Contains("-meteor"))
+                    continue;
+
+                var pkmn = pokeClient.GetResourceAsync(species.Varieties[j].Pokemon).Result;
+                var pkmnSpecies = pokeClient.GetResourceAsync(pkmn.Species).Result;
+                var formName = GetFormName(pkmn.Name.FixName());
+                try
+                {
+                    var record = CreateEntity(ref i, pkmn, pkmnSpecies, chain, growth, true, formName);
+                    PostAddForm(record, pkmnSpecies, chain);
+                    records.Add(record);
+                    added++;
+                    AddLogEntry($"{added} form(s) added");
+                }
+                catch (Exception ex)
+                {
+                    AddLogEntry($"{ex.Message} {pkmn.Name}");
+                }
+            }
+        }
+
+        private void PostAddEntity(ref int idCounter, PokemonEntity record, Pokemon pkmn, PokemonSpecies pkmnSpecies, EvolutionChain evolutionChain, GrowthRate growth)
+        {
+            if (record.Name == "Minior (Red-Meteor)")
+                record.Name = "Minior";
+            if (pkmnSpecies.Name == "zarude")
+                AddZarude(ref idCounter, pkmn, pkmnSpecies, evolutionChain, growth);
+            if (pkmnSpecies.Varieties.Count > 1)
+                AddForms(ref idCounter, pkmnSpecies, evolutionChain, growth);
+        }
+
+        private void PostAddForm(PokemonEntity record, PokemonSpecies pkmnSpecies, EvolutionChain evolutionChain)
+        {
+            if (record.Name == "zarude")
+                record.Name = "Zarude (Dada)";
+            if (record.Name.Contains("Amped-Gmax"))
+            {
+                record.Name = "Toxtricity (Gmax)";
+                record.Ability2 = "Plus/Minus";
+            }
+            if ((record.IsAlolanForm || record.IsGalarianForm) && !string.IsNullOrEmpty(record.Evolve) && !record.EvolvesFromRegionalForm)
+                AddFormsToEvolutionLine(record, pkmnSpecies, evolutionChain);
+        }
+
+        private void AddZarude(ref int i, Pokemon pkmn, PokemonSpecies pkmnSpecies, EvolutionChain chain, GrowthRate growth)
+        {
+            try
+            {
+                var record = CreateEntity(ref i, pkmn, pkmnSpecies, chain, growth, true, null);
+                record.Name = "Zarude (Dada)";
+                records.Add(record);
+                AddLogEntry($"zarude form(s) added");
+            }
+            catch (Exception ex)
+            {
+                AddLogEntry($"{ex.Message} {pkmn.Name}");
+            }
+        }
+
+        private void AddFormsToEvolutionLine(PokemonEntity form, PokemonSpecies pkmnSpecies, EvolutionChain evolutionChain)
+        {
+            var prevPokemon = records.First(x => x.NationalDex == form.NationalDex - 1 && !x.IsForm);
+            if (pkmnSpecies.EvolvesFromSpecies == null)
+                return;
+            var prev = pokeClient.GetResourceAsync(pkmnSpecies.EvolvesFromSpecies).Result;
+            var prevRecord = records.FirstOrDefault(x => x.Name.ToLower().Contains(prev.Name) && !x.IsForm);
+            if (prevRecord == null)
+                return;
+
+            var evs = prevRecord.NextEvolution.Split(',');
+            evs = evs.Append(form.Name).ToArray();
+            prevRecord.NextEvolution = string.Join(',', evs);
+        }
+
+        #endregion
 
         #region Static helper methods
 
@@ -321,57 +421,6 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
         }
 
         private static int GetDexEntryNumber(PokemonSpecies species, string dexName) => species.PokedexNumbers.First(x => x.Pokedex.Name == dexName).EntryNumber;
-
-        #endregion
-
-        #region Helper methods
-
-        private void AddForms(ref int i, PokemonSpecies species, EvolutionChain chain, GrowthRate growth)
-        {
-            var added = 0;
-            for (var j = 1; j < species.Varieties.Count; j++)
-            {
-                if (species.Varieties[j].Pokemon.Name == "greninja-battle-bond" ||
-                    species.Varieties[j].Pokemon.Name.Contains("totem") ||
-                    species.Varieties[j].Pokemon.Name.Contains("-low-key-gmax") ||
-                    species.Varieties[j].Pokemon.Name.Contains("-meteor"))
-                    continue;
-
-                var pkmn = pokeClient.GetResourceAsync(species.Varieties[j].Pokemon).Result;
-                var pkmnSpecies = pokeClient.GetResourceAsync(pkmn.Species).Result;
-                var formName = GetFormName(pkmn.Name.FixName());
-                try
-                {
-                    var record = CreateEntity(ref i, pkmn, pkmnSpecies, chain, growth, true, formName);
-                    SetDexNumbers(record, pkmnSpecies);
-                    if (record.Name == "zarude")
-                        record.Name = "Zarude (Dada)";
-                    if (record.Name.Contains("Amped-Gmax"))
-                    {
-                        record.Name = "Toxtricity (Gmax)";
-                        record.Ability2 = "Plus/Minus";
-                    }
-
-                    records.Add(record);
-                    if ((record.IsAlolanForm || record.IsGalarianForm) && !string.IsNullOrEmpty(record.Evolve) && !record.EvolvesFromRegionalForm)
-                        AddFormsToEvolutionLine(record);
-                    added++;
-                    AddLogEntry($"{added} form(s) added");
-                }
-                catch (Exception ex)
-                {
-                    AddLogEntry($"{ex.Message} {pkmn.Name}");
-                }
-            }
-        }
-
-        private void AddFormsToEvolutionLine(PokemonEntity form)
-        {
-            var pkmn = records.First(x => x.NationalDex == form.NationalDex - 1);
-            var evs = pkmn.NextEvolution.Split(',');
-            evs = evs.Append(form.Name).ToArray();
-            pkmn.NextEvolution = string.Join(',', evs);
-        }
 
         #endregion
 

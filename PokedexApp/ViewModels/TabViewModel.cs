@@ -22,5 +22,11 @@ namespace Pokedex.PokedexApp.ViewModels
                 OnPokemonChanged(mainViewModel.SelectedPokemon);
             base.OnLoaded();
         }
+
+        public override void OnUnloaded()
+        {
+            mainViewModel.PokemonChangedAction -= OnPokemonChanged;
+            base.OnUnloaded();
+        }
     }
 }

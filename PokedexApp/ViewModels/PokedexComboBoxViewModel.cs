@@ -8,11 +8,11 @@ namespace Pokedex.PokedexApp.ViewModels
 {
     public class PokedexComboBoxViewModel : ViewModel
     {
-        public DexType PokedexType { get; set; }
-        public ObservableCollection<Pokemon> DexList { get; set; }
         private Action<Pokemon, DexType> pokemonChanged;
         private Pokemon selectedPokemon;
         private bool withoutNotify;
+        public DexType PokedexType { get; set; }
+        public ObservableCollection<Pokemon> DexList { get; set; }
 
         public Pokemon SelectedPokemon
         {

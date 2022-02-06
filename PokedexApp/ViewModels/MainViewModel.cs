@@ -64,19 +64,7 @@ namespace Pokedex.PokedexApp.ViewModels
             GetAllPokemon();
             placeholder = new Pokemon { Name = "-Select a Pokemon-", Id = -1 };
             pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => !x.IsForm));
-            Pokedexes = new List<PokedexComboBoxViewModel>
-            {
-                new PokedexComboBoxViewModel(DexType.Alphabetical, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.Name)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.National, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.NationalDex)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Kanto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex < 152).OrderBy(p => p.NationalDex)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Johto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 152 && p.NationalDex < 252).OrderBy(p => p.NationalDex)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Hoenn, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 252 && p.NationalDex < 387).OrderBy(p => p.NationalDex)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Sinnoh, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 387 && p.NationalDex < 494).OrderBy(p => p.NationalDex)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Unova, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 494 && p.NationalDex < 650).OrderBy(p => p.NationalDex)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Kalos, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 650 && p.NationalDex < 722).OrderBy(p => p.NationalDex)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Alola, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 722 && p.NationalDex < 810).OrderBy(p => p.NationalDex)), OnPokemonChanged),
-                new PokedexComboBoxViewModel(DexType.Galar, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 810).OrderBy(p => p.NationalDex)), OnPokemonChanged)
-            };
+            CreatePokedexes();
             Pokedexes.ForEach(p => p.DexList.Insert(0, placeholder));
             FormCollection = new ObservableCollection<PokemonForm>();
         }
@@ -143,6 +131,23 @@ namespace Pokedex.PokedexApp.ViewModels
         {
             SelectedPokemon = form;
             OnPokemonChanged(form, CurrentDexType);
+        }
+
+        private void CreatePokedexes()
+        {
+            Pokedexes = new List<PokedexComboBoxViewModel>
+            {
+                new PokedexComboBoxViewModel(DexType.Alphabetical, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.Name)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.National, new ObservableCollection<Pokemon>(pokemonList.OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Kanto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex < 152).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Johto, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 152 && p.NationalDex < 252).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Hoenn, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 252 && p.NationalDex < 387).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Sinnoh, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 387 && p.NationalDex < 494).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Unova, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 494 && p.NationalDex < 650).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Kalos, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 650 && p.NationalDex < 722).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Alola, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 722 && p.NationalDex < 810).OrderBy(p => p.NationalDex)), OnPokemonChanged),
+                new PokedexComboBoxViewModel(DexType.Galar, new ObservableCollection<Pokemon>(pokemonList.Where(p => p.NationalDex >= 810).OrderBy(p => p.NationalDex)), OnPokemonChanged)
+            };
         }
 
         public class PokemonForm
