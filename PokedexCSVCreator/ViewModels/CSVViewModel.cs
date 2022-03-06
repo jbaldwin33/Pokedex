@@ -106,8 +106,8 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     {
                         string defaultFormName = null;
                         var fixedName = pkmn.Name.FixName();
-                        if (!IsKommooLine(fixedName) && !IsMrMimeLine(fixedName) && pkmnSpecies.Varieties.Count > 1 && fixedName.Contains('-') && fixedName == pkmnSpecies.Varieties.First(x => x.IsDefault).Pokemon.Name)
-                            defaultFormName = GetFormName(fixedName);
+                        if (!Utilities.IsKommooLine(fixedName) && !Utilities.IsMrMimeLine(fixedName) && pkmnSpecies.Varieties.Count > 1 && fixedName.Contains('-') && fixedName == pkmnSpecies.Varieties.First(x => x.IsDefault).Pokemon.Name)
+                            defaultFormName = StringExtensions.GetFormName(fixedName);
                         var record = CreateEntity(ref idCounter, pkmn, pkmnSpecies, evolutionChain, growth, false, defaultFormName);
                         added++;
                         AddLogEntry($"{added} record(s) added");
@@ -161,7 +161,6 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 EggGroup2 = pkmnSpecies.EggGroups.Count > 1 ? EggGroupName(pkmnSpecies.EggGroups[1].Name) : null,
                 Catch = pkmnSpecies.CaptureRate,
                 EXP = growth.Levels[^1].Experience,
-                //EvolveNum = GetNumberOfEvolutions(evolutionChain.Chain, pkmnSpecies.Name),
                 EVYield = GetEvs(pkmn),
                 HasForms = pkmnSpecies.Varieties.Count > 1,
                 IsForm = isForm,
@@ -176,10 +175,6 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
         private void DoEvolutionWork(PokemonEntity entity, PokemonSpecies pkmnSpecies, EvolutionChain evolutionChain)
         {
-            if (entity.Name == "Perrserker")
-            {
-
-            }
             if (entity.Name.Contains("Pikachu") && entity.IsForm)
                 return;
 
@@ -188,26 +183,26 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 query = addAlolanClause();
             if (entity.IsGalarianForm)
                 query = addGalarianClause();
-            var prevPokemon = query.FirstOrDefault();
+            var prevPokemonRecord = query.FirstOrDefault();
 
-            PokemonSpecies prev = null;
+            PokemonSpecies prevSpecies = null;
             bool isPreEvolution = false;
-            if (prevPokemon != null)
+            if (prevPokemonRecord != null)
                 isPreEvolution = EvolutionChainContainsName(evolutionChain.Chain, getName());
 
-            if (prevPokemon == null || !isPreEvolution)
+            if (prevPokemonRecord == null || !isPreEvolution)
                 if (pkmnSpecies.EvolvesFromSpecies != null)
-                    prev = pokeClient.GetResourceAsync(pkmnSpecies.EvolvesFromSpecies).Result;
+                    prevSpecies = pokeClient.GetResourceAsync(pkmnSpecies.EvolvesFromSpecies).Result;
 
-            entity.EvolvesFromRegionalForm = prev != null 
-                ? prev.Varieties.Any(x => x.Pokemon.Name.EndsWith("-alola")) || prev.Varieties.Any(x => x.Pokemon.Name.EndsWith("-galar"))
-                : prevPokemon != null && isPreEvolution && ((entity.IsAlolanForm && prevPokemon.IsAlolanForm) || (entity.IsGalarianForm && prevPokemon.IsGalarianForm));
+            entity.EvolvesFromRegionalForm = prevSpecies != null 
+                ? prevSpecies.Varieties.Any(x => x.Pokemon.Name.EndsWith("-alola")) || prevSpecies.Varieties.Any(x => x.Pokemon.Name.EndsWith("-galar"))
+                : prevPokemonRecord != null && isPreEvolution && ((entity.IsAlolanForm && prevPokemonRecord.IsAlolanForm) || (entity.IsGalarianForm && prevPokemonRecord.IsGalarianForm));
             entity.Evolve = pkmnSpecies.EvolvesFromSpecies == null ? string.Empty : GetEvolveString(evolutionChain, pkmnSpecies.Name, entity.IsAlolanForm, entity.IsGalarianForm, entity.EvolvesFromRegionalForm);
             entity.PrevEvolution = GetPreviousEvolutions(pokeClient, pkmnSpecies, entity);
-            entity.NextEvolution = string.Join(',', GetNextEvolutions(evolutionChain.Chain, pkmnSpecies.Name, entity, false));
-            entity.EvolveNum = entity.NextEvolution.Split(',').Count().ToString();
+            entity.NextEvolution = string.Join(',', GetNextEvolutions(pokeClient, evolutionChain.Chain, pkmnSpecies.Name, entity, false));
+            entity.EvolveNum = entity.NextEvolution.Split(',').Length.ToString();
 
-            string getName() => !prevPokemon.Name.Contains(" (", StringComparison.CurrentCulture) ? prevPokemon.Name.ToLower() : prevPokemon.Name[..prevPokemon.Name.IndexOf(" (")].ToLower();
+            string getName() => !prevPokemonRecord.Name.Contains(" (", StringComparison.CurrentCulture) ? prevPokemonRecord.Name.ToLower() : prevPokemonRecord.Name[..prevPokemonRecord.Name.IndexOf(" (")].ToLower();
             IEnumerable<PokemonEntity> addAlolanClause() => records.Where(x => x.IsAlolanForm);
             IEnumerable<PokemonEntity> addGalarianClause() => records.Where(x => x.IsGalarianForm);
         }
@@ -225,7 +220,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
                 var pkmn = pokeClient.GetResourceAsync(species.Varieties[j].Pokemon).Result;
                 var pkmnSpecies = pokeClient.GetResourceAsync(pkmn.Species).Result;
-                var formName = GetFormName(pkmn.Name.FixName());
+                var formName = StringExtensions.GetFormName(pkmn.Name.FixName());
                 try
                 {
                     var record = CreateEntity(ref i, pkmn, pkmnSpecies, chain, growth, true, formName);
@@ -345,12 +340,9 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             return evs.ToString();
         }
 
-        private static bool IsKommooLine(string name) => name.Contains("jangmo-o") || name.Contains("hakamo-o") || name.Contains("kommo-o");
-        private static bool IsMrMimeLine(string name) => name.Contains("mr-mime") || name.Contains("mime-jr") || name.Contains("mr-rime");
-
         private static void SetDexNumbers(PokemonEntity entity, PokemonSpecies pkmnSpecies)
         {
-            entity.NationalDex = entity.JohtoDex = entity.HoennDex = entity.SinnohDex = entity.UnovaDex = entity.KalosDex = entity.AlolaDex = entity.GalarDex = -1;
+            entity.NationalDex = entity.JohtoDex = entity.HoennDex = entity.SinnohDex = entity.UnovaDex = entity.KalosDex = entity.AlolaDex = entity.GalarDex = entity.IsleOfArmorDex = entity.CrownTundraDex = -1;
 
             foreach (var dex in pkmnSpecies.PokedexNumbers)
             {
@@ -374,8 +366,6 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     case "original-melemele":
                     case "original-poni":
                     case "original-ulaula":
-                    case "crown-tundra":
-                    case "isle-of-armor":
                     case "conquest-gallery":
                         break;
                     case "national":
@@ -402,22 +392,15 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     case "galar":
                         entity.GalarDex = dex.EntryNumber;
                         break;
+                    case "isle-of-armor":
+                        entity.IsleOfArmorDex = dex.EntryNumber;
+                        break;
+                    case "crown-tundra":
+                        entity.CrownTundraDex = dex.EntryNumber;
+                        break;
                     default: throw new ArgumentOutOfRangeException(nameof(dex.Pokedex.Name), dex.Pokedex.Name, "No dex.");
                 }
             }
-        }
-
-        private static string GetFormName(string name)
-        {
-            if (name.Contains("noice"))
-                name = "eiscue-no-ice";
-            if (!name.Contains('-'))
-                return name;
-
-            var split = IsKommooLine(name) || IsMrMimeLine(name) ? StringExtensions.SplitBy(name, '-', 2).ToArray() : name.Split('-', 2);
-            var s1 = split[0].FirstCharToUpper();
-            var s2 = split[1].FirstCharToUpper().Insert(split[1].Length, ")").Insert(0, " (");
-            return string.Concat(s1, s2);
         }
 
         private static int GetDexEntryNumber(PokemonSpecies species, string dexName) => species.PokedexNumbers.First(x => x.Pokedex.Name == dexName).EntryNumber;

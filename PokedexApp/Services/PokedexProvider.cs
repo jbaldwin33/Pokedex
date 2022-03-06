@@ -34,6 +34,8 @@ namespace Pokedex.PokedexApp.Services
             KalosDex = pkmn.KalosDex,
             AlolaDex = pkmn.AlolaDex,
             GalarDex = pkmn.GalarDex,
+            IsleOfArmorDex = pkmn.IsleOfArmorDex,
+            CrownTundraDex = pkmn.CrownTundraDex,
             Ability1 = pkmn.Ability1,
             Ability2 = pkmn.Ability2,
             CanEvolveTo = !string.IsNullOrEmpty(pkmn.EvolveMethodString) && !pkmn.EvolveMethodString.Equals("N"),

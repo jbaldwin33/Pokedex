@@ -14,6 +14,8 @@ namespace Pokedex.PkdxDatabase.Models
         public int KalosDex { get; set; }
         public int AlolaDex { get; set; }
         public int GalarDex { get; set; }
+        public int IsleOfArmorDex { get; set; }
+        public int CrownTundraDex { get; set; }
         public string PrevEvolution { get; set; }
         public string[] NextEvolution { get; set; }
         public string Name { get; set; }

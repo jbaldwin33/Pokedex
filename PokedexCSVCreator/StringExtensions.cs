@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Pokedex.PokedexCSVCreator
@@ -55,5 +56,18 @@ namespace Pokedex.PokedexCSVCreator
         /// <param name="name"></param>
         /// <returns></returns>
         public static string GetFriendlyName(this string name) => string.IsNullOrEmpty(name) ? string.Empty : name.Replace('-', ' ').FirstCharToUpper();
+
+        public static string GetFormName(string name)
+        {
+            if (name.Contains("noice"))
+                name = "eiscue-no-ice";
+            if (!name.Contains('-'))
+                return name;
+
+            var split = Utilities.IsKommooLine(name) || Utilities.IsMrMimeLine(name) ? SplitBy(name, '-', 2).ToArray() : name.Split('-', 2);
+            var s1 = split[0].FirstCharToUpper();
+            var s2 = split[1].FirstCharToUpper().Insert(split[1].Length, ")").Insert(0, " (");
+            return string.Concat(s1, s2);
+        }
     }
 }
