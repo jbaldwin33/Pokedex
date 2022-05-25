@@ -104,7 +104,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                     var pkmnSpecies = await pokeClient.GetResourceAsync<PokemonSpecies>(i);
                     var evolutionChain = await pokeClient.GetResourceAsync(pkmnSpecies.EvolutionChain);
                     var growth = await pokeClient.GetResourceAsync(pkmnSpecies.GrowthRate);
-                    
+
                     try
                     {
                         string defaultFormName = null;
@@ -167,7 +167,6 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             if (pkmn.IsGalarianForm)
                 query = addGalarianClause();
             var prevPokemonRecord = query.FirstOrDefault();
-
             PokemonSpecies prevSpecies = null;
             bool isPreEvolution = false;
             if (prevPokemonRecord != null)
@@ -175,7 +174,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
             if ((prevPokemonRecord == null || !isPreEvolution) && pkmnSpecies.EvolvesFromSpecies != null)
                 prevSpecies = pokeClient.GetResourceAsync(pkmnSpecies.EvolvesFromSpecies).Result;
-            
+
             pkmn.EvolvesFromRegionalForm = prevSpecies != null
                 ? (pkmn.IsAlolanForm || pkmn.IsGalar) && (prevSpecies.Varieties.Any(x => x.Pokemon.Name.EndsWith("-alola")) || prevSpecies.Varieties.Any(x => x.Pokemon.Name.EndsWith("-galar")))
                 : prevPokemonRecord != null && isPreEvolution && ((pkmn.IsAlolanForm && prevPokemonRecord.IsAlolanForm) || (pkmn.IsGalarianForm && prevPokemonRecord.IsGalarianForm));
@@ -183,7 +182,6 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             pkmn.PrevEvolution = GetPreviousEvolutions(pokeClient, pkmnSpecies, pkmn);
             pkmn.NextEvolution = string.Empty;
             SetNextEvolutionofPreviousPokemon(pkmnSpecies, pkmn);
-            pkmn.EvolveNum = pkmn.NextEvolution.Split(',').Length.ToString();
 
             string getName() => !prevPokemonRecord.Name.Contains(" (", StringComparison.CurrentCulture) ? prevPokemonRecord.Name.ToLower() : prevPokemonRecord.Name[..prevPokemonRecord.Name.IndexOf(" (")].ToLower();
             IEnumerable<PokemonEntity> addAlolanClause() => records.Where(x => x.IsAlolanForm);
@@ -197,7 +195,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
                 pkmn.NextEvolution = string.Empty;
                 return;
             }
-            
+
             var prevSpecies = pokeClient.GetResourceAsync(species.EvolvesFromSpecies).Result;
             PokemonEntity prev = null;
             if (pkmn.IsAlolanForm && !alolanThatEvolveFromNormalForms.Contains(species.Name.FirstCharToUpper()))
@@ -220,8 +218,20 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
                 prev = records.FirstOrDefault(x => x.Name.Contains(form) && x.NationalDex == GetDexEntryNumber(prevSpecies, "national"));
             }
-            
-            prev.NextEvolution = string.IsNullOrEmpty(prev.NextEvolution) ? pkmn.Name : string.Join(",", new string[] { prev.NextEvolution, pkmn.Name });
+            if (string.IsNullOrEmpty(prev.NextEvolution))
+            {
+                prev.NextEvolution = pkmn.Name;
+                prev.EvolveNum = "1";
+            }
+            else
+            {
+                prev.NextEvolution = string.Join(",", new string[] { prev.NextEvolution, pkmn.Name });
+                if (pkmn.IsDefaultForm)
+                {
+                    var num = int.Parse(prev.EvolveNum);
+                    prev.EvolveNum = (num + 1).ToString();
+                }
+            }
         }
 
 

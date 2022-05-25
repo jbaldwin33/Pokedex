@@ -55,6 +55,7 @@ namespace Pokedex.PokedexApp.ViewModels
 
         private List<Pokemon> GetEvolutionLine(Pokemon pkmn)
         {
+            //todo fix so going to vileplume/bellossom will show both evolutions
             var evolutionList = new List<Pokemon>();
             AddPrev(evolutionList, pkmn.PrevEvolution);
             evolutionList.Add(pkmn);
