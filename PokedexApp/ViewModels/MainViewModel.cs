@@ -63,7 +63,7 @@ namespace Pokedex.PokedexApp.ViewModels
             PokedexProvider = pokedexProvider;
             GetAllPokemon();
             placeholder = new Pokemon { Name = "-Select a Pokemon-", Id = -1 };
-            pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => !x.IsForm));
+            pokemonList = new ObservableCollection<Pokemon>(pokemonListWithForms.Where(x => x.IsDefaultForm));
             CreatePokedexes();
             Pokedexes.ForEach(p => p.DexList.Insert(0, placeholder));
             FormCollection = new ObservableCollection<PokemonForm>();
@@ -77,7 +77,7 @@ namespace Pokedex.PokedexApp.ViewModels
 
         #endregion
 
-        public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.NationalDex == pkmn.NationalDex && x.IsForm);
+        public IEnumerable<Pokemon> GetPokemonForms(Pokemon pkmn) => pokemonListWithForms.Where(x => x.NationalDex == pkmn.NationalDex && !x.IsDefaultForm && x.IsForm);
 
         private async void GetAllPokemon() => pokemonListWithForms = await PokedexProvider.GetAllPokemon();
 
@@ -106,11 +106,11 @@ namespace Pokedex.PokedexApp.ViewModels
 
             CurrentDexType = dexType;
             Pokedexes.First(p => p.PokedexType == CurrentDexType).UpdateComboboxWithoutNotify(pkmn);
-            if (!pkmn.IsForm && pkmn.HasForms)
+            if (pkmn.IsDefaultForm && pkmn.HasForms)
                 AddForms(pkmn);
-            else if (!pkmn.IsForm && !pkmn.HasForms)
+            else if (pkmn.IsDefaultForm && !pkmn.HasForms)
                 FormCollection.Clear();
-            if (!pkmn.IsForm)
+            if (pkmn.IsDefaultForm)
                 SelectedPokemon = pkmn;
             IconData = pkmn.Icon;
             PokemonChangedAction?.Invoke(pkmn);

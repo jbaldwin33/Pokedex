@@ -45,6 +45,7 @@ namespace Pokedex.PkdxDatabase.Entities
         public int NumberOfEvolutions { get; set; }
         public bool HasForms { get; set; }
         public bool IsForm { get; set; }
+        public bool IsDefaultForm { get; set; }
         public bool IsAlolanForm { get; set; }
         public bool IsGalarianForm { get; set; }
         public bool EvolvesFromRegionalForm { get; set; }

@@ -54,6 +54,7 @@ namespace Pokedex.PokedexApp.Services
             BaseStats = GetBaseStats(pkmn),
             HasForms = pkmn.HasForms,
             IsForm = pkmn.IsForm,
+            IsDefaultForm = pkmn.IsDefaultForm,
             IsAlolanForm = pkmn.IsAlolanForm,
             IsGalarianForm = pkmn.IsGalarianForm,
             EvolvesFromRegionalForm = pkmn.EvolvesFromRegionalForm

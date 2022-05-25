@@ -60,6 +60,7 @@ namespace Pokedex.PkdxDatabase
                     EVYield = csv.GetField("EVYield"),
                     HasForms = csv.GetField<bool>("HasForms"),
                     IsForm = csv.GetField<bool>("IsForm"),
+                    IsDefaultForm = csv.GetField<bool>("IsDefaultForm"),
                     IsAlolanForm = csv.GetField<bool>("IsAlolanForm"),
                     IsGalarianForm = csv.GetField<bool>("IsGalarianForm"),
                     EvolvesFromRegionalForm = csv.GetField<bool>("EvolvesFromRegionalForm")

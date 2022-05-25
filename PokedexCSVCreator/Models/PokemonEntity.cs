@@ -36,8 +36,10 @@ namespace Pokedex.PokedexCSVCreator.Models
         public string EvolveNum { get; set; }
         public bool HasForms { get; set; }
         public bool IsForm { get; set; }
+        public bool IsDefaultForm { get; set; }
         public bool IsAlolanForm { get; set; }
         public bool IsGalarianForm { get; set; }
+        public bool IsGalarianEvolution { get; set; }
         public bool EvolvesFromRegionalForm { get; set; }
         public int JohtoDex { get; set; }
         public int HoennDex { get; set; }
@@ -50,5 +52,6 @@ namespace Pokedex.PokedexCSVCreator.Models
         public int CrownTundraDex { get; set; }
         public string PrevEvolution { get; set; }
         public string NextEvolution { get; set; }
+        public bool IsGalar => IsGalarianForm || IsGalarianEvolution;
     }
 }
