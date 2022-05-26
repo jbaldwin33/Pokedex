@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokedexApp", "PokedexApp\PokedexApp.csproj", "{7D84BAE5-3EF3-4368-83EA-69CA691DEDD1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D0234EF-8698-4114-B369-7B0286A5ABB5} = {1D0234EF-8698-4114-B369-7B0286A5ABB5}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokedexLib", "PokedexLib\PokedexLib.csproj", "{8E99704A-2E44-4B2C-88FA-9ED7B7E7FE96}"
 EndProject
@@ -13,6 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PkdxDatabase", "PkdxDatabas
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokedexCSVCreator", "PokedexCSVCreator\PokedexCSVCreator.csproj", "{760670C4-F02F-4BD2-B04D-FD4DDE6BE597}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D0234EF-8698-4114-B369-7B0286A5ABB5} = {1D0234EF-8698-4114-B369-7B0286A5ABB5}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokedexTests", "PokedexTests\PokedexTests.csproj", "{F73C15A9-4658-4B09-A552-0AF7B13B61FB}"
 	ProjectSection(ProjectDependencies) = postProject

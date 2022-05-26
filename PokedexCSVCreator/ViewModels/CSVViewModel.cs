@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using static Pokedex.PokedexCSVCreator.CSVHelpers.EvolutionHelpers;
+using Pokedex.PkdxDatabase.Context;
+using Pokedex.PkdxDatabase;
+using System.Threading;
 
 #pragma warning disable IDE0058
 namespace Pokedex.PokedexCSVCreator.ViewModels
@@ -30,12 +33,14 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
         private static readonly string[] galarEvolutions = new string[] { "Obstagoon", "Perrserker", "Cursola", "Sirfetchd", "Mr. Rime", "Runerigus" };
         private static readonly string[] galarianThatEvolveFromNormalForms = new string[] { "Weezing", "Mr. Mime" };
         private readonly PokeApiClient pokeClient;
-        private bool isCancelled;
         private List<PokemonEntity> records;
         private bool isExecuting;
         private ObservableCollection<string> logEntries;
         private RelayCommand writeCommand;
         private RelayCommand cancelCommand;
+        private RelayCommand createDbCommand;
+        private CancellationTokenSource tokenSource;
+        private CancellationToken token;
 
         public bool IsExecuting
         {
@@ -50,7 +55,9 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
         }
 
         public RelayCommand WriteCommand => writeCommand ??= new RelayCommand(async () => await WriteCommandExecute(), () => !IsExecuting);
-        public RelayCommand CancelCommand => cancelCommand ??= new RelayCommand(() => isCancelled = true, () => IsExecuting);
+        public RelayCommand CreateDbCommand => createDbCommand ??= new RelayCommand(async () => await CreateDbCommandExecute(), () => !IsExecuting);
+
+        public RelayCommand CancelCommand => cancelCommand ??= new RelayCommand(CancelCommandExecute, () => IsExecuting);
 
         public CSVViewModel()
         {
@@ -68,9 +75,11 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
         {
             SetIsExecuting(true);
             LogEntries.Clear();
+            tokenSource = new CancellationTokenSource();
+            token = tokenSource.Token;
             try
             {
-                await Task.Run(FillCSV);
+                await Task.Run(FillCSV, token);
             }
             catch (Exception ex)
             {
@@ -79,8 +88,33 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             }
         }
 
+        private async Task CreateDbCommandExecute()
+        {
+            SetIsExecuting(true);
+            LogEntries.Clear();
+            tokenSource = new CancellationTokenSource();
+            token = tokenSource.Token;
+            try
+            {
+                await Task.Run(() => PopulateDB.PopulateDatabase(token, tokenSource, DoCancel, s => AddLogEntry(s)), token);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage(ex.Message);
+                SetIsExecuting(false);
+            }
+        }
+
+        private void CancelCommandExecute() => tokenSource.Cancel();
+
         private async Task FillCSV()
         {
+            if (token.IsCancellationRequested)
+            {
+                AddLogEntry("Operation cancelled.");
+                return;
+            }
+
             try
             {
                 Directory.CreateDirectory(binaryDirectory);
@@ -94,7 +128,7 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
 
                 for (var i = 1; i <= 898; i++)
                 {
-                    if (isCancelled)
+                    if (token.IsCancellationRequested)
                     {
                         DoCancel();
                         return;
@@ -484,7 +518,8 @@ namespace Pokedex.PokedexCSVCreator.ViewModels
             {
                 AddLogEntry("Cancelled.");
                 SetIsExecuting(false);
-                isCancelled = false;
+                tokenSource.Dispose();
+                tokenSource = null;
             });
 
         private void SetIsExecuting(bool executing) =>

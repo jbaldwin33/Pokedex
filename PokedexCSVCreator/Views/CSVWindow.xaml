@@ -48,8 +48,11 @@
         </ItemsControl.ItemsPanel>
       </ListView>
     </Border>
-    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-      <Button Content="Write CSV file" Command="{Binding WriteCommand}" Padding="5" Margin="5"/>
+    <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal">
+        <Button Content="Write CSV file" Command="{Binding WriteCommand}" Padding="5" Margin="5"/>
+        <Button Content="Create DB" Command="{Binding CreateDbCommand}" Padding="5" Margin="5"/>
+      </StackPanel>
       <Button Content="Cancel" Command="{Binding CancelCommand}" Padding="5" Margin="5"/>
     </StackPanel>
     </Grid>

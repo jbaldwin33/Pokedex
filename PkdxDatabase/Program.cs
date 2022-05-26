@@ -8,8 +8,8 @@ namespace Pokedex.PkdxDatabase
     {
         static void Main(string[] args)
         {
-            using var context = PokedexDbContextFactory.Instance.CreateDbContext();
-            PopulateDB.PopulateDatabase(context);
+            //using var context = PokedexDbContextFactory.Instance.CreateDbContext();
+            //PopulateDB.PopulateDatabase(context);
         }
     }
 }
